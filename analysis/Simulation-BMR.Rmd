@@ -1,0 +1,74 @@
+---
+title: 'Power comparison when bmr relates to phenotype: with two hotspots'
+author: "Jie Zhou, Siming Zhao"
+date: "`r Sys.Date()`"
+output: 
+  workflowr::wflow_html:
+    theme: flatly
+    highlight: tango
+    toc: true
+    toc_float: true
+    code_folding: hide
+---
+
+```{r}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Description
+
+
+Six signatures are generated from LUAD mutation data, using fasttopics model. The third signature is selected to generate the binary phenotype which has the maximum correlation with the third signature. The 63th nttype turns out to reach the maixmum of the third signture([signature plots](https://szhaolab.github.io/diff_driver_analysis/docs/sig10.html)). We then mannully place two hotspots within the the 63th annotation files. We demonstrate that even though phenotype have zero correlation with selection, all the benchmark methods have high type II error, i.e, clains pheotype correlates with selection. In contrast,  diffdriver algorithm  has low type II error.     
+
+Version: f567d9622076b1b00e03100aa5672dd3f4696134
+
+updated description- 20250617 based on Slack. The simulation was for a single gene, we used background mutation rate from LUAD. LUAD contains 527 samples. We bootstrap to get to 1500 samples. We then simulate mutations using mutation rate ( background + selection) of oncogenes, with two hotspots with nttype 63. The phenotypeis simulated to correlated with mutational signature 3 with $R^2 = 0.78$.  
+
+
+
+```{r}
+Nsim=100
+mylist <- list()
+for (i1 in c(1)){
+   for (rho in c(0)) {
+    for (i4 in c(0.5)) {
+    n<-0
+    for(i3 in c(200,400,600,800,1000,1200,1500)){
+      n <- n+1
+      load(paste0("data/tsgsimple_LUAD_fixed_63/diff/pppower_betaf0=",i1, "_sample",i3,"_",i4,"_",rho,".Rd"))
+         load(paste0("data/tsgsimple_LUAD_fixed_63/diffFix/pppower_betaf0=",i1,"_sample",i3,"_",i4,"_", rho,".Rd"))
+          load(paste0("data/tsgsimple_LUAD_fixed_63/other/pppower_betaf0=",i1,"_sample",i3,"_",i4,"_",rho,".Rd"))
+ 
+      m5.pvalue <- simuresdiff[["m1.pvalue"]]
+       m6.pvalue <- simuresdiffFix[["m1.pvalue"]]
+      m1.pvalue <- simuresother[["m1.pvalue"]]
+      m2.pvalue <- simuresother[["m2.pvalue"]]
+      m3.pvalue <- simuresother[["m3.pvalue"]]
+      m4.pvalue <- simuresother[["m4.pvalue"]]
+    #  mutNumber1[m,n]=mean(simuresbase$`#mut`)/i3*100
+     mylist[[n]] <- c(length(m1.pvalue[m1.pvalue <0.01]),length(m2.pvalue[m2.pvalue <0.01]),length(m3.pvalue[m3.pvalue <0.01]), length(m4.pvalue[m4.pvalue <0.01]),length(m5.pvalue[m5.pvalue <0.01]),length(m6.pvalue[m6.pvalue <0.01]))/Nsim
+    }
+    outdt <- do.call(cbind, mylist)
+    rownames(outdt)=c("Linear","Fisher","Binomial","LogisticR","diffDriver","avdiffDriver")
+    colnames(outdt) <- c(200,400,600,800,1000,1200,1500)
+    mycol=c("#00AFBB","#2b8cbe","#aa00ff","#0001f6","#fdae61","#FF3D2E","#FFFF00", "#2b2930")
+ # mycol=c("#00AFBB","#2b8cbe","#aa00ff","#0001f6","#fdae61","#FF3D2E")
+     plot(1:dim(outdt)[2],ylim=c(0,1), col="white", ylab = "Power", xlab="Number of samples", yaxt="n", xaxt="n")
+      # title(paste("f0=",i1,",", "beta_gc=(",i2,",","1.513", ")", "P(E=1) =0.5", "P(positive selection|E=1)=0.8", "P(positive selection|E=1)=0.2", sep=" "))
+     title( paste( "SC(scale efficient)=",i1,",","para=(",i4,1-i4,")", ",", sep=" "))
+    #yticks_val <- pretty(outdt)
+    yticks_val <- seq(0,1,0.1)
+    #axis(2, lab=paste0(yticks_val/Nsim * 100, " %"),las=2)
+    axis(2, at=yticks_val, lab=paste0(yticks_val),las=2)
+    axis(1, at=1:dim(outdt)[2], lab=colnames(outdt))
+    grid()
+    for (r in 1:6){
+      points(outdt[r,],col=mycol[r+1], pch=19, cex=1.3)
+      lines(outdt[r,],col=mycol[r+1])
+    }
+    legend("topleft", legend = c("Linear","Fisher","Binomial","LogisticR","diff","diffFix"), col= mycol[2:7], lwd=1, bty="n", lty=rep(NA,6), pch=rep(19,6))
+  }
+}
+  }
+
+```

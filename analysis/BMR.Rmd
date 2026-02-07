@@ -1,0 +1,143 @@
+---
+title: "Mutation Prediction: Signature VS Regular"
+author: "Jie Zhou, Siming Zhao"
+date: "`r Sys.Date()`"
+output: 
+  workflowr::wflow_html:
+    theme: flatly
+    highlight: tango
+    toc: true
+    toc_float: true
+    code_folding: hide
+---
+
+```{r setup, include=FALSE,echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+```{r,echo=FALSE,include=FALSE}
+library(RColorBrewer)
+colors=c("#E04C5C","#7DAF4C","#23AECE", "#FB894B", "#E7DA36",  "#187A51",
+         "#5EA4A2",  "#3D3C4E", "#4D1836", "#C51B7D",
+         "#E9A3C9",  "#B35806", "#F1A340", "#FEE08B", "#D9EF8B",
+         "#91CF60", "#C7EAE5", "#5AB4AC", "#01665E", "#E7D4E8",
+         "#AF8DC3", "#762A83")
+```
+
+
+
+
+## Description
+
+The regular and signature models are compared through the prediction of mutation number in chromosome `seq(1,22,2)` based on the bmr computed from chromosome `seq(2,22,2)`.   
+
+For regular model, the formula for bmr is
+ `regmtx=matrix(colSums(ymatrix)/numberNttype,ncol=1)`
+`  weight=matrix(rowSums(ymatrix)/sum(ymatrix),ncol=1)`
+ ` regmtx1=weight%*%t(regmtx)`
+ 
+ 
+For signature model, the formula for bmr is 
+` fit =fastTopics::fit_topic_model(yymatrix, k = k)`
+`  lltemp = fit$L`
+ ` fftemp = fit$F`
+ ` ff = matrix(min(fftemp)/2, nrow = totalnttype, ncol = k )`
+ ` ff[as.numeric(rownames(fftemp)), ] <- fftemp`
+ ` ll = matrix(rep(colMeans(lltemp), nsample), nrow = nsample, byrow =T)`
+  `rownames(ll) <- id`
+ ` ll[rownames(lltemp),] <- lltemp`
+ ` colnames(ll)=paste("weight",1:k, sep = "")`
+  `colnames(ff)=paste("factor",1:k,sep="")`
+ ` ff=cbind(sigmapping[,c("context","alt_allele")],ff)`
+  `sigmtx=ll%*%t(ff[,-c(1,2)]) # rows are samples, column is nttypecode`
+
+
+## Regular vs Signature: new annotation + expanded reg 9 to reg 96
+
+```{r}
+load("data/realdata/ntcode_conversion.Rd")
+name=ntcode_conversion$name
+key=paste0(substr(name,1,3),",",substr(name,6,6))
+ntcode_conversion[,1]=key
+code=read.table(file = "data/realdata/coding_data_03212024.txt", header=T)
+for (i in 1:nrow(ntcode_conversion)) {
+  index=which(code$Key==ntcode_conversion$name[i])
+  ntcode_conversion$code[i]=code$Value[index]
+}
+bridge=unique(ntcode_conversion[order(ntcode_conversion$code),c(2,4)])
+rownames(bridge)=c()
+```
+
+
+```{r, fig.height=2, fig.width=6}
+
+load("data/realdata/resultsRegular9.Rd")
+results9=results[-16]
+load("data/realdata/resultsRegular96.Rd")
+results96=results
+load("data/realdata/resultsSignature_newanno.Rd")
+results1=results
+
+
+numberNttype=results1$BLCA$chr2$numberNttype[-c(93,94,95,96)]
+rm(list="results")
+nn2=names(results9)
+par(mfrow=c(1,2))
+par(mar = c(2, 2, 2, 2))
+type=c(1:3,5,7:51,54:96)
+index1=bridge[type,2]
+for (j in c(1:19)) {
+  resultsSig9=results9[[j]]
+  resultsSig2=results96[[j]]
+  bmrTr=resultsSig9$regbmrTr[,index1]
+  pr=c(bmrTr%*%diag(resultsSig2$numberNtTe))
+  #te=c(resultsSig$ymatrixTe)
+  
+  resultsSig=results1[[j]]
+  bmr=resultsSig$bmr
+  ymTe=resultsSig$ymatrixTe[,-c(4,6,52,53)]
+  te=c(ymTe)
+  
+  dd1=round(cor(pr,te),3)
+  plot(pr,te,xlim = c(0,max(te,pr)),ylim = c(0,max(te,pr)),col= "white", bg = colors[3], pch = 21, bty = "n", xlab = "Predicted", ylab = "Observed")
+  grid(col = "lightgray", lty = "dotted")
+  abline(a=0,b=1)
+  title(paste0("Reg-indirect: ",nn2[j],": ",dd1))
+  
+  
+  # pr=c(resultsSig2$regbmrTr%*%diag(resultsSig2$numberNtTe))
+  # te=c(resultsSig2$ymatrixTe)
+  # plot(pr,te,xlim = c(0,max(te,pr)),ylim = c(0,max(te,pr)),col=colors[3])
+  # abline(a=0,b=1)
+  # tt1=round(cor(pr,te),3)
+  # title(paste0("Reg-direct: ",nn2[j],": ",tt1))
+  
+  
+  resultsSig=results1[[j]]
+  bmr=resultsSig$bmr
+  ymTe=resultsSig$ymatrixTe[,-c(4,6,52,53)]
+  sigbmr=c()
+  for (i in 1:96) {
+    index=which(bmr$nttypecode==i)
+    ibmr=exp(bmr[index,-c(1,2)])
+    aa=apply(ibmr,2,median)
+    sigbmr=cbind(sigbmr,aa)
+  }
+  
+  sigbmr1=sigbmr
+  colnames(sigbmr1)=1:96
+  sigbmr1=sigbmr1[,-c(4,6,52,53)]
+  
+  pp1=c(sigbmr1%*%diag(numberNttype))
+  Te1=c(ymTe)
+  dd1=round(sum((pp1-Te1)^2)/length(Te1),2)
+  plot(pp1,Te1,xlim = c(0,max(pp1,Te1)),ylim = c(0,max(pp1,Te1)), col= "white", bg = colors[2], pch = 21, bty = "n", xlab = "Predicted", ylab = "Observed")
+  grid(col = "lightgray", lty = "dotted")
+  abline(a=0,b=1)
+  tt1=round(cor(Te1,pp1),3)
+  title(paste0("Signature: ",nn2[j],":",tt1))
+}
+
+```
