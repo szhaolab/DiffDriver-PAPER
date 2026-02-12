@@ -463,8 +463,10 @@ Figure is selected FDR, sort by fold enrichment. Top 20. Remove all redundancy.
 unique(a[a[, "age_all"]!="", "age_all"])
 ```
 
+![Barplot of GO enrichment (age)](material/barplot-GO-bio-age.png)
+
 ```{r include-png-figure, out.width='85%', fig.cap="Barplot of GO enrichment (age)"}
-knitr::include_graphics("docs/material/barplot-GO-bio-age.png")
+knitr::include_graphics("material/barplot-GO-bio-age.png")
 ```
 
 ##  Differential genes for tumor mutation burden
@@ -473,7 +475,7 @@ unique(a[a[, "tmb_all"]!="", "tmb_all"])
 ```
 
 ```{r include-png-figure2, out.width='85%', fig.cap="Barplot of GO enrichment (TMB)"}
-knitr::include_graphics("docs/material/barplot-GO-bio-tmb.png")
+knitr::include_graphics("material/barplot-GO-bio-tmb.png")
 ```
 
 ##  Differential genes for genome instability
@@ -482,7 +484,7 @@ unique(a[a[, "instability_all"]!="", "instability_all"])
 ```
 
 ```{r include-png-figure3, out.width='85%', fig.cap="Barplot of GO enrichment (INS)"}
-knitr::include_graphics("docs/material/barplot-GO-bio-ins.png")
+knitr::include_graphics("material/barplot-GO-bio-ins.png")
 ```
 
 For the KEGG pathway based enrichment analysis, tmb is mostly cancer related, and ins is mostly immune. See output/barplot-KEGG-ins.pdf and output/barplot-KEGG-tmb.pdf
