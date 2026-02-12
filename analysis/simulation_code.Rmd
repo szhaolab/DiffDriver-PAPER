@@ -1,8 +1,8 @@
 ---
-title: 'Code to Run Simulation'
+title: "Code to Run Simulation"
 author: "Jie Zhou, Siming Zhao"
 date: "`r Sys.Date()`"
-output: 
+output:
   workflowr::wflow_html:
     theme: flatly
     highlight: tango
