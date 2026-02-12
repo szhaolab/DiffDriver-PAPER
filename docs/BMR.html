@@ -11,7 +11,7 @@
 
 <meta name="author" content="Jie Zhou, Siming Zhao" />
 
-<meta name="date" content="2026-02-07" />
+<meta name="date" content="2026-02-12" />
 
 <title>Mutation Prediction: Signature VS Regular</title>
 
@@ -437,7 +437,13 @@ div.tocify {
   <a href="index.html">Home</a>
 </li>
 <li>
-  <a href="about.html">About</a>
+  <a href="simulation.html">Simulation</a>
+</li>
+<li>
+  <a href="real-data.html">Real Data</a>
+</li>
+<li>
+  <a href="download.html">Download</a>
 </li>
 <li>
   <a href="license.html">License</a>
@@ -465,7 +471,7 @@ div.tocify {
 <h1 class="title toc-ignore">Mutation Prediction: Signature VS
 Regular</h1>
 <h4 class="author">Jie Zhou, Siming Zhao</h4>
-<h4 class="date">2026-02-07</h4>
+<h4 class="date">2026-02-12</h4>
 
 </div>
 
@@ -473,7 +479,7 @@ Regular</h1>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-ok text-success"
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -484,8 +490,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-</a>
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -494,13 +500,13 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2026-02-07
+<strong>Last updated:</strong> 2026-02-12
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 0
+aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>DiffDriver-PAPER/</code> <span
@@ -610,28 +616,56 @@ run.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongabsolute">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>File paths:</strong> absolute </a>
 </p>
 </div>
-<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div id="strongFilepathsstrongabsolute" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great job! Using relative paths to the files within your workflowr
-project makes it easier to run your code on other machines.</p>
+<p>
+Using absolute paths to the files within your workflowr project makes it
+difficult for you and others to run your code on a different machine.
+Change the absolute path(s) below to the suggested relative path(s) to
+make your code more reproducible.
+</p>
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th style="text-align:left;">
+absolute
+</th>
+<th style="text-align:left;">
+relative
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+/dartfs/rc/lab/S/Szhao/qiruiz/DiffDriver-PAPER/data/realdata/coding_data_03212024.txt
+</td>
+<td style="text-align:left;">
+data/realdata/coding_data_03212024.txt
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong3d2e0bb">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree92fca5401200eb938f2662d20de5c4df0b9dd6f6targetblank92fca54a">
 <span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>Repository version:</strong> 3d2e0bb
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/92fca5401200eb938f2662d20de5c4df0b9dd6f6" target="_blank">92fca54</a>
 </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrong3d2e0bb"
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree92fca5401200eb938f2662d20de5c4df0b9dd6f6targetblank92fca54a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -640,7 +674,8 @@ and connecting the code version to the results is critical for
 reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version 3d2e0bb.
+The results in this page were generated with repository version
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/92fca5401200eb938f2662d20de5c4df0b9dd6f6" target="_blank">92fca54</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -654,10 +689,28 @@ depends on. Below is the status of the Git repository when the results
 were generated:
 </p>
 <pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+
 Untracked files:
     Untracked:  LICENSE
     Untracked:  data/realdata/
     Untracked:  data/tsgsimple_LUAD_fixed_63/
+    Untracked:  output/Clinical.csv
+    Untracked:  output/all_diffdriver_genes.txt
+    Untracked:  output/barplot-GO-bio-age.pdf
+    Untracked:  output/barplot-GO-bio-age.png
+    Untracked:  output/barplot-GO-bio-ins.pdf
+    Untracked:  output/barplot-GO-bio-ins.png
+    Untracked:  output/barplot-GO-bio-tmb.pdf
+    Untracked:  output/barplot-GO-bio-tmb.png
+    Untracked:  output/barplot-KEGG-ins.pdf
+    Untracked:  output/barplot-KEGG-tmb.pdf
+
+Unstaged changes:
+    Modified:   DiffDriver-PAPER.Rproj
+    Modified:   analysis/_site.yml
 
 </code></pre>
 <p>
@@ -706,7 +759,41 @@ Message
 Rmd
 </td>
 <td>
-3d2e0bb
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/92fca5401200eb938f2662d20de5c4df0b9dd6f6/analysis/BMR.Rmd" target="_blank">92fca54</a>
+</td>
+<td>
+Qirui Zhang
+</td>
+<td>
+2026-02-12
+</td>
+<td>
+rebuild
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/szhaolab/DiffDriver-PAPER/df72d559f8650560dfdd4fb9daa5ca6a97036d54/docs/BMR.html" target="_blank">df72d55</a>
+</td>
+<td>
+Qirui Zhang
+</td>
+<td>
+2026-02-07
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/3d2e0bbf2e04abb7612fec943374c7503754d97e/analysis/BMR.Rmd" target="_blank">3d2e0bb</a>
 </td>
 <td>
 Qirui Zhang
@@ -754,7 +841,7 @@ class="section level2">
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>name<span class="ot">=</span>ntcode_conversion<span class="sc">$</span>name</span>
 <span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>key<span class="ot">=</span><span class="fu">paste0</span>(<span class="fu">substr</span>(name,<span class="dv">1</span>,<span class="dv">3</span>),<span class="st">&quot;,&quot;</span>,<span class="fu">substr</span>(name,<span class="dv">6</span>,<span class="dv">6</span>))</span>
 <span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>ntcode_conversion[,<span class="dv">1</span>]<span class="ot">=</span>key</span>
-<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>code<span class="ot">=</span><span class="fu">read.table</span>(<span class="at">file =</span> <span class="st">&quot;data/realdata/coding_data_03212024.txt&quot;</span>, <span class="at">header=</span>T)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>code<span class="ot">=</span><span class="fu">read.table</span>(<span class="at">file =</span> <span class="st">&quot;/dartfs/rc/lab/S/Szhao/qiruiz/DiffDriver-PAPER/data/realdata/coding_data_03212024.txt&quot;</span>, <span class="at">header=</span>T)</span>
 <span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(ntcode_conversion)) {</span>
 <span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>  index<span class="ot">=</span><span class="fu">which</span>(code<span class="sc">$</span>Key<span class="sc">==</span>ntcode_conversion<span class="sc">$</span>name[i])</span>
 <span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>  ntcode_conversion<span class="sc">$</span>code[i]<span class="ot">=</span>code<span class="sc">$</span>Value[index]</span>
@@ -827,7 +914,728 @@ class="section level2">
 <span id="cb2-64"><a href="#cb2-64" tabindex="-1"></a>  tt1<span class="ot">=</span><span class="fu">round</span>(<span class="fu">cor</span>(Te1,pp1),<span class="dv">3</span>)</span>
 <span id="cb2-65"><a href="#cb2-65" tabindex="-1"></a>  <span class="fu">title</span>(<span class="fu">paste0</span>(<span class="st">&quot;Signature: &quot;</span>,nn2[j],<span class="st">&quot;:&quot;</span>,tt1))</span>
 <span id="cb2-66"><a href="#cb2-66" tabindex="-1"></a>}</span></code></pre></div>
-<p><img src="figure/BMR.Rmd/unnamed-chunk-3-1.png" width="576" style="display: block; margin: auto;" /><img src="figure/BMR.Rmd/unnamed-chunk-3-2.png" width="576" style="display: block; margin: auto;" /><img src="figure/BMR.Rmd/unnamed-chunk-3-3.png" width="576" style="display: block; margin: auto;" /><img src="figure/BMR.Rmd/unnamed-chunk-3-4.png" width="576" style="display: block; margin: auto;" /><img src="figure/BMR.Rmd/unnamed-chunk-3-5.png" width="576" style="display: block; margin: auto;" /><img src="figure/BMR.Rmd/unnamed-chunk-3-6.png" width="576" style="display: block; margin: auto;" /><img src="figure/BMR.Rmd/unnamed-chunk-3-7.png" width="576" style="display: block; margin: auto;" /><img src="figure/BMR.Rmd/unnamed-chunk-3-8.png" width="576" style="display: block; margin: auto;" /><img src="figure/BMR.Rmd/unnamed-chunk-3-9.png" width="576" style="display: block; margin: auto;" /><img src="figure/BMR.Rmd/unnamed-chunk-3-10.png" width="576" style="display: block; margin: auto;" /><img src="figure/BMR.Rmd/unnamed-chunk-3-11.png" width="576" style="display: block; margin: auto;" /><img src="figure/BMR.Rmd/unnamed-chunk-3-12.png" width="576" style="display: block; margin: auto;" /><img src="figure/BMR.Rmd/unnamed-chunk-3-13.png" width="576" style="display: block; margin: auto;" /><img src="figure/BMR.Rmd/unnamed-chunk-3-14.png" width="576" style="display: block; margin: auto;" /><img src="figure/BMR.Rmd/unnamed-chunk-3-15.png" width="576" style="display: block; margin: auto;" /><img src="figure/BMR.Rmd/unnamed-chunk-3-16.png" width="576" style="display: block; margin: auto;" /><img src="figure/BMR.Rmd/unnamed-chunk-3-17.png" width="576" style="display: block; margin: auto;" /><img src="figure/BMR.Rmd/unnamed-chunk-3-18.png" width="576" style="display: block; margin: auto;" /><img src="figure/BMR.Rmd/unnamed-chunk-3-19.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="figure/BMR.Rmd/unnamed-chunk-3-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-1">
+Past versions of unnamed-chunk-3-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/df72d559f8650560dfdd4fb9daa5ca6a97036d54/docs/figure/BMR.Rmd/unnamed-chunk-3-1.png" target="_blank">df72d55</a>
+</td>
+<td>
+Qirui Zhang
+</td>
+<td>
+2026-02-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/BMR.Rmd/unnamed-chunk-3-2.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-2">
+Past versions of unnamed-chunk-3-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/df72d559f8650560dfdd4fb9daa5ca6a97036d54/docs/figure/BMR.Rmd/unnamed-chunk-3-2.png" target="_blank">df72d55</a>
+</td>
+<td>
+Qirui Zhang
+</td>
+<td>
+2026-02-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/BMR.Rmd/unnamed-chunk-3-3.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-3">
+Past versions of unnamed-chunk-3-3.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/df72d559f8650560dfdd4fb9daa5ca6a97036d54/docs/figure/BMR.Rmd/unnamed-chunk-3-3.png" target="_blank">df72d55</a>
+</td>
+<td>
+Qirui Zhang
+</td>
+<td>
+2026-02-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/BMR.Rmd/unnamed-chunk-3-4.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-4">
+Past versions of unnamed-chunk-3-4.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/df72d559f8650560dfdd4fb9daa5ca6a97036d54/docs/figure/BMR.Rmd/unnamed-chunk-3-4.png" target="_blank">df72d55</a>
+</td>
+<td>
+Qirui Zhang
+</td>
+<td>
+2026-02-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/BMR.Rmd/unnamed-chunk-3-5.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-5">
+Past versions of unnamed-chunk-3-5.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-5" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/df72d559f8650560dfdd4fb9daa5ca6a97036d54/docs/figure/BMR.Rmd/unnamed-chunk-3-5.png" target="_blank">df72d55</a>
+</td>
+<td>
+Qirui Zhang
+</td>
+<td>
+2026-02-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/BMR.Rmd/unnamed-chunk-3-6.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-6">
+Past versions of unnamed-chunk-3-6.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-6" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/df72d559f8650560dfdd4fb9daa5ca6a97036d54/docs/figure/BMR.Rmd/unnamed-chunk-3-6.png" target="_blank">df72d55</a>
+</td>
+<td>
+Qirui Zhang
+</td>
+<td>
+2026-02-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/BMR.Rmd/unnamed-chunk-3-7.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-7">
+Past versions of unnamed-chunk-3-7.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-7" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/df72d559f8650560dfdd4fb9daa5ca6a97036d54/docs/figure/BMR.Rmd/unnamed-chunk-3-7.png" target="_blank">df72d55</a>
+</td>
+<td>
+Qirui Zhang
+</td>
+<td>
+2026-02-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/BMR.Rmd/unnamed-chunk-3-8.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-8">
+Past versions of unnamed-chunk-3-8.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-8" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/df72d559f8650560dfdd4fb9daa5ca6a97036d54/docs/figure/BMR.Rmd/unnamed-chunk-3-8.png" target="_blank">df72d55</a>
+</td>
+<td>
+Qirui Zhang
+</td>
+<td>
+2026-02-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/BMR.Rmd/unnamed-chunk-3-9.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-9">
+Past versions of unnamed-chunk-3-9.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-9" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/df72d559f8650560dfdd4fb9daa5ca6a97036d54/docs/figure/BMR.Rmd/unnamed-chunk-3-9.png" target="_blank">df72d55</a>
+</td>
+<td>
+Qirui Zhang
+</td>
+<td>
+2026-02-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/BMR.Rmd/unnamed-chunk-3-10.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-10">
+Past versions of unnamed-chunk-3-10.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-10" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/df72d559f8650560dfdd4fb9daa5ca6a97036d54/docs/figure/BMR.Rmd/unnamed-chunk-3-10.png" target="_blank">df72d55</a>
+</td>
+<td>
+Qirui Zhang
+</td>
+<td>
+2026-02-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/BMR.Rmd/unnamed-chunk-3-11.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-11">
+Past versions of unnamed-chunk-3-11.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-11" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/df72d559f8650560dfdd4fb9daa5ca6a97036d54/docs/figure/BMR.Rmd/unnamed-chunk-3-11.png" target="_blank">df72d55</a>
+</td>
+<td>
+Qirui Zhang
+</td>
+<td>
+2026-02-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/BMR.Rmd/unnamed-chunk-3-12.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-12">
+Past versions of unnamed-chunk-3-12.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-12" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/df72d559f8650560dfdd4fb9daa5ca6a97036d54/docs/figure/BMR.Rmd/unnamed-chunk-3-12.png" target="_blank">df72d55</a>
+</td>
+<td>
+Qirui Zhang
+</td>
+<td>
+2026-02-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/BMR.Rmd/unnamed-chunk-3-13.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-13">
+Past versions of unnamed-chunk-3-13.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-13" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/df72d559f8650560dfdd4fb9daa5ca6a97036d54/docs/figure/BMR.Rmd/unnamed-chunk-3-13.png" target="_blank">df72d55</a>
+</td>
+<td>
+Qirui Zhang
+</td>
+<td>
+2026-02-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/BMR.Rmd/unnamed-chunk-3-14.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-14">
+Past versions of unnamed-chunk-3-14.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-14" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/df72d559f8650560dfdd4fb9daa5ca6a97036d54/docs/figure/BMR.Rmd/unnamed-chunk-3-14.png" target="_blank">df72d55</a>
+</td>
+<td>
+Qirui Zhang
+</td>
+<td>
+2026-02-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/BMR.Rmd/unnamed-chunk-3-15.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-15">
+Past versions of unnamed-chunk-3-15.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-15" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/df72d559f8650560dfdd4fb9daa5ca6a97036d54/docs/figure/BMR.Rmd/unnamed-chunk-3-15.png" target="_blank">df72d55</a>
+</td>
+<td>
+Qirui Zhang
+</td>
+<td>
+2026-02-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/BMR.Rmd/unnamed-chunk-3-16.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-16">
+Past versions of unnamed-chunk-3-16.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-16" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/df72d559f8650560dfdd4fb9daa5ca6a97036d54/docs/figure/BMR.Rmd/unnamed-chunk-3-16.png" target="_blank">df72d55</a>
+</td>
+<td>
+Qirui Zhang
+</td>
+<td>
+2026-02-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/BMR.Rmd/unnamed-chunk-3-17.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-17">
+Past versions of unnamed-chunk-3-17.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-17" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/df72d559f8650560dfdd4fb9daa5ca6a97036d54/docs/figure/BMR.Rmd/unnamed-chunk-3-17.png" target="_blank">df72d55</a>
+</td>
+<td>
+Qirui Zhang
+</td>
+<td>
+2026-02-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/BMR.Rmd/unnamed-chunk-3-18.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-18">
+Past versions of unnamed-chunk-3-18.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-18" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/df72d559f8650560dfdd4fb9daa5ca6a97036d54/docs/figure/BMR.Rmd/unnamed-chunk-3-18.png" target="_blank">df72d55</a>
+</td>
+<td>
+Qirui Zhang
+</td>
+<td>
+2026-02-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/BMR.Rmd/unnamed-chunk-3-19.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-19">
+Past versions of unnamed-chunk-3-19.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-19" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/df72d559f8650560dfdd4fb9daa5ca6a97036d54/docs/figure/BMR.Rmd/unnamed-chunk-3-19.png" target="_blank">df72d55</a>
+</td>
+<td>
+Qirui Zhang
+</td>
+<td>
+2026-02-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">

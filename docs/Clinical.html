@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Qirui Zhang, Siming Zhao" />
+
+<meta name="date" content="2026-02-12" />
+
+<title>Clinical</title>
+
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
+<script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<link href="site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="site_libs/datatables-binding-0.33/datatables.js"></script>
+<link href="site_libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="site_libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="site_libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="site_libs/jszip-1.13.6/jszip.min.js"></script>
+<script src="site_libs/pdfmake-1.13.6/pdfmake.js"></script>
+<script src="site_libs/pdfmake-1.13.6/vfs_fonts.js"></script>
+<link href="site_libs/dt-ext-buttons-1.13.6/css/buttons.dataTables.min.css" rel="stylesheet" />
+<script src="site_libs/dt-ext-buttons-1.13.6/js/dataTables.buttons.min.js"></script>
+<script src="site_libs/dt-ext-buttons-1.13.6/js/buttons.html5.min.js"></script>
+<script src="site_libs/dt-ext-buttons-1.13.6/js/buttons.colVis.min.js"></script>
+<script src="site_libs/dt-ext-buttons-1.13.6/js/buttons.print.min.js"></script>
+<link href="site_libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #204a87; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #204a87; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+
+.sourceCode .row {
+  width: 100%;
+}
+.sourceCode {
+  overflow-x: auto;
+}
+.code-folding-btn {
+  margin-right: -30px;
+}
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">DiffDriver-PAPER</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="simulation.html">Simulation</a>
+</li>
+<li>
+  <a href="real-data.html">Real Data</a>
+</li>
+<li>
+  <a href="download.html">Download</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Clinical</h1>
+<h4 class="author">Qirui Zhang, Siming Zhao</h4>
+<h4 class="date">2026-02-12</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2026-02-12
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>DiffDriver-PAPER/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.1). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20260206code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20260206)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20260206code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20260206)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree92fca5401200eb938f2662d20de5c4df0b9dd6f6targetblank92fca54a">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/92fca5401200eb938f2662d20de5c4df0b9dd6f6" target="_blank">92fca54</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree92fca5401200eb938f2662d20de5c4df0b9dd6f6targetblank92fca54a"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/92fca5401200eb938f2662d20de5c4df0b9dd6f6" target="_blank">92fca54</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+
+Untracked files:
+    Untracked:  LICENSE
+    Untracked:  data/realdata/
+    Untracked:  data/tsgsimple_LUAD_fixed_63/
+    Untracked:  output/Clinical.csv
+    Untracked:  output/all_diffdriver_genes.txt
+    Untracked:  output/barplot-GO-bio-age.pdf
+    Untracked:  output/barplot-GO-bio-age.png
+    Untracked:  output/barplot-GO-bio-ins.pdf
+    Untracked:  output/barplot-GO-bio-ins.png
+    Untracked:  output/barplot-GO-bio-tmb.pdf
+    Untracked:  output/barplot-GO-bio-tmb.png
+    Untracked:  output/barplot-KEGG-ins.pdf
+    Untracked:  output/barplot-KEGG-tmb.pdf
+
+Unstaged changes:
+    Modified:   DiffDriver-PAPER.Rproj
+    Modified:   analysis/_site.yml
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/Clinical.Rmd</code>) and HTML
+(<code>docs/Clinical.html</code>) files. If you’ve configured a remote
+Git repository (see <code>?wflow_git_remote</code>), click on the
+hyperlinks in the table below to view the files as they were in that
+past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/92fca5401200eb938f2662d20de5c4df0b9dd6f6/analysis/Clinical.Rmd" target="_blank">92fca54</a>
+</td>
+<td>
+Qirui Zhang
+</td>
+<td>
+2026-02-12
+</td>
+<td>
+rebuild
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">echo =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div id="overview" class="section level1">
+<h1>Overview</h1>
+<p>In total, <strong>120 analyses</strong> were conducted across
+<strong>20 tumor types</strong>, involving the following <strong>6
+distinct phenotypes</strong>:</p>
+<ul>
+<li>Aneuploidy Score<br />
+</li>
+<li>Fraction Genome Altered (FGA)</li>
+<li>Months of Disease-specific Survival<br />
+</li>
+<li>Tumor Mutation Burden (TMB)<br />
+</li>
+<li>Diagnosis Age<br />
+</li>
+<li>Progression-Free Survival Months</li>
+</ul>
+<p>All <strong>120 analyses</strong> were successfully completed without
+errors.</p>
+</div>
+<div id="extracting-and-summarizing-analysis-results"
+class="section level1">
+<h1>Extracting and Summarizing Analysis Results</h1>
+<p>This code segment scans through analysis output directories,
+identifies relevant result files (*_resdd.Rd), extracts corresponding
+tumor types, immune phenotypes, and analysis modes(sig/reg).</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>get_files <span class="ot">&lt;-</span> <span class="cf">function</span>(outputdir, <span class="at">tumors =</span> <span class="cn">NULL</span>, <span class="at">phenotypes =</span> <span class="cn">NULL</span>) {</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>  files <span class="ot">&lt;-</span> <span class="fu">list.files</span>(</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>    <span class="at">path =</span> outputdir,</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>    <span class="at">pattern =</span> <span class="st">&quot;_resdd</span><span class="sc">\\</span><span class="st">.Rd$&quot;</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>    <span class="at">recursive =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>    <span class="at">full.names =</span> <span class="cn">TRUE</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>  )</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>  </span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>  matching_files_txt <span class="ot">&lt;-</span> <span class="fu">sub</span>(<span class="st">&quot;</span><span class="sc">\\</span><span class="st">.Rd$&quot;</span>, <span class="st">&quot;.txt&quot;</span>, files)</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>  </span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>  analysis_mode <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">grepl</span>(<span class="st">&quot;_sig_&quot;</span>, <span class="fu">basename</span>(files)), <span class="st">&quot;sig&quot;</span>, <span class="st">&quot;reg&quot;</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>  inner_folder_names      <span class="ot">&lt;-</span> <span class="fu">basename</span>(<span class="fu">dirname</span>(files))            <span class="co"># e.g. &quot;Aneuploidy.Score_BLCA_mutations&quot;</span></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>  phenotype_folder_names  <span class="ot">&lt;-</span> <span class="fu">basename</span>(<span class="fu">dirname</span>(<span class="fu">dirname</span>(files)))   <span class="co"># e.g. &quot;Aneuploidy.Score&quot;</span></span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>  </span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>  tumor_names <span class="ot">&lt;-</span> <span class="fu">mapply</span>(<span class="cf">function</span>(inner_name, phen) {</span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a>    pattern_front <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;^&quot;</span>, phen, <span class="st">&quot;_&quot;</span>)</span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a>    tmp <span class="ot">&lt;-</span> <span class="fu">sub</span>(pattern_front, <span class="st">&quot;&quot;</span>, inner_name)</span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a>    tmp <span class="ot">&lt;-</span> <span class="fu">sub</span>(<span class="st">&quot;_mutations$&quot;</span>, <span class="st">&quot;&quot;</span>, tmp)</span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a>    <span class="fu">return</span>(tmp)</span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a>  }, inner_folder_names, phenotype_folder_names)</span>
+<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a>  </span>
+<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a>  phenos_all <span class="ot">&lt;-</span> phenotype_folder_names</span>
+<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a>  </span>
+<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a>  filedf <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a>    <span class="at">tumor      =</span> tumor_names,</span>
+<span id="cb2-27"><a href="#cb2-27" tabindex="-1"></a>    <span class="at">phenotype  =</span> phenos_all,</span>
+<span id="cb2-28"><a href="#cb2-28" tabindex="-1"></a>    <span class="at">mode       =</span> analysis_mode,   </span>
+<span id="cb2-29"><a href="#cb2-29" tabindex="-1"></a>    <span class="at">file       =</span> files,</span>
+<span id="cb2-30"><a href="#cb2-30" tabindex="-1"></a>    <span class="at">filetxt    =</span> matching_files_txt,</span>
+<span id="cb2-31"><a href="#cb2-31" tabindex="-1"></a>    <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb2-32"><a href="#cb2-32" tabindex="-1"></a>  )</span>
+<span id="cb2-33"><a href="#cb2-33" tabindex="-1"></a>  </span>
+<span id="cb2-34"><a href="#cb2-34" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(tumors)) {</span>
+<span id="cb2-35"><a href="#cb2-35" tabindex="-1"></a>    filedf <span class="ot">&lt;-</span> filedf[filedf<span class="sc">$</span>tumor <span class="sc">%in%</span> tumors, ]</span>
+<span id="cb2-36"><a href="#cb2-36" tabindex="-1"></a>  }</span>
+<span id="cb2-37"><a href="#cb2-37" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(phenotypes)) {</span>
+<span id="cb2-38"><a href="#cb2-38" tabindex="-1"></a>    filedf <span class="ot">&lt;-</span> filedf[filedf<span class="sc">$</span>phenotype <span class="sc">%in%</span> phenotypes, ]</span>
+<span id="cb2-39"><a href="#cb2-39" tabindex="-1"></a>  }</span>
+<span id="cb2-40"><a href="#cb2-40" tabindex="-1"></a></span>
+<span id="cb2-41"><a href="#cb2-41" tabindex="-1"></a>  <span class="fu">rownames</span>(filedf) <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb2-42"><a href="#cb2-42" tabindex="-1"></a>  <span class="fu">return</span>(filedf)</span>
+<span id="cb2-43"><a href="#cb2-43" tabindex="-1"></a>}</span>
+<span id="cb2-44"><a href="#cb2-44" tabindex="-1"></a></span>
+<span id="cb2-45"><a href="#cb2-45" tabindex="-1"></a>filedf <span class="ot">&lt;-</span> <span class="fu">get_files</span>(</span>
+<span id="cb2-46"><a href="#cb2-46" tabindex="-1"></a>  <span class="at">outputdir =</span> <span class="st">&quot;/dartfs/rc/lab/S/Szhao/qiruiz/diffdriver/temp/output/new_plot/clinical&quot;</span></span>
+<span id="cb2-47"><a href="#cb2-47" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<div id="summary-table-of-significant-differential-genes"
+class="section level1">
+<h1>Summary Table of Significant Differential Genes</h1>
+<p>The provided function extracts and compiles results from analyses,
+filtering specifically for significant differential genes based on a
+threshold (<strong><code>dd.fdr &lt; 0.1</code></strong>).</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>get_diff_table <span class="ot">&lt;-</span> <span class="cf">function</span>(filedf, <span class="at">include_nonsig =</span> <span class="cn">TRUE</span>){</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  pheno_all <span class="ot">&lt;-</span> <span class="fu">unique</span>(filedf<span class="sc">$</span>phenotype)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  numlist <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  </span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>  <span class="cf">for</span> (p <span class="cf">in</span> pheno_all){</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>    p_txtfiles <span class="ot">&lt;-</span> filedf[filedf<span class="sc">$</span>phenotype <span class="sc">==</span> p, ]</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>    numlist[[p]] <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>    </span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>    <span class="cf">for</span> (t <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(p_txtfiles))){</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>      txtf  <span class="ot">&lt;-</span> p_txtfiles[t, <span class="st">&quot;filetxt&quot;</span>]</span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>      rdf   <span class="ot">&lt;-</span> p_txtfiles[t, <span class="st">&quot;file&quot;</span>] </span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>      tumor <span class="ot">&lt;-</span> p_txtfiles[t, <span class="st">&quot;tumor&quot;</span>] </span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>      mode  <span class="ot">&lt;-</span> p_txtfiles[t, <span class="st">&quot;mode&quot;</span>]     <span class="co"># reg / sig</span></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>      </span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a>      env <span class="ot">&lt;-</span> <span class="fu">new.env</span>()</span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a>      <span class="fu">load</span>(rdf, <span class="at">envir =</span> env)</span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a>      res_rdata <span class="ot">&lt;-</span> env<span class="sc">$</span>res</span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a>      </span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a>      res <span class="ot">&lt;-</span> <span class="fu">read.table</span>(txtf, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a>      res<span class="sc">$</span>gene <span class="ot">&lt;-</span> <span class="fu">row.names</span>(res)</span>
+<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a>      res<span class="sc">$</span>mode <span class="ot">&lt;-</span> mode</span>
+<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a>      </span>
+<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a>      res<span class="sc">$</span>alpha <span class="ot">&lt;-</span> <span class="fu">sapply</span>(res<span class="sc">$</span>gene, <span class="cf">function</span>(gene){</span>
+<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a>          res_rdata[[gene]][[<span class="st">&quot;dd&quot;</span>]][[<span class="st">&quot;res.alt&quot;</span>]]<span class="sc">$</span>alpha[<span class="dv">2</span>]</span>
+<span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a>      })</span>
+<span id="cb3-26"><a href="#cb3-26" tabindex="-1"></a>      </span>
+<span id="cb3-27"><a href="#cb3-27" tabindex="-1"></a>      res<span class="sc">$</span>significant <span class="ot">&lt;-</span> res<span class="sc">$</span>dd.fdr <span class="sc">&lt;</span> <span class="fl">0.1</span></span>
+<span id="cb3-28"><a href="#cb3-28" tabindex="-1"></a>      </span>
+<span id="cb3-29"><a href="#cb3-29" tabindex="-1"></a>      <span class="cf">if</span> (include_nonsig) {</span>
+<span id="cb3-30"><a href="#cb3-30" tabindex="-1"></a>        numlist[[p]][[ <span class="fu">paste0</span>(tumor, <span class="st">&quot;_&quot;</span>, mode) ]] <span class="ot">&lt;-</span> res</span>
+<span id="cb3-31"><a href="#cb3-31" tabindex="-1"></a>      } <span class="cf">else</span> {</span>
+<span id="cb3-32"><a href="#cb3-32" tabindex="-1"></a>        sig_res <span class="ot">&lt;-</span> res[res<span class="sc">$</span>dd.fdr <span class="sc">&lt;</span> <span class="fl">0.1</span>, ]</span>
+<span id="cb3-33"><a href="#cb3-33" tabindex="-1"></a>        <span class="cf">if</span> (<span class="fu">nrow</span>(sig_res) <span class="sc">&gt;</span> <span class="dv">0</span>){</span>
+<span id="cb3-34"><a href="#cb3-34" tabindex="-1"></a>          numlist[[p]][[ <span class="fu">paste0</span>(tumor, <span class="st">&quot;_&quot;</span>, mode) ]] <span class="ot">&lt;-</span> sig_res</span>
+<span id="cb3-35"><a href="#cb3-35" tabindex="-1"></a>        }</span>
+<span id="cb3-36"><a href="#cb3-36" tabindex="-1"></a>      }</span>
+<span id="cb3-37"><a href="#cb3-37" tabindex="-1"></a>    }</span>
+<span id="cb3-38"><a href="#cb3-38" tabindex="-1"></a>    </span>
+<span id="cb3-39"><a href="#cb3-39" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">length</span>(numlist[[p]]) <span class="sc">==</span> <span class="dv">0</span>){</span>
+<span id="cb3-40"><a href="#cb3-40" tabindex="-1"></a>      numlist[[p]] <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb3-41"><a href="#cb3-41" tabindex="-1"></a>    }</span>
+<span id="cb3-42"><a href="#cb3-42" tabindex="-1"></a>  }</span>
+<span id="cb3-43"><a href="#cb3-43" tabindex="-1"></a>  </span>
+<span id="cb3-44"><a href="#cb3-44" tabindex="-1"></a>  combined_df <span class="ot">&lt;-</span> <span class="fu">do.call</span>(</span>
+<span id="cb3-45"><a href="#cb3-45" tabindex="-1"></a>    rbind,</span>
+<span id="cb3-46"><a href="#cb3-46" tabindex="-1"></a>    <span class="fu">lapply</span>(<span class="fu">names</span>(numlist), <span class="cf">function</span>(pheno) {</span>
+<span id="cb3-47"><a href="#cb3-47" tabindex="-1"></a>      numlist.pheno <span class="ot">&lt;-</span> numlist[[pheno]]</span>
+<span id="cb3-48"><a href="#cb3-48" tabindex="-1"></a>      df.pheno <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, <span class="fu">lapply</span>(<span class="fu">names</span>(numlist.pheno), <span class="cf">function</span>(tname) {</span>
+<span id="cb3-49"><a href="#cb3-49" tabindex="-1"></a>        df <span class="ot">&lt;-</span> numlist.pheno[[tname]]</span>
+<span id="cb3-50"><a href="#cb3-50" tabindex="-1"></a>        df<span class="sc">$</span>tumor <span class="ot">&lt;-</span> <span class="fu">sub</span>(<span class="st">&quot;_.*&quot;</span>, <span class="st">&quot;&quot;</span>, tname) </span>
+<span id="cb3-51"><a href="#cb3-51" tabindex="-1"></a>        df<span class="sc">$</span>mode  <span class="ot">&lt;-</span> <span class="fu">sub</span>(<span class="st">&quot;.*_&quot;</span>, <span class="st">&quot;&quot;</span>, tname) </span>
+<span id="cb3-52"><a href="#cb3-52" tabindex="-1"></a>        <span class="fu">return</span>(df)</span>
+<span id="cb3-53"><a href="#cb3-53" tabindex="-1"></a>      }))</span>
+<span id="cb3-54"><a href="#cb3-54" tabindex="-1"></a>      df.pheno<span class="sc">$</span>pheno <span class="ot">&lt;-</span> pheno</span>
+<span id="cb3-55"><a href="#cb3-55" tabindex="-1"></a>      <span class="fu">return</span>(df.pheno)</span>
+<span id="cb3-56"><a href="#cb3-56" tabindex="-1"></a>    })</span>
+<span id="cb3-57"><a href="#cb3-57" tabindex="-1"></a>  )</span>
+<span id="cb3-58"><a href="#cb3-58" tabindex="-1"></a>  <span class="fu">return</span>(combined_df)</span>
+<span id="cb3-59"><a href="#cb3-59" tabindex="-1"></a>}</span>
+<span id="cb3-60"><a href="#cb3-60" tabindex="-1"></a></span>
+<span id="cb3-61"><a href="#cb3-61" tabindex="-1"></a>diff_table_all <span class="ot">&lt;-</span> <span class="fu">get_diff_table</span>(filedf, <span class="at">include_nonsig =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-62"><a href="#cb3-62" tabindex="-1"></a>diff_table <span class="ot">&lt;-</span>  <span class="fu">get_diff_table</span>(filedf, <span class="at">include_nonsig =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">library</span>(DT)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>diff_table_sig <span class="ot">&lt;-</span> <span class="fu">subset</span>(diff_table, mode <span class="sc">==</span> <span class="st">&quot;sig&quot;</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="fu">datatable</span>(</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>  diff_table_sig,</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>  <span class="at">extensions =</span> <span class="st">&#39;Buttons&#39;</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>  <span class="at">options =</span> <span class="fu">list</span>(</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>    <span class="at">dom        =</span> <span class="st">&#39;Bfrtip&#39;</span>, </span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>    <span class="at">buttons    =</span> <span class="fu">c</span>(<span class="st">&#39;copy&#39;</span>, <span class="st">&#39;csv&#39;</span>, <span class="st">&#39;excel&#39;</span>, <span class="st">&#39;pdf&#39;</span>, <span class="st">&#39;print&#39;</span>),</span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>    <span class="at">pageLength =</span> <span class="dv">10</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>  )</span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>)</span></code></pre></div>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-175c4e14aa5041d454d2" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-175c4e14aa5041d454d2">{"x":{"filter":"none","vertical":false,"extensions":["Buttons"],"data":[["FGFR31","HRAS1","NFE2L21","TP531","CTCF1","MAP3K11","TP533","SMARCA41","IDH1","CASP81","CTCF3","EP3001","HLA-A1","HLA-B1","HRAS3","RAC11","TGFBR21","TP535","CUL31","KRAS1","HNF1A1","TP537","BRAF1","SETD21","TP539","MAP2K1","PPP2R1A1","TP5311","PTEN","FOXA11","IDH11","CASP811","RAC111","BRAF11","NF11","PTEN1","CTNNB11","PPP2R1A11","TP5313","FGFR311","HRAS11","CBFB1","CDH11","CTCF11","KRAS11","MAP2K41","MAP3K111","PIK3CA1","RUNX11","KRAS3","NFE2L211","NF111","TP5321","CASP812","EPHA21","HLA-A11","HLA-B11","HRAS31","NOTCH11","RAC112","TGFBR211","TP5341","KRAS5","HNF1A11","KRAS7","KEAP11","KIT1","SMARCA411","BAP11","RNF431","TP5317","ZBTB7B1","MAPK1","SMARCA412","BAP111","RNF4311","TP5319","CDKN1A","CREBBP1","FBXW7","FGFR312","HRAS12","KRAS12","NFE2L212","RHOB1","TP53110","TSC11","MAP3K112","CDKN2A1","NFE2L23","SLC17A61","TGFBR212","CDKN2A3","FBXW71","NOTCH111","NSD11","PIK3CA11","PBRM11","KEAP111","BRAF12","EGFR1","KEAP13","KRAS31","NFE2L25","RB11","SETD211","STK111","KRAS51","CDK121","BRAF3","NF13","NRAS1","PPP6C","PTEN11","ARID1A1","CHD41","CTCF12","CTNNB111","FGFR21","NRAS3","PIK3CA3","PPP2R1A12","SPOP1","TP5332"],[6.68149908232169e-07,8.02120653465986e-05,0.000713934674912527,0.00018033289178863,6.92400803552201e-07,0.00527181617697416,7.93247752384805e-13,0.00569723410912119,0.000461593803394027,3.49546804001598e-06,0.0127881930010412,0.0228802440723563,0.0236468394398861,4.34905681229337e-05,6.41676139191739e-11,3.80235864403831e-06,0.00102197785861885,1.04548146393984e-07,0.016893544880117,0.00712858347200807,0.000788666029661196,2.26719216968664e-06,0.000497428505123857,0.000411169970512948,3.81065060121862e-07,0.00483216978965085,8.52511933095528e-05,1.28414516029083e-18,0.00466366166365321,0.000190473690613652,1.18684866043848e-09,0.000372558772652222,8.29180279996838e-05,1.50967856358462e-05,0.009388167039289149,0.00317236684087897,0.000162919032381379,0.0070920280855323,0.00263050829597237,0.000179903213816648,0.000302154060558778,0.00515782917907375,6.22656697338264e-06,1.76023656792902e-05,0.00216147137523699,0.0149202673327241,3.86398947211288e-05,2.7751413100819e-10,0.00765276340081118,0.00148516146906935,0.00222407705191977,0.00728442909158122,0.00893618196491767,3.19703582156436e-10,0.000607868306510477,0.00222395406649926,7.51122810175891e-05,1.7056078424345e-14,0.00159667132825305,2.53148760063857e-06,0.00162296324110973,0.00393582404531581,0.000124881590898377,0.000970737063104838,0.00242074906058832,0.00784925552039395,0.00228643455491005,0.00492987105492141,0.00103631954648478,0.0134880287748671,0.000761992018560447,0.00382572003996972,0.00134353959295135,0.008000586501628481,0.00346514150063058,0.0151690843801175,0.00265773051960183,0.0152201165200291,0.0010869874514332,0.0116543549293377,8.2930030508282e-10,0.000911510413072173,0.000168483757742525,3.51791403010078e-05,0.0129133412839858,0.00170555802610885,0.00471485560008372,0.00039367044285773,0.00178546286060264,0.000572392245186093,0.0218209327759769,0.0132347441138021,1.51918998565625e-05,0.0117237964897179,0.000337912542269722,0.009772779611571671,0.000480492314707097,0.008619405691272159,0.00224706023200251,0.00820813495104804,2.64738699234961e-15,1.60144250026403e-05,8.35066029245859e-14,0.0232628190479267,0.0235164099274394,0.00401195871712954,3.65819663777883e-06,0.00131068055680963,0.00665207059061758,0.00305731663008929,0.0234722723512303,3.72871759736414e-06,0.0249876367837358,0.00474108527987653,0.000174414188684595,5.34234885301483e-10,0.000750897197648193,1.0050785489374e-14,0.0065014938589671,0.00895925978893574,0.009518397110422209,3.36752831846562e-06,0.0110251564667278,6.70221961403936e-16],[0.000123390182508319,0.0140074690739063,0.095232846614035,2.35171914065736e-05,0.000177859521413727,0.0313934836566347,8.10963796009172e-17,0.00275016398020566,0.0360155424315641,2.29382111998443e-06,0.0308351349110317,0.0105451147105784,0.0427940586360342,0.00637350415337436,7.98153213613546e-08,0.000268038148737681,0.00381037067995277,1.0648352848732e-09,0.0787209178298678,0.0252690710357282,0.0956482605983329,7.00766160404382e-07,0.0650937816386504,0.0267683180683059,1.80924876000496e-10,0.00327084335455624,0.00023600198398645,2.34864279721039e-19,0.000699739843629964,3.6902210544278e-05,7.476174985865159e-11,4.47440275607826e-07,0.000302317587367514,0.000134989506226035,1.16447118470408e-05,0.00608362268234956,0.000414461998127211,0.00684400999826809,0.000390877856413836,0.0102962297350112,0.0233038808365056,0.0818128679231352,0.00434806127751646,0.00305985641976217,0.0686741292781229,0.26808555269338,0.00706738599202246,1.25126267271815e-05,0.0985645667742525,0.007918577694724699,0.00599093278561415,0.0576823630000562,0.00883408212853082,8.91209042470811e-08,0.0567634750559587,0.0193955208667396,0.0125516620695105,1.24420779021681e-08,0.0402312572515086,0.0296082303955053,0.0157413803766281,0.000285119200552664,0.0757335194127165,0.0181666541775882,0.983092332032984,0.0120325596853336,0.00200779333683566,0.00112425225096888,7.502382560155999e-05,0.00490249293714391,0.000671161844343186,0.00557750408044796,0.415399784921357,0.00288094917536813,0.000113966927879748,0.00922796429600819,0.00152447738791195,0.966296425596803,0.63234209672722,0.409534283296584,0.0427184482898087,0.7998272681216539,0.148363348592338,0.308110557312943,0.932470401169338,0.000833412955560328,0.381039382922943,0.744507404881714,0.26437953979845,0.0560716665317984,0.281374474967617,0.21696275328006,0.52352888175478,0.823406509448795,0.749867692922911,1.15456094181188e-11,0.61614803836301,0.753263370828129,9.83819916778493e-07,0.00683427197728799,0.432791907420377,0.198451083339137,0.873079266148483,0.647434601189378,0.628862895500208,0.229342776540462,0.510613735446506,0.0325686563759768,0.000397928725697124,0.856114877424677,2.68664327825877e-07,0.738143342503361,0.818493113338493,0.743938380184317,0.0553532159196768,0.452025850751206,0.175974561909879,0.00101811970060935,0.07279855658574159,0.740415286210083,0.0988332355268353,0.641893648766148,0.816417618588997,0.0374330750887372],[0.000339186531379673,0.0246034767914772,0.161504735491047,0.000373735474026432,0.00023248980470462,0.0348668371906554,3.24584777468267e-15,0.00275362693911933,0.0499093802627915,1.40719111829947e-06,0.0303077363938284,0.00917035712428883,0.0355078970700525,0.00300825594267618,7.36101325261688e-08,0.000162261238199707,0.00306059333384262,1.69701302737323e-09,0.07927754996656811,0.0255174680752455,0.07541479036340271,4.43759151494814e-06,0.01113905521555,0.0110806747093847,2.84607879502853e-10,0.00317946123493707,0.000305611779368326,3.8648155442147e-18,0.00144654999622133,6.19453297247051e-05,4.20872490325412e-10,1.97045575227851e-06,0.000871436105802507,0.000174714909625465,7.148631525226549e-05,0.00729850418155501,0.000473911493528711,0.00641576052075753,0.000247378413621528,0.0212451184316646,0.0375159093006787,0.0707633714337913,0.000151456652839872,0.00431192956074786,0.111697171428559,0.06379553333709349,0.00729406059786914,4.52287159418798e-06,0.207416961874995,0.00823328472697268,0.00887586522568088,0.0670748565021741,0.0122432891769645,4.56755139124474e-09,0.0143628666761332,0.00858155743916667,0.00116367001030463,6.05712928938665e-09,0.0220914469814823,0.009624551419004869,0.00757154468708224,0.000287302851502205,0.0741604534351787,0.0134564140965246,0.963028140722213,0.0148652864768569,0.00261250682555409,0.00120357342091952,4.1266704788568e-05,0.00519057700531696,0.0010596224536413,0.0038801617567374,0.421438704945593,0.00296534422093494,7.66902813297221e-05,0.00961493865306905,0.00322900484422211,0.7768342335609,0.866906278136045,0.9108735231560851,0.264728528555284,0.223619337458699,0.663724477206966,0.808689397132238,0.397187643146939,0.870606580465154,0.807611287508008,0.837869071670266,0.475521621017876,0.760064618206545,0.502175325135208,0.6442936058697279,0.282565744518127,0.618067774287791,0.46653741246394,0.0771184461789719,0.529736438970454,0.666373055759324,7.187722711063329e-05,0.945489597765379,0.2757998759582,0.100119816036911,0.501820679750132,0.253031452814614,0.54983813934513,0.237055350637964,0.604955848741571,0.657044676740084,0.0743438270758528,0.333270979686188,0.429605262134664,0.312885294642782,0.698849961517672,0.918741189561644,0.0420733255186723,0.29165533112808,0.250751304382773,0.232643880369493,0.000675579092065907,0.444162858563948,0.997658877542546,0.352280901160202,0.0249212096951156,0.42221194312671],[0.00473261858323031,0.119633224043727,0.408852657360871,0.00561459643043641,0.000443150348405823,0.0732598698717136,1.37264987784386e-09,0.0999565741463443,0.524568622636397,0.000297160925633862,0.0154800763829688,0.0963326785572253,0.105388299985764,0.0104858892224794,4.29813792572029e-06,0.00876198741888343,0.0493569987139907,0.0320391228977265,0.08583388529843169,0.0781275061469399,0.163046854869157,0.0070907754476133,0.390109038774778,0.0339832739121135,4.11272164004025e-08,0.00290387115471901,0.00438125170829836,1.25324453915076e-06,0.037886463867365,0.00388986832119225,0.000455135416122964,0.0076344488317272,0.00312213139772425,0.0439822891610386,0.00408975041416994,0.0741659052607458,0.0369309066058891,0.0192030980186514,0.0034638035674697,0.124962653393464,0.06260282894102059,0.242956598260157,0.0401586464926344,0.00476774505175097,0.06776889018258481,0.254259235670475,0.0273147839824866,0.000616979121618194,0.242956598260157,0.101140409126902,0.192481874844065,0.0856215935629491,0.0148112287895008,8.60572560194424e-06,0.000830672742846886,0.0277025469777482,0.0100579217107931,9.337515596703799e-09,0.361677387531186,0.008571170115375479,0.51443027834286,0.00177501182059204,0.326650921732273,0.0898713471954887,1,0.00532624737441695,0.07549111237777049,0.0365174145638346,0.00508629257614101,0.06397757947512241,0.234109594076053,0.00526008182349504,0.129562638852099,0.0850898805447191,0.035881871014815,0.0500264410364886,0.228041572239603,1,0.6047110305680971,0.168886875304888,0.303324074097768,0.403522978400569,0.234342261848083,0.263891377338443,0.157600499068692,0.00522345252661802,0.411035850957033,0.0146965959419931,0.0322337327624329,0.0244502436518037,0.440811244059179,1,0.796038611105863,1,0.496303390715633,1.03162169098046e-07,0.803233162562675,0.49417467805374,0.0100930116110579,0.0196640905635782,0.271726407021293,0.709092890787998,0.773459612738761,0.416854549400695,0.146345411644944,0.128387685767384,0.162350053630896,0.393073550110842,0.0464581687592674,0.756822708516274,2.22194993927804e-06,0.799862281164172,1,0.592896751260763,0.16310177607479,0.354314984134862,0.521248496432141,0.0309941773808696,0.0876627030840533,0.0902903353749689,0.169164551659539,0.622266854308547,0.78148829074921,0.0423179392352883],[0.00228822411371504,0.121362123908391,0.417824123534395,0.000694450226633281,0.000237688779551701,0.0756198243073109,1.08392015960462e-11,0.062318512096053,0.535984079041806,0.000157342871897406,0.0162520915156913,0.0750992873397994,0.107578374093397,0.0105186630875543,1.66828824894668e-06,0.009161204773747929,0.0519559239717197,0.0055294320990866,0.0886010859030668,0.07735764125723241,0.167325117942458,0.0024942088166158,0.404885459357971,0.0250538842477373,7.845483961783871e-09,0.00139796210491966,0.00360042362954028,4.14616711970131e-08,0.0205477774413547,0.00376783967656425,0.000489183613572119,0.00445715306632244,0.00179593503177518,0.0101910605899757,0.00222351070776143,0.07791544403786239,0.0203108182573089,0.0132514162231211,0.00085662368399442,0.09267998583218801,0.06638229685073729,0.245782481364391,0.0326603199785221,0.00500820455449451,0.0678695825399508,0.256907299255335,0.028619144246696,7.539890726374019e-05,0.245782481364391,0.0618149872174998,0.139390936970459,0.0923535488747539,0.00415481299752313,2.52992090275275e-06,0.000474534170104492,0.0286525329208332,0.0102301268441349,5.67180957362495e-09,0.329453476104136,0.00907492055768872,0.5225698474124429,0.00161039569188373,0.331993987292771,0.0912240308706294,1,0.00338156629320528,0.0400965576829213,0.0375800914069827,0.00439784168686104,0.0570735474231673,0.133757205263297,0.00309225861245041,0.130653921469771,0.0829489950862163,0.0199833366006003,0.0439210915318122,0.165533098038915,1,0.511949892765883,0.176327037153723,0.275874143967789,0.413516141281385,0.241508241028886,0.201324677241871,0.169599733090244,0.00050627091470571,0.324494602720766,0.0157465991094494,0.0370031668614202,0.0296474381869876,0.283036122542295,1,0.7210869850773201,1,0.51944634094083,3.16190146172991e-08,0.817517519256804,0.45208954322528,0.00508846975108406,0.0143682382648797,0.232501152386404,0.726298722593712,0.7347201836273,0.420654733837367,0.14892765751541,0.09666900532896169,0.129450482135704,0.227347885706671,0.0457057425122484,0.739139922931449,3.88047876097167e-07,0.739646515740165,1,0.601548212693664,0.106838437102202,0.379646250653848,0.418172294385489,0.0127495882927321,0.0579382101996487,0.0847602845455494,0.0642486962601674,0.635427328541917,0.789034315563059,0.0256319613036289],[0.00250690469980014,0.10177982464263,0.502531237057106,5.56199459473581e-05,0.968418014883952,0.117781111723569,1.46728712478115e-13,0.06439448993177251,0.314699106754077,0.000618645437607245,0.0449317551188122,0.060200013049469,0.131413880996995,0.0371185766907992,0.000654359935290194,0.034977862100962,0.0336480185439206,2.96903874131136e-06,0.119923853985149,0.981259169727432,0.233038633395657,0.000296221135150165,0.409767693298314,0.0161785164764606,1.92451618266515e-08,0.008143386095095739,0.0022814244321923,5.0451790746283e-10,0.0266454217984695,0.0117101306679957,0.987641154634654,0.00325512311460339,0.0197087312286007,0.00270892424502963,0.0023629818245006,0.0592334960258881,0.00579765376407625,0.0126342123796479,0.000111094116397655,0.06536504819174289,0.0515393431785137,0.167870864063159,0.0273205477824347,0.0206763511881458,0.970921484429659,0.228782356814024,0.0495404651096871,1.81575046735285e-06,0.167870864063159,0.0758610752009368,0.171849323879995,0.094636281374679,0.00109489638914818,8.01804297657824e-05,0.9811094549988491,0.0485525687087673,0.0353893989363866,0.980699122207019,0.385462748044904,0.0337741031454491,0.373068175137906,0.980075015222862,0.981894100346573,0.179191204543452,0.932516663407296,0.00669797770755502,0.0445241108603692,0.023084999627404,0.009087238170116521,0.134281746900089,0.0248505415354244,0.992492739735551,0.08065905888823791,0.0602921295834972,0.023547444942823,0.110545326463642,0.0351886075366526,0.686517834241841,0.537354357039729,0.154472205305437,0.256747081573323,0.252812199849558,0.167861323470119,0.207246907795519,0.279283318962658,0.00011122838225,0.446051365309322,0.0389283534415743,0.983219293678734,0.0500468358265751,0.299424053205955,0.611401082180465,0.70866395761673,0.901248525435811,0.907426323561028,2.06076462669258e-06,0.6135539902715,0.459994685167189,0.0136600226081062,0.00777111534130811,0.0985860908066265,0.796330221254524,0.602897386566338,0.360096949653551,0.11747588931693,0.10236211928215,0.21668174356484,0.0130285152296075,0.0245336179258135,0.513073873252727,2.66840399781781e-05,0.644915875977387,0.605332617174117,0.464878636908039,0.07020732955411239,0.129201036129927,0.21979278007521,0.00313270388996247,0.0374618797292924,0.0864880011061436,0.322044478451476,0.501921585353419,0.39923914672947,0.00539592933934309],[4.20934442186266e-05,0.00252668005841786,0.0112444711298723,0.00378699072756123,8.655010044402511e-06,0.0439318014747847,1.98311938096201e-11,0.0569723410912119,0.00738550085430443,3.1369458813316e-05,0.060287195576337,0.0867050779462489,0.0867050779462489,0.000287037749611363,2.11753125933274e-09,3.1369458813316e-05,0.00562087822240367,1.72504441550074e-06,0.033787089760234,0.0285143338880323,0.00552066220762837,3.1740690375613e-05,0.00472557079867664,0.00472557079867664,5.33491084170607e-06,0.09664339579301701,0.00170502386619106,5.13658064116333e-17,0.0606276016274918,0.00476184226534131,1.89895785670157e-08,0.00614721974876166,0.00273629492398957,0.000301935712716925,0.0625877802619276,0.0317236684087897,0.00651676129525517,0.09456037447376391,0.0526101659194474,0.00951785290760152,0.00951785290760152,0.0214909549128073,7.7832087167283e-05,0.000146686380660751,0.010807356876185,0.0466258354147628,0.000241499342007055,6.93785327520475e-09,0.0273312978600399,0.0252477449741789,0.0222407705191977,0.0714894557193413,0.0714894557193413,5.27510910558119e-09,0.00401193082296915,0.009173810524309441,0.00061967631839511,5.62850588003384e-13,0.00765111242237444,2.78463636070242e-05,0.00765111242237444,0.0393582404531581,0.00049952636359351,0.0135903188834677,0.045994232151178,0.0784925552039395,0.00685930366473016,0.0492987105492141,0.0145084736507869,0.0539521150994683,0.00609593614848357,0.0497343605196064,0.022840173080173,0.0800058650162848,0.0485119810088281,0.0606763375204699,0.0212618441568146,0.0958867340761833,0.0136960418880584,0.09039338898790041,5.22459192202177e-08,0.0136960418880584,0.00353815891259303,0.00110814291948175,0.09039338898790041,0.0179083592741429,0.0424337004007535,0.00984176107144325,0.00892731430301319,0.00572392245186093,0.0545523319399422,0.0441158137126738,0.000501332695266563,0.077377056832138,0.00528541546177807,0.077377056832138,0.00528541546177807,0.0861940569127216,0.0314588432480351,0.0259924273449855,5.03003528546426e-14,7.606851876254141e-05,7.93312727783566e-13,0.0558514735776685,0.0558514735776685,0.0152454431250922,2.31685787059326e-05,0.010485444454477,0.093128988268646,0.0305731663008929,0.0999505471349432,7.457435194728279e-05,0.0999505471349432,0.0316072351991769,0.00139531350947676,7.12313180401978e-09,0.00500598131765462,2.01015709787481e-13,0.037151393479812,0.042303987157432,0.042303987157432,3.36752831846562e-05,0.0441006258669111,2.68088784561575e-14],[0.00388679074901205,0.223001002582721,0.501009661889644,0.00148158305861414,0.00222324401767159,0.261612363805289,2.02740949002293e-15,0.0275016398020566,0.192082892968342,2.52320323198288e-05,0.0925054047330951,0.0386654206054541,0.117683661249094,0.0265681888727699,1.31695280246235e-06,0.00221131472708587,0.0209570387397402,3.51395644008155e-08,0.157441835659736,0.101076284142913,0.5217099987060549,9.810726245661351e-06,0.275098868551976,0.254299021648906,2.53294826400694e-09,0.06541686709112481,0.0023600198398645,9.39457118884154e-18,0.009096617967189529,0.00092255526360695,1.19618799773843e-09,1.47655290950583e-05,0.00249412009578199,0.00134989506226035,0.000232894236940816,0.0405574845489971,0.00828923996254423,0.0912534666435745,0.00828923996254423,0.324331236652854,0.367036123174964,0.227257966453153,0.0271753829844779,0.025498803498018,0.214606653994134,0.446809254488967,0.0353369299601123,0.000156407834089769,0.246411416935631,0.0673079104051599,0.0599093278561415,0.230729452000225,0.0471151046854977,1.47049492007684e-06,0.175740557139357,0.106675364767068,0.103551212073462,4.10588570771549e-07,0.165953936162473,0.139581657578811,0.103893110485746,0.00285119200552664,0.302934077650866,0.127166579243117,0.983092332032984,0.120325596853336,0.00602338001050697,0.0112425225096888,0.00105033355842184,0.0130733144990504,0.00360324942178286,0.0725075530458235,0.909803318162913,0.0288094917536813,0.00159553699031647,0.0246079047893552,0.0121958191032956,0.966296425596803,0.6989044226985059,0.4961665355324,0.07475728450716521,0.826051112978102,0.204894085294003,0.388219302214308,0.947510246349488,0.00262525081001503,0.470695708316576,0.994593658151026,0.312638305519575,0.12665817515935,0.312638305519575,0.309946790400085,0.639868633255842,0.876529510058395,0.835635355132204,3.81005110797921e-10,0.726174473784976,0.899441403200215,1.37734788348989e-05,0.0129851167568472,0.548203082732478,0.299688460293552,0.873079266148483,0.683403190144343,0.683403190144343,0.311250911019199,0.606353810842726,0.130274625503907,0.00275206286178867,0.856114877424677,2.68664327825877e-06,0.856114877424677,0.856114877424677,0.856114877424677,0.0790760227423955,0.488676595406709,0.207028896364564,0.00214340989601968,0.0970647421143221,0.759400293548803,0.123541544408544,0.675677525016998,0.816417618588997,0.0554564075388699],[0.0117726674318326,0.5166730126210199,0.780963701609526,0.0117726674318326,0.00290612255880775,0.290556976588795,8.11461943670667e-14,0.0275362693911933,0.266183361401555,1.54791023012942e-05,0.09092320918148521,0.033624642789059,0.0976467169426443,0.0144285114309723,1.21456718668178e-06,0.00133865521514759,0.0144285114309723,5.60014299033168e-08,0.158555099933136,0.102069872300982,0.5279035325438191,6.2126281209274e-05,0.0705473496984831,0.0705473496984831,3.98451031303994e-09,0.062015389919305,0.00305611779368326,1.54592621768588e-16,0.0188051499508773,0.00154863324311763,6.73395984520659e-09,6.50250398251908e-05,0.00718934787287069,0.00174714909625465,0.00142972630504531,0.0486566945437001,0.00947822987057423,0.0855434736101004,0.00947822987057423,0.398278850207987,0.398278850207987,0.250294305276807,0.0012621387736656,0.0269495597546741,0.297256492474589,0.250294305276807,0.0364703029893457,5.65358949273497e-05,0.398878772836529,0.0699829201792678,0.0887586522568088,0.268299426008696,0.06529754227714379,9.99426332748797e-08,0.0592468250390496,0.0453728852610229,0.009600277585013211,9.99426332748797e-08,0.0810019722654349,0.0453728852610229,0.0453728852610229,0.00287302851502205,0.296641813740715,0.09419489867567191,0.99668635938336,0.148652864768569,0.007837520476662269,0.0120357342091952,0.000577733867039952,0.0138415386808452,0.00592365371636786,0.0504421028375861,0.890217873707026,0.0296534422093494,0.00107366393861611,0.0280443877372061,0.0258320387537769,0.980002203008094,0.980002203008094,0.980002203008094,0.980002203008094,0.9392012173265371,0.980002203008094,0.980002203008094,0.980002203008094,0.980002203008094,0.980002203008094,0.967650971715496,0.950080772758181,0.950080772758181,0.950080772758181,0.950080772758181,0.915844755808255,0.915844755808255,0.915844755808255,0.5070706759999249,0.915844755808255,0.7445749748767579,0.00100628117954887,0.988352478293381,0.820375880505259,0.634092168233772,0.826627092890731,0.820375880505259,0.826627092890731,0.820375880505259,0.826627092890731,0.657044676740084,0.223476041948465,0.8765985692896749,0.8765985692896749,0.8765985692896749,0.8765985692896749,0.918741189561644,0.11219553471646,0.416650473040114,0.393483552722394,0.393483552722394,0.00540463273652725,0.573113365888965,0.997658877542546,0.485904691255452,0.0830706989837187,0.56294925750228],[0.176859787558747,0.476611734435533,0.858590580457828,0.176859787558747,0.00553937935507279,0.45787418669821,3.43162469460964e-08,0.514447496204587,0.920826280630003,0.00490315527295872,0.0801365169195789,0.288998035671676,0.28981782496085,0.0801365169195789,0.00014183855154877,0.0801365169195789,0.162878095756169,0.132161381953122,0.171667770596863,0.171667770596863,0.602256104043565,0.0992708562665862,1,0.322841102165078,5.75781029605635e-07,0.0580774230943801,0.0438125170829836,5.01297815660304e-05,0.35954785954786,0.0972467080298062,0.00728216665796742,0.08397893714899921,0.0515151680624502,0.316680895823125,0.08179500828339881,0.370829526303729,0.330648740516225,0.261722474565585,0.138552142698788,0.657281373791594,0.492997277910538,0.529706740980156,0.16732769371931,0.0397312087645914,0.211777781820578,0.529706740980156,0.136573919912433,0.00771223902022742,0.529706740980156,0.668675906603586,0.641606249480218,0.456648499002395,0.17592284039501,0.00014199447243208,0.00913740017131574,0.130597721466527,0.0553185694093621,3.08138014691225e-07,0.663075210473841,0.0553185694093621,0.808390437395923,0.0177501182059204,0.620845010027011,0.481078621461399,1,0.0532624737441695,0.226473337133311,0.182587072819173,0.0712080960659741,0.511820635800979,0.59589067598767,0.06838106370543549,0.8437697573582,0.518493540301123,0.251173097103705,0.400211528291909,0.705799400669839,1,0.705496202329446,0.247438910330417,0.39811284725332,0.48858978509987,0.320947010791939,0.353726739836636,0.242166620520186,0.0195151642913909,0.48858978509987,0.0612358164249714,0.132612005727967,0.132612005727967,0.746039433578836,1,0.855054656921558,1,0.681732884352657,3.40435158023551e-06,0.855054656921558,0.90451532931654,0.141302162554811,0.0401798517650304,0.322675108337785,0.74848694027622,0.773459612738761,0.465896261094894,0.22033221564193,0.22033221564193,0.22033221564193,0.769393619962483,0.374136566470342,0.888735867960191,2.22194993927803e-05,0.888735867960191,1,0.76416680112151,0.210453904612633,0.41684115780572,0.548682627823306,0.0619883547617392,0.128986193392813,0.128986193392813,0.211455689574424,0.6382224146754329,0.78148829074921,0.07281570105061221],[0.0720790595820236,0.44968385295859,0.843517381974181,0.0437503642778967,0.00297110974439626,0.472623901920693,2.70980039901156e-10,0.548248290984334,0.924917112227183,0.00259615738630721,0.0757312453154753,0.225297862019398,0.295840528756841,0.0578526469815488,5.50535122152406e-05,0.0578526469815488,0.171454549106675,0.0525441778264824,0.177202171806134,0.177202171806134,0.553591866404737,0.0349189234326213,0.956771437917236,0.238011900353504,1.09836775464974e-07,0.0279592420983931,0.0288033890363222,1.65846684788052e-06,0.254605641571076,0.0941959919141062,0.007826937817153899,0.0490286837295468,0.0296329280242905,0.101910605899757,0.0444702141552285,0.389577220189312,0.203108182573089,0.176685549641615,0.0342649473597768,0.530803555220713,0.522760587699556,0.5352235401152819,0.136084666577175,0.0417350379541209,0.212092445437346,0.5352235401152819,0.136084666577175,0.000942486340796752,0.5352235401152819,0.5254273913487481,0.558555781670978,0.492552260665354,0.06647700796037009,4.17436948954203e-05,0.00521987587114941,0.118191698298437,0.0482277408366362,1.87169715929624e-07,0.639527335966852,0.0482277408366362,0.821181188790981,0.0161039569188373,0.625849152594927,0.495237321228358,1,0.0338156629320528,0.120289673048764,0.187900457034913,0.0615697836160546,0.456588379385338,0.5350288210531881,0.0401993619618553,0.818181625003187,0.398228851584449,0.139883356204202,0.351368732254498,0.662132392155661,1,0.59727487489353,0.252468257742831,0.362084813957723,0.491538054730703,0.323723812442975,0.281854548138619,0.248587868364228,0.00281632281023824,0.408863199428165,0.0644390434515956,0.123343889538067,0.123343889538067,0.566072245084591,1,0.820547258881088,1,0.685228626232891,1.04342748237087e-06,0.870260585015307,0.898823556353164,0.0712385765151768,0.0303329474480794,0.276095118458855,0.7347201836273,0.7347201836273,0.470143526053528,0.188641699519519,0.166973736477298,0.185245909790789,0.580317686816039,0.377061013646257,0.821829461933516,3.88047876097167e-06,0.821829461933516,1,0.77225327666897,0.137856047873809,0.424642644614065,0.440181362511041,0.0293211230830262,0.08913570799945961,0.116910737304206,0.0951832537187665,0.651720336966069,0.789034315563059,0.046603566006598],[0.0789674980437045,0.493240688652743,0.888494056535481,0.00350405659468356,0.968418014883952,0.509683361915376,3.66821781195287e-12,0.372651918087281,0.701982183892331,0.00719795928819213,0.14827479189208,0.180600039148407,0.302034754782403,0.136101447866264,0.00719795928819213,0.136101447866264,0.136101447866264,9.797827846327479e-05,0.239847707970299,0.981259169727432,0.548100603753404,0.00414709589210231,0.822302240121161,0.153695906526375,2.69432265573121e-07,0.162867721901915,0.022814244321923,2.01807162985132e-08,0.173195241690052,0.146376633349946,0.993997898546258,0.0537095313909559,0.162597032635956,0.0270892424502963,0.0270892424502963,0.29616748012944,0.0773020501876833,0.126342123796479,0.0044437646559062,0.478433190573886,0.463854088606623,0.419677160157898,0.166839832891639,0.166839832891639,0.970921484429659,0.476629910029217,0.206418604623696,2.26968808419106e-05,0.419677160157898,0.429879426138642,0.5652382734040829,0.54620991484619,0.0175183422263708,0.00132297709113541,0.9811094549988491,0.26703912789822,0.233570032980151,0.9811094549988491,0.669487930814833,0.233570032980151,0.669487930814833,0.980075015222862,0.981894100346573,0.5293277474756301,0.932516663407296,0.0669797770755502,0.133572332581108,0.130128793472977,0.127221334381631,0.358084658400238,0.190833310643849,0.993524384501565,0.767557797526655,0.240240381266662,0.329664229199523,0.442181305854568,0.281508860293221,0.733061416224339,0.638741971575527,0.252964419556441,0.344150343385518,0.344150343385518,0.264381584465437,0.299216598231525,0.366559356138489,0.00233579602725,0.540408384893986,0.153493237509928,0.983219293678734,0.166822786088584,0.57947192930527,0.718304803566816,0.806410710391452,0.907426323561028,0.907426323561028,6.800523268085499e-05,0.723117202819982,0.71417575898172,0.191240316513487,0.0218377011762979,0.14960617433545,0.796330221254524,0.636391685820023,0.402461296671616,0.159431564072976,0.14960617433545,0.274463541848797,0.0521140609184302,0.228902305355582,0.641342341565908,0.000235647610269517,0.71657319553043,0.712156020204844,0.619838182544052,0.11233172728658,0.174634582471414,0.274740975094013,0.0165988797835647,0.0681125085987135,0.133058463240221,0.384690547518631,0.5283385108983359,0.431609888356184,0.0215837173573724],[20,5,11,130,0,7,150,2,2,7,1,9,3,2,2,1,5,172,1,0,1,46,16,9,30,13,12,36,2,13,0,32,12,60,27,4,22,15,37,21,3,3,15,1,0,6,6,109,3,1,11,3,43,5,0,2,2,0,26,1,8,6,0,1,63,15,9,7,8,4,15,5,5,6,7,4,14,4,16,14,16,3,2,5,6,91,12,2,0,1,1,2,24,8,25,34,29,35,11,20,13,30,56,7,10,16,18,42,7,58,28,33,6,7,19,5,11,12,11,4,53,5,4,9],[38,10,13,65,14,19,71,8,11,36,11,23,11,14,31,12,17,158,8,5,8,40,20,20,12,3,6,16,8,2,12,13,1,96,9,12,46,5,16,39,12,9,35,13,5,13,20,208,9,10,5,16,41,39,13,12,14,33,42,12,14,0,5,8,78,3,15,3,2,1,44,0,4,4,3,1,45,9,25,16,44,12,11,19,23,106,16,24,10,15,7,6,56,16,44,13,57,28,3,16,36,50,96,8,9,16,20,43,3,100,8,56,12,9,25,19,17,56,10,2,82,15,12,44],[208,208,208,208,405,405,405,81,73,214,214,214,214,214,214,214,214,214,116,116,130,130,242,242,130,113,69,69,31,461,94,245,245,135,135,135,105,105,105,178,178,417,417,417,417,417,417,417,417,68,89,96,96,218,218,218,218,218,218,218,218,139,84,145,208,80,86,61,123,43,43,17,52,57,119,40,40,133,133,133,133,133,133,133,133,133,133,267,60,60,60,60,158,158,158,158,158,166,143,186,186,186,186,186,186,186,186,51,179,99,99,99,99,99,71,71,71,71,71,71,71,71,71,71],[173,173,173,173,492,492,492,79,189,268,268,268,268,268,268,268,268,268,158,158,218,218,220,220,331,164,147,147,22,473,95,246,246,141,141,141,119,119,119,208,208,502,502,502,502,502,502,502,502,112,91,173,173,269,269,269,269,269,269,269,269,267,191,207,256,87,61,119,233,78,78,37,130,123,237,81,81,258,258,258,258,258,258,258,258,258,258,652,120,120,120,120,333,333,333,333,333,162,210,339,339,339,339,339,339,339,339,69,304,182,182,182,182,182,153,153,153,153,153,153,153,153,153,153],["FGFR3","HRAS","NFE2L2","TP53","CTCF","MAP3K1","TP53","SMARCA4","IDH1","CASP8","CTCF","EP300","HLA-A","HLA-B","HRAS","RAC1","TGFBR2","TP53","CUL3","KRAS","HNF1A","TP53","BRAF","SETD2","TP53","MAP2K1","PPP2R1A","TP53","PTEN","FOXA1","IDH1","CASP8","RAC1","BRAF","NF1","PTEN","CTNNB1","PPP2R1A","TP53","FGFR3","HRAS","CBFB","CDH1","CTCF","KRAS","MAP2K4","MAP3K1","PIK3CA","RUNX1","KRAS","NFE2L2","NF1","TP53","CASP8","EPHA2","HLA-A","HLA-B","HRAS","NOTCH1","RAC1","TGFBR2","TP53","KRAS","HNF1A","KRAS","KEAP1","KIT","SMARCA4","BAP1","RNF43","TP53","ZBTB7B","MAPK1","SMARCA4","BAP1","RNF43","TP53","CDKN1A","CREBBP","FBXW7","FGFR3","HRAS","KRAS","NFE2L2","RHOB","TP53","TSC1","MAP3K1","CDKN2A","NFE2L2","SLC17A6","TGFBR2","CDKN2A","FBXW7","NOTCH1","NSD1","PIK3CA","PBRM1","KEAP1","BRAF","EGFR","KEAP1","KRAS","NFE2L2","RB1","SETD2","STK11","KRAS","CDK12","BRAF","NF1","NRAS","PPP6C","PTEN","ARID1A","CHD4","CTCF","CTNNB1","FGFR2","NRAS","PIK3CA","PPP2R1A","SPOP","TP53"],["sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig","sig"],[-0.1237247669249133,-0.1812782714586452,-0.1262165105239841,0.5204332904837937,-0.4266003243748149,-0.108123149592971,0.6775768503576787,-0.2529679115001938,-0.686409762513319,-0.1848109129690963,-0.1780368293198797,-0.1259742082591678,-0.1277328834353024,-0.5392490321892324,-0.2918956352938264,-0.4521050698186168,-0.1566567978871767,0.7015882372945026,-0.3949809399981761,-0.325358091187531,-0.5550240112755311,1.136660652797727,-0.1318012626624283,-0.1524744442372575,0.7984516283015419,0.1257436175976657,0.1673559109081773,0.3876051757983722,-0.2415974971188512,0.1210600188526892,-0.1814555482018654,0.08023156075082746,0.2302717274017669,-0.08118345204644646,0.1146774557571678,-0.07676313087907788,-0.06531833914680654,0.08113248661371593,0.06486843720562627,-3.726154550630302,-6.692997200971188,-6.512297705687697,-6.939455216566822,-11.56585003428829,-13.49561709237458,-5.35614717083825,-6.565695391256523,-5.126062437593337,-6.893494072675101,-9.913421321855239,7.838082438275,-20.18369583951743,7.664656482678052,-14.11878698329427,-25.55584433337004,-8.24580966438627,-20.67586729719861,-18.91091673945385,-4.941488634048119,-37.91757457590643,-6.30943904391188,6.56777134249548,-19.13838348196998,-14.53138602528128,-3.66702918475445,9.324455818631893,-6.888670062616818,0.09762020403883696,0.0631750328564807,0.05959203617666256,-0.2221291164113858,0.06436440276752656,0.2186417868499999,0.0977892447838925,0.0596006132200989,0.06401694536931556,-0.1864174991475366,-0.2631192410418201,-0.2467093355782402,-0.115433814603644,-0.2408061726625802,-0.2237455768351254,-0.3659240127608375,-0.313598490269812,-0.1056234844535549,-0.176887916492308,-0.220177443167517,-0.8182604764085296,-1.521754666263591,-0.8985978789197209,-0.7207085709615367,-0.7647665459815379,-0.3316539689057574,-0.2955203568617546,-0.2376744569129541,0.2240185243444212,-0.1871222809636783,-2.334882878629052,0.6815986978551202,-0.06230381112604784,-0.5608037242779144,-0.1056829476970198,-0.1358637555791747,-0.1023796616945684,-0.1054396437975664,-0.09799683591743866,-0.1736495451542835,-2.817636791347562,2.137473559497763,-0.02635046144703013,0.1053574541896369,-0.07870249408706273,-0.04696204730659801,-0.06633325794594673,-0.1996764175960401,-0.9287376195557646,-0.1447777498009236,-0.2648863035648613,-0.08261266396598116,-0.1995004477487787,-0.05881275417498674,-0.292365916620612,-0.1213409417779713,-0.4869529928916229],[true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true],["BLCA","BLCA","BLCA","BLCA","BRCA","BRCA","BRCA","ESCA","GBM","HNSC","HNSC","HNSC","HNSC","HNSC","HNSC","HNSC","HNSC","HNSC","KIRP","KIRP","LIHC","LIHC","LUAD","LUAD","PRAD","SKCM","UCEC","UCEC","UCS","BRCA","GBM","HNSC","HNSC","SKCM","SKCM","SKCM","UCEC","UCEC","UCEC","BLCA","BLCA","BRCA","BRCA","BRCA","BRCA","BRCA","BRCA","BRCA","BRCA","CESC","ESCA","GBM","GBM","HNSC","HNSC","HNSC","HNSC","HNSC","HNSC","HNSC","HNSC","KIRC","KIRP","LIHC","LUAD","LUSC","TGCT","ESCA","LIHC","PAAD","PAAD","UCS","CESC","ESCA","LIHC","PAAD","PAAD","BLCA","BLCA","BLCA","BLCA","BLCA","BLCA","BLCA","BLCA","BLCA","BLCA","BRCA","ESCA","ESCA","ESCA","ESCA","HNSC","HNSC","HNSC","HNSC","HNSC","KIRC","LIHC","LUAD","LUAD","LUAD","LUAD","LUAD","LUAD","LUAD","LUAD","PAAD","PRAD","SKCM","SKCM","SKCM","SKCM","SKCM","UCEC","UCEC","UCEC","UCEC","UCEC","UCEC","UCEC","UCEC","UCEC","UCEC"],["Aneuploidy.Score","Aneuploidy.Score","Aneuploidy.Score","Aneuploidy.Score","Aneuploidy.Score","Aneuploidy.Score","Aneuploidy.Score","Aneuploidy.Score","Aneuploidy.Score","Aneuploidy.Score","Aneuploidy.Score","Aneuploidy.Score","Aneuploidy.Score","Aneuploidy.Score","Aneuploidy.Score","Aneuploidy.Score","Aneuploidy.Score","Aneuploidy.Score","Aneuploidy.Score","Aneuploidy.Score","Aneuploidy.Score","Aneuploidy.Score","Aneuploidy.Score","Aneuploidy.Score","Aneuploidy.Score","Aneuploidy.Score","Aneuploidy.Score","Aneuploidy.Score","Aneuploidy.Score","Diagnosis.Age","Diagnosis.Age","Diagnosis.Age","Diagnosis.Age","Diagnosis.Age","Diagnosis.Age","Diagnosis.Age","Diagnosis.Age","Diagnosis.Age","Diagnosis.Age","Fraction.Genome.Altered","Fraction.Genome.Altered","Fraction.Genome.Altered","Fraction.Genome.Altered","Fraction.Genome.Altered","Fraction.Genome.Altered","Fraction.Genome.Altered","Fraction.Genome.Altered","Fraction.Genome.Altered","Fraction.Genome.Altered","Fraction.Genome.Altered","Fraction.Genome.Altered","Fraction.Genome.Altered","Fraction.Genome.Altered","Fraction.Genome.Altered","Fraction.Genome.Altered","Fraction.Genome.Altered","Fraction.Genome.Altered","Fraction.Genome.Altered","Fraction.Genome.Altered","Fraction.Genome.Altered","Fraction.Genome.Altered","Fraction.Genome.Altered","Fraction.Genome.Altered","Fraction.Genome.Altered","Fraction.Genome.Altered","Fraction.Genome.Altered","Fraction.Genome.Altered","Months.of.disease.specific.survival","Months.of.disease.specific.survival","Months.of.disease.specific.survival","Months.of.disease.specific.survival","Months.of.disease.specific.survival","Progress.Free.Survival.Months","Progress.Free.Survival.Months","Progress.Free.Survival.Months","Progress.Free.Survival.Months","Progress.Free.Survival.Months","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous","TMB.nonsynonymous"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>dd.p<\/th>\n      <th>mlr.p<\/th>\n      <th>mlr.v2.p<\/th>\n      <th>fisher.p<\/th>\n      <th>binom.p<\/th>\n      <th>lr.p<\/th>\n      <th>dd.fdr<\/th>\n      <th>mlr.fdr<\/th>\n      <th>mlr.v2.fdr<\/th>\n      <th>fisher.fdr<\/th>\n      <th>binom.fdr<\/th>\n      <th>lr.fdr<\/th>\n      <th>mut.E1<\/th>\n      <th>mut.E0<\/th>\n      <th>E1<\/th>\n      <th>E0<\/th>\n      <th>gene<\/th>\n      <th>mode<\/th>\n      <th>alpha<\/th>\n      <th>significant<\/th>\n      <th>tumor<\/th>\n      <th>pheno<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Bfrtip","buttons":["copy","csv","excel","pdf","print"],"pageLength":10,"columnDefs":[{"className":"dt-right","targets":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,19]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"dd.p","targets":1},{"name":"mlr.p","targets":2},{"name":"mlr.v2.p","targets":3},{"name":"fisher.p","targets":4},{"name":"binom.p","targets":5},{"name":"lr.p","targets":6},{"name":"dd.fdr","targets":7},{"name":"mlr.fdr","targets":8},{"name":"mlr.v2.fdr","targets":9},{"name":"fisher.fdr","targets":10},{"name":"binom.fdr","targets":11},{"name":"lr.fdr","targets":12},{"name":"mut.E1","targets":13},{"name":"mut.E0","targets":14},{"name":"E1","targets":15},{"name":"E0","targets":16},{"name":"gene","targets":17},{"name":"mode","targets":18},{"name":"alpha","targets":19},{"name":"significant","targets":20},{"name":"tumor","targets":21},{"name":"pheno","targets":22}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="plotting-the-number-of-significant-differential-genes"
+class="section level1">
+<h1>Plotting the Number of Significant Differential Genes</h1>
+<p>The provided function generates bar plots illustrating the number of
+significantly differentially expressed genes
+(<strong><code>dd.fdr &lt; 0.1</code></strong>) for each tumor type
+across different phenotype contexts.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">library</span>(scales)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>phenotype_label_map <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>  <span class="st">&quot;Diagnosis.Age&quot;</span>                     <span class="ot">=</span> <span class="st">&quot;Patient Age&quot;</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>  <span class="st">&quot;Months.of.disease.specific.survival&quot;</span> <span class="ot">=</span> <span class="st">&quot;Disease-Specific Survival&quot;</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>  <span class="st">&quot;Progress.Free.Survival.Months&quot;</span>     <span class="ot">=</span> <span class="st">&quot;Progression-Free Survival&quot;</span>,</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>  <span class="st">&quot;TMB.nonsynonymous&quot;</span>                 <span class="ot">=</span> <span class="st">&quot;Tumor Mutational Burden (TMB)&quot;</span>,</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>  <span class="st">&quot;Fraction.Genome.Altered&quot;</span>           <span class="ot">=</span> <span class="st">&quot;Fraction of Genome Altered (FGA)&quot;</span>,</span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>  <span class="st">&quot;Aneuploidy.Score&quot;</span>                  <span class="ot">=</span> <span class="st">&quot;Aneuploidy Score&quot;</span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>)</span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>plot_diff_number <span class="ot">&lt;-</span> <span class="cf">function</span>(filedf, <span class="at">mode =</span> <span class="fu">c</span>(<span class="st">&quot;reg&quot;</span>, <span class="st">&quot;sig&quot;</span>)){</span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>  </span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>  filedf <span class="ot">&lt;-</span> filedf[filedf<span class="sc">$</span>mode <span class="sc">==</span> mode, ]</span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a>  </span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a>  pheno_all <span class="ot">&lt;-</span> <span class="fu">unique</span>(filedf<span class="sc">$</span>phenotype)</span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a>  numlist <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a>  </span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a>  pt <span class="ot">&lt;-</span> scales<span class="sc">::</span><span class="fu">pseudo_log_trans</span>()</span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a>  mar <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">5</span>,<span class="dv">2</span>,<span class="dv">1</span>)</span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a>  <span class="cf">for</span> (p <span class="cf">in</span> pheno_all){</span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a>    p_txtfiles <span class="ot">&lt;-</span> filedf[filedf<span class="sc">$</span>phenotype <span class="sc">==</span> p, ]</span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a>    numlist[[p]] <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a>    <span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(p_txtfiles)){</span>
+<span id="cb5-25"><a href="#cb5-25" tabindex="-1"></a>      txtf <span class="ot">&lt;-</span> p_txtfiles[t, <span class="st">&quot;filetxt&quot;</span>]</span>
+<span id="cb5-26"><a href="#cb5-26" tabindex="-1"></a>      tumor <span class="ot">&lt;-</span> p_txtfiles[t, <span class="st">&quot;tumor&quot;</span>]</span>
+<span id="cb5-27"><a href="#cb5-27" tabindex="-1"></a>      res <span class="ot">&lt;-</span> <span class="fu">read.table</span>(txtf, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb5-28"><a href="#cb5-28" tabindex="-1"></a>      numlist[[p]][[tumor]] <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb5-29"><a href="#cb5-29" tabindex="-1"></a>        <span class="fu">nrow</span>(res[res<span class="sc">$</span>dd.fdr <span class="sc">&lt;</span> <span class="fl">0.1</span>,]),</span>
+<span id="cb5-30"><a href="#cb5-30" tabindex="-1"></a>        <span class="fu">nrow</span>(res) <span class="sc">-</span> <span class="fu">nrow</span>(res[res<span class="sc">$</span>dd.fdr <span class="sc">&lt;</span> <span class="fl">0.1</span>,])</span>
+<span id="cb5-31"><a href="#cb5-31" tabindex="-1"></a>      )</span>
+<span id="cb5-32"><a href="#cb5-32" tabindex="-1"></a>    }</span>
+<span id="cb5-33"><a href="#cb5-33" tabindex="-1"></a>  }</span>
+<span id="cb5-34"><a href="#cb5-34" tabindex="-1"></a>  </span>
+<span id="cb5-35"><a href="#cb5-35" tabindex="-1"></a>  <span class="co"># par(mfrow = c(length(numlist),1), mar = c(1,5,2,0))</span></span>
+<span id="cb5-36"><a href="#cb5-36" tabindex="-1"></a>  n_plots <span class="ot">&lt;-</span> <span class="fu">length</span>(numlist)</span>
+<span id="cb5-37"><a href="#cb5-37" tabindex="-1"></a>  layout_matrix <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span>n_plots, <span class="at">ncol =</span> <span class="dv">1</span>)</span>
+<span id="cb5-38"><a href="#cb5-38" tabindex="-1"></a>  plot_heights <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">1</span>, n_plots <span class="sc">-</span> <span class="dv">1</span>), <span class="fl">1.4</span>)</span>
+<span id="cb5-39"><a href="#cb5-39" tabindex="-1"></a>  <span class="fu">layout</span>(layout_matrix, <span class="at">heights =</span> plot_heights)</span>
+<span id="cb5-40"><a href="#cb5-40" tabindex="-1"></a>  </span>
+<span id="cb5-41"><a href="#cb5-41" tabindex="-1"></a>  last_pheno <span class="ot">&lt;-</span> <span class="fu">tail</span>(<span class="fu">names</span>(numlist), <span class="dv">1</span>)</span>
+<span id="cb5-42"><a href="#cb5-42" tabindex="-1"></a>  </span>
+<span id="cb5-43"><a href="#cb5-43" tabindex="-1"></a>  <span class="cf">for</span> (phenotype <span class="cf">in</span> <span class="fu">names</span>(numlist)) {</span>
+<span id="cb5-44"><a href="#cb5-44" tabindex="-1"></a>    </span>
+<span id="cb5-45"><a href="#cb5-45" tabindex="-1"></a>    <span class="cf">if</span> (phenotype <span class="sc">==</span> last_pheno) {</span>
+<span id="cb5-46"><a href="#cb5-46" tabindex="-1"></a>      <span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">8</span>, <span class="dv">5</span>, <span class="dv">2</span>, <span class="dv">0</span>))</span>
+<span id="cb5-47"><a href="#cb5-47" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb5-48"><a href="#cb5-48" tabindex="-1"></a>      <span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">2</span>, <span class="dv">0</span>))</span>
+<span id="cb5-49"><a href="#cb5-49" tabindex="-1"></a>    }</span>
+<span id="cb5-50"><a href="#cb5-50" tabindex="-1"></a>    </span>
+<span id="cb5-51"><a href="#cb5-51" tabindex="-1"></a>    colors <span class="ot">&lt;-</span> <span class="fu">rainbow</span>(<span class="fu">length</span>(numlist[[phenotype]]))</span>
+<span id="cb5-52"><a href="#cb5-52" tabindex="-1"></a>    max_height <span class="ot">&lt;-</span> <span class="fu">max</span>(<span class="fu">unlist</span>(<span class="fu">lapply</span>(numlist[[phenotype]], <span class="cf">function</span>(x) <span class="fu">sum</span>(x))))</span>
+<span id="cb5-53"><a href="#cb5-53" tabindex="-1"></a>    </span>
+<span id="cb5-54"><a href="#cb5-54" tabindex="-1"></a>    max_plot_height <span class="ot">&lt;-</span> pt<span class="sc">$</span><span class="fu">transform</span>(max_height)</span>
+<span id="cb5-55"><a href="#cb5-55" tabindex="-1"></a>    </span>
+<span id="cb5-56"><a href="#cb5-56" tabindex="-1"></a>    <span class="fu">plot</span>(</span>
+<span id="cb5-57"><a href="#cb5-57" tabindex="-1"></a>      <span class="cn">NULL</span>,</span>
+<span id="cb5-58"><a href="#cb5-58" tabindex="-1"></a>      <span class="at">xlim =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fu">length</span>(numlist[[phenotype]]) <span class="sc">+</span> <span class="fl">0.5</span>),</span>
+<span id="cb5-59"><a href="#cb5-59" tabindex="-1"></a>      <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, max_plot_height <span class="sc">*</span> <span class="fl">1.3</span>),</span>
+<span id="cb5-60"><a href="#cb5-60" tabindex="-1"></a>      <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb5-61"><a href="#cb5-61" tabindex="-1"></a>      <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb5-62"><a href="#cb5-62" tabindex="-1"></a>      <span class="at">main =</span> <span class="fu">paste</span>(<span class="st">&quot;Context:&quot;</span>, <span class="fu">ifelse</span>(phenotype <span class="sc">%in%</span> <span class="fu">names</span>(phenotype_label_map),</span>
+<span id="cb5-63"><a href="#cb5-63" tabindex="-1"></a>                                      phenotype_label_map[phenotype], phenotype)),</span>
+<span id="cb5-64"><a href="#cb5-64" tabindex="-1"></a>      <span class="at">xaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">yaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">bty =</span> <span class="st">&#39;n&#39;</span>,</span>
+<span id="cb5-65"><a href="#cb5-65" tabindex="-1"></a>      <span class="at">cex.main =</span> <span class="fl">2.5</span></span>
+<span id="cb5-66"><a href="#cb5-66" tabindex="-1"></a>    )</span>
+<span id="cb5-67"><a href="#cb5-67" tabindex="-1"></a>    </span>
+<span id="cb5-68"><a href="#cb5-68" tabindex="-1"></a>    <span class="fu">title</span>(</span>
+<span id="cb5-69"><a href="#cb5-69" tabindex="-1"></a>      <span class="at">ylab =</span> <span class="st">&quot;No. Genes&quot;</span>,</span>
+<span id="cb5-70"><a href="#cb5-70" tabindex="-1"></a>      <span class="at">cex.lab =</span> <span class="fl">2.3</span></span>
+<span id="cb5-71"><a href="#cb5-71" tabindex="-1"></a>    )</span>
+<span id="cb5-72"><a href="#cb5-72" tabindex="-1"></a></span>
+<span id="cb5-73"><a href="#cb5-73" tabindex="-1"></a>    <span class="cf">if</span> (phenotype <span class="sc">==</span> last_pheno) {</span>
+<span id="cb5-74"><a href="#cb5-74" tabindex="-1"></a>       <span class="fu">title</span>(<span class="at">xlab =</span> <span class="st">&quot;Tumor Type&quot;</span>, <span class="at">cex.lab =</span> <span class="dv">2</span>, <span class="at">line =</span> <span class="dv">6</span>)</span>
+<span id="cb5-75"><a href="#cb5-75" tabindex="-1"></a>    }</span>
+<span id="cb5-76"><a href="#cb5-76" tabindex="-1"></a>    </span>
+<span id="cb5-77"><a href="#cb5-77" tabindex="-1"></a>    y_ticks <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">30</span>, <span class="dv">60</span>)</span>
+<span id="cb5-78"><a href="#cb5-78" tabindex="-1"></a>    y_ticks <span class="ot">&lt;-</span> y_ticks[y_ticks <span class="sc">&lt;=</span> max_height]</span>
+<span id="cb5-79"><a href="#cb5-79" tabindex="-1"></a>    <span class="fu">axis</span>(<span class="dv">2</span>, <span class="at">at =</span> pt<span class="sc">$</span><span class="fu">transform</span>(y_ticks), <span class="at">labels =</span> y_ticks, <span class="at">cex.axis =</span> <span class="fl">1.8</span>, <span class="at">xpd =</span> <span class="cn">NA</span>)</span>
+<span id="cb5-80"><a href="#cb5-80" tabindex="-1"></a>    </span>
+<span id="cb5-81"><a href="#cb5-81" tabindex="-1"></a>    <span class="fu">grid</span>()</span>
+<span id="cb5-82"><a href="#cb5-82" tabindex="-1"></a></span>
+<span id="cb5-83"><a href="#cb5-83" tabindex="-1"></a>    <span class="cf">if</span> (phenotype <span class="sc">==</span> last_pheno) {</span>
+<span id="cb5-84"><a href="#cb5-84" tabindex="-1"></a>      <span class="fu">axis</span>(</span>
+<span id="cb5-85"><a href="#cb5-85" tabindex="-1"></a>        <span class="dv">1</span>,</span>
+<span id="cb5-86"><a href="#cb5-86" tabindex="-1"></a>        <span class="at">at =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(numlist[[phenotype]]),</span>
+<span id="cb5-87"><a href="#cb5-87" tabindex="-1"></a>        <span class="at">labels =</span> <span class="fu">names</span>(numlist[[phenotype]]),</span>
+<span id="cb5-88"><a href="#cb5-88" tabindex="-1"></a>        <span class="at">las =</span> <span class="dv">2</span>,</span>
+<span id="cb5-89"><a href="#cb5-89" tabindex="-1"></a>        <span class="at">cex.axis =</span> <span class="fl">1.8</span></span>
+<span id="cb5-90"><a href="#cb5-90" tabindex="-1"></a>      )</span>
+<span id="cb5-91"><a href="#cb5-91" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb5-92"><a href="#cb5-92" tabindex="-1"></a>      <span class="fu">axis</span>(</span>
+<span id="cb5-93"><a href="#cb5-93" tabindex="-1"></a>        <span class="dv">1</span>,</span>
+<span id="cb5-94"><a href="#cb5-94" tabindex="-1"></a>        <span class="at">at =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(numlist[[phenotype]]),</span>
+<span id="cb5-95"><a href="#cb5-95" tabindex="-1"></a>        <span class="at">labels =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb5-96"><a href="#cb5-96" tabindex="-1"></a>        <span class="at">tick =</span> <span class="cn">FALSE</span></span>
+<span id="cb5-97"><a href="#cb5-97" tabindex="-1"></a>      )</span>
+<span id="cb5-98"><a href="#cb5-98" tabindex="-1"></a>    }</span>
+<span id="cb5-99"><a href="#cb5-99" tabindex="-1"></a>    </span>
+<span id="cb5-100"><a href="#cb5-100" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(numlist[[phenotype]])) {</span>
+<span id="cb5-101"><a href="#cb5-101" tabindex="-1"></a>      sig_count <span class="ot">&lt;-</span> numlist[[phenotype]][[i]][<span class="dv">1</span>]</span>
+<span id="cb5-102"><a href="#cb5-102" tabindex="-1"></a>      nonsig_count <span class="ot">&lt;-</span> numlist[[phenotype]][[i]][<span class="dv">2</span>]</span>
+<span id="cb5-103"><a href="#cb5-103" tabindex="-1"></a></span>
+<span id="cb5-104"><a href="#cb5-104" tabindex="-1"></a>      <span class="fu">rect</span>(i <span class="sc">-</span> <span class="fl">0.4</span>, pt<span class="sc">$</span><span class="fu">transform</span>(sig_count), i <span class="sc">+</span> <span class="fl">0.4</span>, </span>
+<span id="cb5-105"><a href="#cb5-105" tabindex="-1"></a>          pt<span class="sc">$</span><span class="fu">transform</span>(sig_count <span class="sc">+</span> nonsig_count),</span>
+<span id="cb5-106"><a href="#cb5-106" tabindex="-1"></a>          <span class="at">col =</span> <span class="fu">adjustcolor</span>(colors[i], <span class="at">alpha.f =</span> <span class="fl">0.15</span>), </span>
+<span id="cb5-107"><a href="#cb5-107" tabindex="-1"></a>          <span class="at">border =</span> <span class="cn">NA</span>)</span>
+<span id="cb5-108"><a href="#cb5-108" tabindex="-1"></a>      </span>
+<span id="cb5-109"><a href="#cb5-109" tabindex="-1"></a>      <span class="cf">if</span> (sig_count <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb5-110"><a href="#cb5-110" tabindex="-1"></a>        <span class="fu">rect</span>(i <span class="sc">-</span> <span class="fl">0.4</span>, pt<span class="sc">$</span><span class="fu">transform</span>(<span class="dv">0</span>), i <span class="sc">+</span> <span class="fl">0.4</span>, pt<span class="sc">$</span><span class="fu">transform</span>(sig_count),</span>
+<span id="cb5-111"><a href="#cb5-111" tabindex="-1"></a>             <span class="at">col =</span> colors[i], <span class="at">border =</span> <span class="cn">NA</span>)</span>
+<span id="cb5-112"><a href="#cb5-112" tabindex="-1"></a>        <span class="fu">text</span>(i, pt<span class="sc">$</span><span class="fu">transform</span>(sig_count) <span class="sc">*</span> <span class="fl">1.2</span>, sig_count, <span class="at">cex =</span> <span class="fl">1.0</span>)</span>
+<span id="cb5-113"><a href="#cb5-113" tabindex="-1"></a>      }</span>
+<span id="cb5-114"><a href="#cb5-114" tabindex="-1"></a>    }</span>
+<span id="cb5-115"><a href="#cb5-115" tabindex="-1"></a>    </span>
+<span id="cb5-116"><a href="#cb5-116" tabindex="-1"></a>  }</span>
+<span id="cb5-117"><a href="#cb5-117" tabindex="-1"></a>}</span></code></pre></div>
+<div id="visualization-under-sig-mode" class="section level2">
+<h2>Visualization under “Sig” Mode</h2>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">plot_diff_number</span>(filedf, <span class="at">mode =</span> <span class="st">&quot;sig&quot;</span>)</span></code></pre></div>
+<p><img src="figure/Clinical.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="multi-faceted-dot-plot-for-differential-gene-analysis"
+class="section level1">
+<h1>Multi-Faceted Dot Plot for Differential Gene Analysis</h1>
+<p>This function generates a series of dot plots to illustrate
+differential gene analysis results across various tumors and phenotypes.
+Each plot highlights significance (positive, negative, non-significant),
+p-values, and relative effect sizes.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code></pre></div>
+<pre><code>
+Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>The following objects are masked from &#39;package:stats&#39;:
+
+    filter, lag</code></pre>
+<pre><code>The following objects are masked from &#39;package:base&#39;:
+
+    intersect, setdiff, setequal, union</code></pre>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>plot_diff_gene <span class="ot">&lt;-</span> <span class="cf">function</span>(diff_table_all, filedf, <span class="at">mode =</span> <span class="fu">c</span>(<span class="st">&quot;sig&quot;</span>, <span class="st">&quot;reg&quot;</span>)) {</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>  dt <span class="ot">&lt;-</span> diff_table_all[diff_table_all<span class="sc">$</span>mode <span class="sc">==</span> mode, ]</span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>  </span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>  all_tumors <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">unique</span>(filedf<span class="sc">$</span>tumor))</span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>  all_phenos <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">unique</span>(filedf<span class="sc">$</span>phenotype))</span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a>   </span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a>  dt <span class="ot">&lt;-</span> dt <span class="sc">%&gt;%</span></span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a>    <span class="fu">mutate</span>(</span>
+<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a>      <span class="at">tumor =</span> <span class="fu">factor</span>(tumor, <span class="at">levels =</span> all_tumors),</span>
+<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a>      <span class="at">pheno =</span> <span class="fu">factor</span>(pheno, <span class="at">levels =</span> all_phenos)</span>
+<span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a>    )</span>
+<span id="cb11-14"><a href="#cb11-14" tabindex="-1"></a>  </span>
+<span id="cb11-15"><a href="#cb11-15" tabindex="-1"></a>  gene_order <span class="ot">&lt;-</span> dt <span class="sc">%&gt;%</span></span>
+<span id="cb11-16"><a href="#cb11-16" tabindex="-1"></a>    <span class="fu">group_by</span>(gene) <span class="sc">%&gt;%</span></span>
+<span id="cb11-17"><a href="#cb11-17" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb11-18"><a href="#cb11-18" tabindex="-1"></a>    <span class="fu">arrange</span>(<span class="fu">desc</span>(n)) <span class="sc">%&gt;%</span></span>
+<span id="cb11-19"><a href="#cb11-19" tabindex="-1"></a>    <span class="fu">pull</span>(gene)</span>
+<span id="cb11-20"><a href="#cb11-20" tabindex="-1"></a>  </span>
+<span id="cb11-21"><a href="#cb11-21" tabindex="-1"></a>  dt <span class="ot">&lt;-</span> dt <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">gene =</span> <span class="fu">factor</span>(gene, <span class="at">levels =</span> gene_order))</span>
+<span id="cb11-22"><a href="#cb11-22" tabindex="-1"></a></span>
+<span id="cb11-23"><a href="#cb11-23" tabindex="-1"></a>  all_genes  <span class="ot">&lt;-</span> <span class="fu">levels</span>(dt<span class="sc">$</span>gene)</span>
+<span id="cb11-24"><a href="#cb11-24" tabindex="-1"></a></span>
+<span id="cb11-25"><a href="#cb11-25" tabindex="-1"></a>  plots_list <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb11-26"><a href="#cb11-26" tabindex="-1"></a></span>
+<span id="cb11-27"><a href="#cb11-27" tabindex="-1"></a>  <span class="cf">for</span> (current_gene <span class="cf">in</span> all_genes) {</span>
+<span id="cb11-28"><a href="#cb11-28" tabindex="-1"></a>    df_gene <span class="ot">&lt;-</span> dt <span class="sc">%&gt;%</span> <span class="fu">filter</span>(gene <span class="sc">==</span> current_gene)</span>
+<span id="cb11-29"><a href="#cb11-29" tabindex="-1"></a>    </span>
+<span id="cb11-30"><a href="#cb11-30" tabindex="-1"></a>    full_grid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(</span>
+<span id="cb11-31"><a href="#cb11-31" tabindex="-1"></a>      <span class="at">tumor =</span> all_tumors,</span>
+<span id="cb11-32"><a href="#cb11-32" tabindex="-1"></a>      <span class="at">pheno =</span> all_phenos,</span>
+<span id="cb11-33"><a href="#cb11-33" tabindex="-1"></a>      <span class="at">KEEP.OUT.ATTRS =</span> <span class="cn">FALSE</span></span>
+<span id="cb11-34"><a href="#cb11-34" tabindex="-1"></a>    )</span>
+<span id="cb11-35"><a href="#cb11-35" tabindex="-1"></a>    full_grid<span class="sc">$</span>tumor <span class="ot">&lt;-</span> <span class="fu">factor</span>(full_grid<span class="sc">$</span>tumor, <span class="at">levels =</span> all_tumors)</span>
+<span id="cb11-36"><a href="#cb11-36" tabindex="-1"></a>    full_grid<span class="sc">$</span>pheno <span class="ot">&lt;-</span> <span class="fu">factor</span>(full_grid<span class="sc">$</span>pheno, <span class="at">levels =</span> all_phenos)</span>
+<span id="cb11-37"><a href="#cb11-37" tabindex="-1"></a>    </span>
+<span id="cb11-38"><a href="#cb11-38" tabindex="-1"></a>    df_plot <span class="ot">&lt;-</span> full_grid <span class="sc">%&gt;%</span></span>
+<span id="cb11-39"><a href="#cb11-39" tabindex="-1"></a>      <span class="fu">left_join</span>(df_gene, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;tumor&quot;</span>, <span class="st">&quot;pheno&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb11-40"><a href="#cb11-40" tabindex="-1"></a>      <span class="fu">mutate</span>(</span>
+<span id="cb11-41"><a href="#cb11-41" tabindex="-1"></a>        <span class="at">signcat =</span> <span class="fu">case_when</span>(</span>
+<span id="cb11-42"><a href="#cb11-42" tabindex="-1"></a>          <span class="fu">is.na</span>(significant)                 <span class="sc">~</span> <span class="st">&quot;none&quot;</span>,</span>
+<span id="cb11-43"><a href="#cb11-43" tabindex="-1"></a>          significant <span class="sc">==</span> <span class="cn">FALSE</span>               <span class="sc">~</span> <span class="st">&quot;ns&quot;</span>,</span>
+<span id="cb11-44"><a href="#cb11-44" tabindex="-1"></a>          significant <span class="sc">==</span> <span class="cn">TRUE</span> <span class="sc">&amp;</span> alpha <span class="sc">&gt;</span> <span class="dv">0</span>    <span class="sc">~</span> <span class="st">&quot;pos&quot;</span>,</span>
+<span id="cb11-45"><a href="#cb11-45" tabindex="-1"></a>          significant <span class="sc">==</span> <span class="cn">TRUE</span> <span class="sc">&amp;</span> alpha <span class="sc">&lt;</span> <span class="dv">0</span>    <span class="sc">~</span> <span class="st">&quot;neg&quot;</span></span>
+<span id="cb11-46"><a href="#cb11-46" tabindex="-1"></a>        ),</span>
+<span id="cb11-47"><a href="#cb11-47" tabindex="-1"></a>        <span class="at">pvalue =</span> dd.p,</span>
+<span id="cb11-48"><a href="#cb11-48" tabindex="-1"></a>        <span class="at">log_pvalue =</span> <span class="fu">case_when</span>(</span>
+<span id="cb11-49"><a href="#cb11-49" tabindex="-1"></a>          <span class="sc">!</span><span class="fu">is.na</span>(dd.p) <span class="sc">&amp;</span> dd.p <span class="sc">&gt;</span> <span class="dv">0</span> <span class="sc">~</span> <span class="sc">-</span><span class="fu">log10</span>(dd.p),</span>
+<span id="cb11-50"><a href="#cb11-50" tabindex="-1"></a>          <span class="sc">!</span><span class="fu">is.na</span>(dd.p) <span class="sc">&amp;</span> dd.p <span class="sc">==</span> <span class="dv">0</span> <span class="sc">~</span> <span class="dv">10</span>,</span>
+<span id="cb11-51"><a href="#cb11-51" tabindex="-1"></a>          <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_real_</span></span>
+<span id="cb11-52"><a href="#cb11-52" tabindex="-1"></a>        ),</span>
+<span id="cb11-53"><a href="#cb11-53" tabindex="-1"></a>        <span class="at">signed_log_pvalue =</span> <span class="fu">case_when</span>(</span>
+<span id="cb11-54"><a href="#cb11-54" tabindex="-1"></a>          signcat <span class="sc">==</span> <span class="st">&quot;pos&quot;</span> <span class="sc">~</span> log_pvalue,</span>
+<span id="cb11-55"><a href="#cb11-55" tabindex="-1"></a>          signcat <span class="sc">==</span> <span class="st">&quot;neg&quot;</span> <span class="sc">~</span> <span class="sc">-</span>log_pvalue,</span>
+<span id="cb11-56"><a href="#cb11-56" tabindex="-1"></a>          <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_real_</span></span>
+<span id="cb11-57"><a href="#cb11-57" tabindex="-1"></a>        )</span>
+<span id="cb11-58"><a href="#cb11-58" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span></span>
+<span id="cb11-59"><a href="#cb11-59" tabindex="-1"></a>    <span class="fu">group_by</span>(pheno) <span class="sc">%&gt;%</span></span>
+<span id="cb11-60"><a href="#cb11-60" tabindex="-1"></a>      <span class="fu">mutate</span>(</span>
+<span id="cb11-61"><a href="#cb11-61" tabindex="-1"></a>        <span class="at">ref_alpha =</span> <span class="fu">median</span>(<span class="fu">abs</span>(alpha), <span class="at">na.rm =</span> <span class="cn">TRUE</span>),  <span class="co"># mean/max/a specified tumor</span></span>
+<span id="cb11-62"><a href="#cb11-62" tabindex="-1"></a>        <span class="at">ratio_alpha =</span> <span class="fu">if_else</span>(<span class="fu">is.na</span>(ref_alpha) <span class="sc">|</span> ref_alpha <span class="sc">==</span> <span class="dv">0</span>, </span>
+<span id="cb11-63"><a href="#cb11-63" tabindex="-1"></a>                              <span class="cn">NA_real_</span>, </span>
+<span id="cb11-64"><a href="#cb11-64" tabindex="-1"></a>                              <span class="fu">abs</span>(alpha) <span class="sc">/</span> ref_alpha), </span>
+<span id="cb11-65"><a href="#cb11-65" tabindex="-1"></a>        <span class="at">size_value =</span> <span class="fu">case_when</span>(</span>
+<span id="cb11-66"><a href="#cb11-66" tabindex="-1"></a>          signcat <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;pos&quot;</span>, <span class="st">&quot;neg&quot;</span>, <span class="st">&quot;ns&quot;</span>) <span class="sc">~</span> ratio_alpha,</span>
+<span id="cb11-67"><a href="#cb11-67" tabindex="-1"></a>          <span class="cn">TRUE</span>                               <span class="sc">~</span> <span class="cn">NA_real_</span></span>
+<span id="cb11-68"><a href="#cb11-68" tabindex="-1"></a>        )</span>
+<span id="cb11-69"><a href="#cb11-69" tabindex="-1"></a>      ) <span class="sc">%&gt;%</span></span>
+<span id="cb11-70"><a href="#cb11-70" tabindex="-1"></a>      <span class="fu">ungroup</span>()</span>
+<span id="cb11-71"><a href="#cb11-71" tabindex="-1"></a>    </span>
+<span id="cb11-72"><a href="#cb11-72" tabindex="-1"></a>    p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb11-73"><a href="#cb11-73" tabindex="-1"></a>      <span class="co"># For significant points (both positive and negative)</span></span>
+<span id="cb11-74"><a href="#cb11-74" tabindex="-1"></a>      <span class="fu">geom_point</span>(</span>
+<span id="cb11-75"><a href="#cb11-75" tabindex="-1"></a>        <span class="at">data =</span> df_plot <span class="sc">%&gt;%</span> <span class="fu">filter</span>(signcat <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;pos&quot;</span>, <span class="st">&quot;neg&quot;</span>)),</span>
+<span id="cb11-76"><a href="#cb11-76" tabindex="-1"></a>        <span class="fu">aes</span>(<span class="at">x =</span> tumor, <span class="at">y =</span> pheno, <span class="at">size =</span> size_value, <span class="at">fill =</span> signed_log_pvalue),</span>
+<span id="cb11-77"><a href="#cb11-77" tabindex="-1"></a>        <span class="at">shape =</span> <span class="dv">21</span>,</span>
+<span id="cb11-78"><a href="#cb11-78" tabindex="-1"></a>        <span class="at">color =</span> <span class="st">&quot;black&quot;</span>, </span>
+<span id="cb11-79"><a href="#cb11-79" tabindex="-1"></a>        <span class="at">stroke =</span> <span class="fl">0.2</span>, </span>
+<span id="cb11-80"><a href="#cb11-80" tabindex="-1"></a>        <span class="at">na.rm =</span> <span class="cn">TRUE</span></span>
+<span id="cb11-81"><a href="#cb11-81" tabindex="-1"></a>      ) <span class="sc">+</span></span>
+<span id="cb11-82"><a href="#cb11-82" tabindex="-1"></a>      <span class="co"># For non-significant points</span></span>
+<span id="cb11-83"><a href="#cb11-83" tabindex="-1"></a>      <span class="fu">geom_point</span>(</span>
+<span id="cb11-84"><a href="#cb11-84" tabindex="-1"></a>        <span class="at">data =</span> df_plot <span class="sc">%&gt;%</span> <span class="fu">filter</span>(signcat <span class="sc">==</span> <span class="st">&quot;ns&quot;</span>),</span>
+<span id="cb11-85"><a href="#cb11-85" tabindex="-1"></a>        <span class="fu">aes</span>(<span class="at">x =</span> tumor, <span class="at">y =</span> pheno, <span class="at">size =</span> size_value),</span>
+<span id="cb11-86"><a href="#cb11-86" tabindex="-1"></a>        <span class="at">shape =</span> <span class="dv">21</span>,</span>
+<span id="cb11-87"><a href="#cb11-87" tabindex="-1"></a>        <span class="at">fill =</span> <span class="st">&quot;grey90&quot;</span>,</span>
+<span id="cb11-88"><a href="#cb11-88" tabindex="-1"></a>        <span class="at">color =</span> <span class="st">&quot;black&quot;</span>,</span>
+<span id="cb11-89"><a href="#cb11-89" tabindex="-1"></a>        <span class="at">stroke =</span> <span class="fl">0.2</span>,</span>
+<span id="cb11-90"><a href="#cb11-90" tabindex="-1"></a>        <span class="at">alpha =</span> <span class="fl">0.3</span>,</span>
+<span id="cb11-91"><a href="#cb11-91" tabindex="-1"></a>        <span class="at">na.rm =</span> <span class="cn">TRUE</span></span>
+<span id="cb11-92"><a href="#cb11-92" tabindex="-1"></a>      ) <span class="sc">+</span></span>
+<span id="cb11-93"><a href="#cb11-93" tabindex="-1"></a>      <span class="fu">geom_blank</span>(</span>
+<span id="cb11-94"><a href="#cb11-94" tabindex="-1"></a>        <span class="at">data =</span> df_plot <span class="sc">%&gt;%</span> <span class="fu">filter</span>(signcat <span class="sc">==</span> <span class="st">&quot;none&quot;</span>),</span>
+<span id="cb11-95"><a href="#cb11-95" tabindex="-1"></a>        <span class="fu">aes</span>(<span class="at">x =</span> tumor, <span class="at">y =</span> pheno)</span>
+<span id="cb11-96"><a href="#cb11-96" tabindex="-1"></a>      ) <span class="sc">+</span></span>
+<span id="cb11-97"><a href="#cb11-97" tabindex="-1"></a>      </span>
+<span id="cb11-98"><a href="#cb11-98" tabindex="-1"></a>      <span class="fu">scale_fill_gradient2</span>(</span>
+<span id="cb11-99"><a href="#cb11-99" tabindex="-1"></a>        <span class="at">low =</span> <span class="st">&quot;darkblue&quot;</span>, </span>
+<span id="cb11-100"><a href="#cb11-100" tabindex="-1"></a>        <span class="at">mid =</span> <span class="st">&quot;white&quot;</span>,</span>
+<span id="cb11-101"><a href="#cb11-101" tabindex="-1"></a>        <span class="at">high =</span> <span class="st">&quot;darkred&quot;</span>,</span>
+<span id="cb11-102"><a href="#cb11-102" tabindex="-1"></a>        <span class="at">midpoint =</span> <span class="dv">0</span>,</span>
+<span id="cb11-103"><a href="#cb11-103" tabindex="-1"></a>        <span class="at">name =</span> <span class="st">&quot;Directional Significance</span><span class="sc">\n</span><span class="st">(-log10 p-value)&quot;</span>,</span>
+<span id="cb11-104"><a href="#cb11-104" tabindex="-1"></a>        <span class="at">guide =</span> <span class="fu">guide_colorbar</span>(<span class="at">direction =</span> <span class="st">&quot;vertical&quot;</span>),</span>
+<span id="cb11-105"><a href="#cb11-105" tabindex="-1"></a>        <span class="at">na.value =</span> <span class="st">&quot;#FF6700&quot;</span>,</span>
+<span id="cb11-106"><a href="#cb11-106" tabindex="-1"></a>        <span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">10</span>),</span>
+<span id="cb11-107"><a href="#cb11-107" tabindex="-1"></a>        <span class="at">oob =</span> scales<span class="sc">::</span>squish</span>
+<span id="cb11-108"><a href="#cb11-108" tabindex="-1"></a>      ) <span class="sc">+</span></span>
+<span id="cb11-109"><a href="#cb11-109" tabindex="-1"></a>  </span>
+<span id="cb11-110"><a href="#cb11-110" tabindex="-1"></a>      <span class="fu">scale_size_continuous</span>(</span>
+<span id="cb11-111"><a href="#cb11-111" tabindex="-1"></a>        <span class="at">range =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">8</span>), </span>
+<span id="cb11-112"><a href="#cb11-112" tabindex="-1"></a>        <span class="at">name =</span> <span class="st">&quot;Relative size (|alpha| / ref)&quot;</span></span>
+<span id="cb11-113"><a href="#cb11-113" tabindex="-1"></a>      ) <span class="sc">+</span></span>
+<span id="cb11-114"><a href="#cb11-114" tabindex="-1"></a>      </span>
+<span id="cb11-115"><a href="#cb11-115" tabindex="-1"></a>      <span class="fu">scale_x_discrete</span>(<span class="at">drop =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb11-116"><a href="#cb11-116" tabindex="-1"></a>      <span class="fu">scale_y_discrete</span>(</span>
+<span id="cb11-117"><a href="#cb11-117" tabindex="-1"></a>        <span class="at">drop =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb11-118"><a href="#cb11-118" tabindex="-1"></a>        <span class="at">labels =</span> <span class="cf">function</span>(x) <span class="fu">ifelse</span>(x <span class="sc">%in%</span> <span class="fu">names</span>(phenotype_label_map),</span>
+<span id="cb11-119"><a href="#cb11-119" tabindex="-1"></a>                              phenotype_label_map[x], x)</span>
+<span id="cb11-120"><a href="#cb11-120" tabindex="-1"></a>        ) <span class="sc">+</span></span>
+<span id="cb11-121"><a href="#cb11-121" tabindex="-1"></a>      </span>
+<span id="cb11-122"><a href="#cb11-122" tabindex="-1"></a>      <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">18</span>) <span class="sc">+</span></span>
+<span id="cb11-123"><a href="#cb11-123" tabindex="-1"></a>      <span class="fu">theme</span>(</span>
+<span id="cb11-124"><a href="#cb11-124" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">18</span>, <span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust =</span> <span class="dv">1</span>),</span>
+<span id="cb11-125"><a href="#cb11-125" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">22</span>),</span>
+<span id="cb11-126"><a href="#cb11-126" tabindex="-1"></a>        <span class="at">axis.title  =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">26</span>),</span>
+<span id="cb11-127"><a href="#cb11-127" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">&quot;right&quot;</span>,</span>
+<span id="cb11-128"><a href="#cb11-128" tabindex="-1"></a>        <span class="at">legend.box =</span> <span class="st">&quot;vertical&quot;</span>,</span>
+<span id="cb11-129"><a href="#cb11-129" tabindex="-1"></a>        <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>, <span class="at">size =</span> <span class="dv">28</span>)</span>
+<span id="cb11-130"><a href="#cb11-130" tabindex="-1"></a>      ) <span class="sc">+</span></span>
+<span id="cb11-131"><a href="#cb11-131" tabindex="-1"></a>      <span class="fu">labs</span>(</span>
+<span id="cb11-132"><a href="#cb11-132" tabindex="-1"></a>        <span class="at">x =</span> <span class="st">&quot;Tumor&quot;</span>,</span>
+<span id="cb11-133"><a href="#cb11-133" tabindex="-1"></a>        <span class="at">y =</span> <span class="st">&quot;Phenotype&quot;</span>,</span>
+<span id="cb11-134"><a href="#cb11-134" tabindex="-1"></a>        <span class="at">title =</span> <span class="fu">paste</span>(current_gene)</span>
+<span id="cb11-135"><a href="#cb11-135" tabindex="-1"></a>      )</span>
+<span id="cb11-136"><a href="#cb11-136" tabindex="-1"></a>    </span>
+<span id="cb11-137"><a href="#cb11-137" tabindex="-1"></a>    plots_list[[current_gene]] <span class="ot">&lt;-</span> p</span>
+<span id="cb11-138"><a href="#cb11-138" tabindex="-1"></a>  }</span>
+<span id="cb11-139"><a href="#cb11-139" tabindex="-1"></a>  </span>
+<span id="cb11-140"><a href="#cb11-140" tabindex="-1"></a>  <span class="fu">return</span>(plots_list)</span>
+<span id="cb11-141"><a href="#cb11-141" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>plots <span class="ot">&lt;-</span> <span class="fu">plot_diff_gene</span>(diff_table_all, filedf, <span class="at">mode =</span> <span class="st">&quot;sig&quot;</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="fu">print</span>(plots[[<span class="st">&quot;TP53&quot;</span>]])</span></code></pre></div>
+<p><img src="figure/Clinical.Rmd/unnamed-chunk-8-1.png" width="1296" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">print</span>(plots[[<span class="st">&quot;KRAS&quot;</span>]])</span></code></pre></div>
+<p><img src="figure/Clinical.Rmd/unnamed-chunk-8-2.png" width="1296" style="display: block; margin: auto;" /></p>
+</div>
+<div id="clinical-traits-enrichment" class="section level1">
+<h1>Clinical Traits Enrichment</h1>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;output/Clinical.csv&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>allg <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">&quot;output/all_diffdriver_genes.txt&quot;</span>)[,<span class="dv">1</span>]</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>allg <span class="ot">&lt;-</span> <span class="fu">unique</span>(allg)</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="fu">length</span>(allg)</span></code></pre></div>
+<pre><code>[1] 185</code></pre>
+<p>Test enrichment for diffdriver significant genes against background.
+Put in <a href="https://bioinformatics.sdstate.edu/go/"
+class="uri">https://bioinformatics.sdstate.edu/go/</a>, FDR 0.1, max
+gene 5000, min 2 GO terms Figure is selected FDR, sort by fold
+enrichment. Top 20. Remove all redundancy.</p>
+<div id="differential-genes-for-age" class="section level2">
+<h2>Differential genes for age</h2>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="fu">unique</span>(a[a[, <span class="st">&quot;age_all&quot;</span>]<span class="sc">!=</span><span class="st">&quot;&quot;</span>, <span class="st">&quot;age_all&quot;</span>])</span></code></pre></div>
+<pre><code> [1] &quot;FOXA1&quot;   &quot;CASP8&quot;   &quot;RAC1&quot;    &quot;NF1&quot;     &quot;PPP2R1A&quot; &quot;TP53&quot;    &quot;IDH1&quot;   
+ [8] &quot;BRAF&quot;    &quot;PTEN&quot;    &quot;CTNNB1&quot; </code></pre>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">&quot;output/barplot-GO-bio-age.png&quot;</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center">
+<img src="output/barplot-GO-bio-age.png" alt="A caption for your PDF figure." width="85%" />
+<p class="caption">
+A caption for your PDF figure.
+</p>
+</div>
+</div>
+<div id="differential-genes-for-tumor-mutation-burden"
+class="section level2">
+<h2>Differential genes for tumor mutation burden</h2>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">unique</span>(a[a[, <span class="st">&quot;tmb_all&quot;</span>]<span class="sc">!=</span><span class="st">&quot;&quot;</span>, <span class="st">&quot;tmb_all&quot;</span>])</span></code></pre></div>
+<pre><code> [1] &quot;CDKN1A&quot;  &quot;CREBBP&quot;  &quot;FBXW7&quot;   &quot;FGFR3&quot;   &quot;HRAS&quot;    &quot;KRAS&quot;    &quot;NFE2L2&quot; 
+ [8] &quot;RHOB&quot;    &quot;TP53&quot;    &quot;TSC1&quot;    &quot;MAP3K1&quot;  &quot;CDKN2A&quot;  &quot;SLC17A6&quot; &quot;TGFBR2&quot; 
+[15] &quot;NOTCH1&quot;  &quot;PIK3CA&quot;  &quot;PBRM1&quot;   &quot;BRAF&quot;    &quot;EGFR&quot;    &quot;KEAP1&quot;   &quot;RB1&quot;    
+[22] &quot;SETD2&quot;   &quot;STK11&quot;   &quot;NRAS&quot;    &quot;PPP6C&quot;   &quot;PTEN&quot;    &quot;ARID1A&quot;  &quot;CHD4&quot;   
+[29] &quot;CTCF&quot;    &quot;CTNNB1&quot;  &quot;FGFR2&quot;   &quot;PPP2R1A&quot; &quot;SPOP&quot;    &quot;NSD1&quot;    &quot;CDK12&quot;  
+[36] &quot;NF1&quot;    </code></pre>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">&quot;output/barplot-GO-bio-tmb.png&quot;</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center">
+<img src="output/barplot-GO-bio-tmb.png" alt="A caption for your PDF figure." width="85%" />
+<p class="caption">
+A caption for your PDF figure.
+</p>
+</div>
+</div>
+<div id="differential-genes-for-genome-instability"
+class="section level2">
+<h2>Differential genes for genome instability</h2>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="fu">unique</span>(a[a[, <span class="st">&quot;instability_all&quot;</span>]<span class="sc">!=</span><span class="st">&quot;&quot;</span>, <span class="st">&quot;instability_all&quot;</span>])</span></code></pre></div>
+<pre><code> [1] &quot;FGFR3&quot;   &quot;HRAS&quot;    &quot;NFE2L2&quot;  &quot;CTCF&quot;    &quot;MAP3K1&quot;  &quot;SMARCA4&quot; &quot;IDH1&quot;   
+ [8] &quot;CASP8&quot;   &quot;EP300&quot;   &quot;HLA-A&quot;   &quot;HLA-B&quot;   &quot;RAC1&quot;    &quot;TGFBR2&quot;  &quot;CUL3&quot;   
+[15] &quot;KRAS&quot;    &quot;HNF1A&quot;   &quot;BRAF&quot;    &quot;SETD2&quot;   &quot;PTEN&quot;    &quot;CBFB&quot;    &quot;CDH1&quot;   
+[22] &quot;MAP2K4&quot;  &quot;PIK3CA&quot;  &quot;RUNX1&quot;   &quot;NF1&quot;     &quot;EPHA2&quot;   &quot;NOTCH1&quot;  &quot;KIT&quot;    
+[29] &quot;TP53&quot;    &quot;MAP2K1&quot;  &quot;PPP2R1A&quot; &quot;KEAP1&quot;  </code></pre>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">&quot;output/barplot-GO-bio-ins.png&quot;</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center">
+<img src="output/barplot-GO-bio-ins.png" alt="A caption for your PDF figure." width="85%" />
+<p class="caption">
+A caption for your PDF figure.
+</p>
+</div>
+<p>For the KEGG pathway based enrichment analysis, tmb is mostly cancer
+related, and ins is mostly immune. See output/barplot-KEGG-ins.pdf and
+output/barplot-KEGG-tmb.pdf</p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<pre><code>R version 4.4.2 (2024-10-31)
+Platform: x86_64-conda-linux-gnu
+Running under: Ubuntu 24.04.1 LTS
+
+Matrix products: default
+BLAS/LAPACK: /dartfs-hpc/rc/home/p/f0070pp/.conda/envs/diffdriver/lib/libopenblasp-r0.3.29.so;  LAPACK version 3.12.0
+
+locale:
+ [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+ [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+
+time zone: Etc/UTC
+tzcode source: system (glibc)
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] ggplot2_3.5.2   dplyr_1.1.4     scales_1.4.0    DT_0.33        
+[5] workflowr_1.7.1
+
+loaded via a namespace (and not attached):
+ [1] sass_0.4.10        generics_0.1.4     stringi_1.8.7      diffdriver_0.1.6  
+ [5] lattice_0.22-7     digest_0.6.37      magrittr_2.0.3     evaluate_1.0.3    
+ [9] grid_4.4.2         RColorBrewer_1.1-3 fastmap_1.2.0      rprojroot_2.0.4   
+[13] jsonlite_2.0.0     Matrix_1.7-3       processx_3.8.6     whisker_0.4.1     
+[17] ps_1.9.1           promises_1.3.3     httr_1.4.7         crosstalk_1.2.1   
+[21] jquerylib_0.1.4    cli_3.6.5          rlang_1.1.6        withr_3.0.2       
+[25] cachem_1.1.0       yaml_2.3.10        tools_4.4.2        httpuv_1.6.16     
+[29] vctrs_0.6.5        R6_2.6.1           lifecycle_1.0.4    git2r_0.36.2      
+[33] stringr_1.5.1      fs_1.6.6           htmlwidgets_1.6.4  pkgconfig_2.0.3   
+[37] callr_3.7.6        pillar_1.10.2      bslib_0.9.0        later_1.4.2       
+[41] gtable_0.3.6       glue_1.8.0         data.table_1.17.4  Rcpp_1.0.14       
+[45] xfun_0.52          tibble_3.2.1       tidyselect_1.2.1   rstudioapi_0.17.1 
+[49] knitr_1.50         farver_2.1.2       htmltools_0.5.8.1  labeling_0.4.3    
+[53] rmarkdown_2.29     compiler_4.4.2     getPass_0.2-4     </code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

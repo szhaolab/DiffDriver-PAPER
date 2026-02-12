@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Qirui Zhang, Siming Zhao" />
+
+<meta name="date" content="2026-02-12" />
+
+<title>Individual Genes</title>
+
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #204a87; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #204a87; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+
+.sourceCode .row {
+  width: 100%;
+}
+.sourceCode {
+  overflow-x: auto;
+}
+.code-folding-btn {
+  margin-right: -30px;
+}
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">DiffDriver-PAPER</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="simulation.html">Simulation</a>
+</li>
+<li>
+  <a href="real-data.html">Real Data</a>
+</li>
+<li>
+  <a href="download.html">Download</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Individual Genes</h1>
+<h4 class="author">Qirui Zhang, Siming Zhao</h4>
+<h4 class="date">2026-02-12</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2026-02-12
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>DiffDriver-PAPER/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.1). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20260206code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20260206)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20260206code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20260206)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree92fca5401200eb938f2662d20de5c4df0b9dd6f6targetblank92fca54a">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/92fca5401200eb938f2662d20de5c4df0b9dd6f6" target="_blank">92fca54</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree92fca5401200eb938f2662d20de5c4df0b9dd6f6targetblank92fca54a"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/92fca5401200eb938f2662d20de5c4df0b9dd6f6" target="_blank">92fca54</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+
+Untracked files:
+    Untracked:  LICENSE
+    Untracked:  data/realdata/
+    Untracked:  data/tsgsimple_LUAD_fixed_63/
+    Untracked:  output/Clinical.csv
+    Untracked:  output/all_diffdriver_genes.txt
+    Untracked:  output/barplot-GO-bio-age.pdf
+    Untracked:  output/barplot-GO-bio-age.png
+    Untracked:  output/barplot-GO-bio-ins.pdf
+    Untracked:  output/barplot-GO-bio-ins.png
+    Untracked:  output/barplot-GO-bio-tmb.pdf
+    Untracked:  output/barplot-GO-bio-tmb.png
+    Untracked:  output/barplot-KEGG-ins.pdf
+    Untracked:  output/barplot-KEGG-tmb.pdf
+
+Unstaged changes:
+    Modified:   DiffDriver-PAPER.Rproj
+    Modified:   analysis/_site.yml
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/Individual_Genes.Rmd</code>) and
+HTML (<code>docs/Individual_Genes.html</code>) files. If you’ve
+configured a remote Git repository (see <code>?wflow_git_remote</code>),
+click on the hyperlinks in the table below to view the files as they
+were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/92fca5401200eb938f2662d20de5c4df0b9dd6f6/analysis/Individual_Genes.Rmd" target="_blank">92fca54</a>
+</td>
+<td>
+Qirui Zhang
+</td>
+<td>
+2026-02-12
+</td>
+<td>
+rebuild
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">echo =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>get_files <span class="ot">&lt;-</span> <span class="cf">function</span>(outputdir, <span class="at">tumors =</span> <span class="cn">NULL</span>, <span class="at">phenotypes =</span> <span class="cn">NULL</span>) {</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>  files <span class="ot">&lt;-</span> <span class="fu">list.files</span>(</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>    <span class="at">path =</span> outputdir,</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>    <span class="at">pattern =</span> <span class="st">&quot;_resdd</span><span class="sc">\\</span><span class="st">.Rd$&quot;</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>    <span class="at">recursive =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>    <span class="at">full.names =</span> <span class="cn">TRUE</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>  )</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>  </span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>  matching_files_txt <span class="ot">&lt;-</span> <span class="fu">sub</span>(<span class="st">&quot;</span><span class="sc">\\</span><span class="st">.Rd$&quot;</span>, <span class="st">&quot;.txt&quot;</span>, files)</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>  </span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>  analysis_mode <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">grepl</span>(<span class="st">&quot;_sig_&quot;</span>, <span class="fu">basename</span>(files)), <span class="st">&quot;sig&quot;</span>, <span class="st">&quot;reg&quot;</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>  inner_folder_names      <span class="ot">&lt;-</span> <span class="fu">basename</span>(<span class="fu">dirname</span>(files))            </span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>  phenotype_folder_names  <span class="ot">&lt;-</span> <span class="fu">basename</span>(<span class="fu">dirname</span>(<span class="fu">dirname</span>(files)))  </span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>  </span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>  tumor_names <span class="ot">&lt;-</span> <span class="fu">mapply</span>(<span class="cf">function</span>(inner_name, phen) {</span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a>    pattern_front <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;^&quot;</span>, phen, <span class="st">&quot;_&quot;</span>)</span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a>    tmp <span class="ot">&lt;-</span> <span class="fu">sub</span>(pattern_front, <span class="st">&quot;&quot;</span>, inner_name)</span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a>    tmp <span class="ot">&lt;-</span> <span class="fu">sub</span>(<span class="st">&quot;_mutations$&quot;</span>, <span class="st">&quot;&quot;</span>, tmp)</span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a>    <span class="fu">return</span>(tmp)</span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a>  }, inner_folder_names, phenotype_folder_names)</span>
+<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a>  </span>
+<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a>  phenos_all <span class="ot">&lt;-</span> phenotype_folder_names</span>
+<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a>  </span>
+<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a>  filedf <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a>    <span class="at">tumor      =</span> tumor_names,</span>
+<span id="cb2-27"><a href="#cb2-27" tabindex="-1"></a>    <span class="at">phenotype  =</span> phenos_all,</span>
+<span id="cb2-28"><a href="#cb2-28" tabindex="-1"></a>    <span class="at">mode       =</span> analysis_mode,   </span>
+<span id="cb2-29"><a href="#cb2-29" tabindex="-1"></a>    <span class="at">file       =</span> files,</span>
+<span id="cb2-30"><a href="#cb2-30" tabindex="-1"></a>    <span class="at">filetxt    =</span> matching_files_txt,</span>
+<span id="cb2-31"><a href="#cb2-31" tabindex="-1"></a>    <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb2-32"><a href="#cb2-32" tabindex="-1"></a>  )</span>
+<span id="cb2-33"><a href="#cb2-33" tabindex="-1"></a>  </span>
+<span id="cb2-34"><a href="#cb2-34" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(tumors)) {</span>
+<span id="cb2-35"><a href="#cb2-35" tabindex="-1"></a>    filedf <span class="ot">&lt;-</span> filedf[filedf<span class="sc">$</span>tumor <span class="sc">%in%</span> tumors, ]</span>
+<span id="cb2-36"><a href="#cb2-36" tabindex="-1"></a>  }</span>
+<span id="cb2-37"><a href="#cb2-37" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(phenotypes)) {</span>
+<span id="cb2-38"><a href="#cb2-38" tabindex="-1"></a>    filedf <span class="ot">&lt;-</span> filedf[filedf<span class="sc">$</span>phenotype <span class="sc">%in%</span> phenotypes, ]</span>
+<span id="cb2-39"><a href="#cb2-39" tabindex="-1"></a>  }</span>
+<span id="cb2-40"><a href="#cb2-40" tabindex="-1"></a></span>
+<span id="cb2-41"><a href="#cb2-41" tabindex="-1"></a>  <span class="fu">rownames</span>(filedf) <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb2-42"><a href="#cb2-42" tabindex="-1"></a>  <span class="fu">return</span>(filedf)</span>
+<span id="cb2-43"><a href="#cb2-43" tabindex="-1"></a>}</span>
+<span id="cb2-44"><a href="#cb2-44" tabindex="-1"></a></span>
+<span id="cb2-45"><a href="#cb2-45" tabindex="-1"></a>get_diff_table <span class="ot">&lt;-</span> <span class="cf">function</span>(filedf, <span class="at">include_nonsig =</span> <span class="cn">TRUE</span>){</span>
+<span id="cb2-46"><a href="#cb2-46" tabindex="-1"></a>  pheno_all <span class="ot">&lt;-</span> <span class="fu">unique</span>(filedf<span class="sc">$</span>phenotype)</span>
+<span id="cb2-47"><a href="#cb2-47" tabindex="-1"></a>  numlist <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb2-48"><a href="#cb2-48" tabindex="-1"></a>  </span>
+<span id="cb2-49"><a href="#cb2-49" tabindex="-1"></a>  <span class="cf">for</span> (p <span class="cf">in</span> pheno_all){</span>
+<span id="cb2-50"><a href="#cb2-50" tabindex="-1"></a>    p_txtfiles <span class="ot">&lt;-</span> filedf[filedf<span class="sc">$</span>phenotype <span class="sc">==</span> p, ]</span>
+<span id="cb2-51"><a href="#cb2-51" tabindex="-1"></a>    numlist[[p]] <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb2-52"><a href="#cb2-52" tabindex="-1"></a>    </span>
+<span id="cb2-53"><a href="#cb2-53" tabindex="-1"></a>    <span class="cf">for</span> (t <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(p_txtfiles))){</span>
+<span id="cb2-54"><a href="#cb2-54" tabindex="-1"></a>      txtf  <span class="ot">&lt;-</span> p_txtfiles[t, <span class="st">&quot;filetxt&quot;</span>]</span>
+<span id="cb2-55"><a href="#cb2-55" tabindex="-1"></a>      rdf   <span class="ot">&lt;-</span> p_txtfiles[t, <span class="st">&quot;file&quot;</span>] </span>
+<span id="cb2-56"><a href="#cb2-56" tabindex="-1"></a>      tumor <span class="ot">&lt;-</span> p_txtfiles[t, <span class="st">&quot;tumor&quot;</span>] </span>
+<span id="cb2-57"><a href="#cb2-57" tabindex="-1"></a>      mode  <span class="ot">&lt;-</span> p_txtfiles[t, <span class="st">&quot;mode&quot;</span>]     <span class="co"># reg / sig</span></span>
+<span id="cb2-58"><a href="#cb2-58" tabindex="-1"></a>      </span>
+<span id="cb2-59"><a href="#cb2-59" tabindex="-1"></a>      env <span class="ot">&lt;-</span> <span class="fu">new.env</span>()</span>
+<span id="cb2-60"><a href="#cb2-60" tabindex="-1"></a>      <span class="fu">load</span>(rdf, <span class="at">envir =</span> env)</span>
+<span id="cb2-61"><a href="#cb2-61" tabindex="-1"></a>      res_rdata <span class="ot">&lt;-</span> env<span class="sc">$</span>res</span>
+<span id="cb2-62"><a href="#cb2-62" tabindex="-1"></a>      </span>
+<span id="cb2-63"><a href="#cb2-63" tabindex="-1"></a>      res <span class="ot">&lt;-</span> <span class="fu">read.table</span>(txtf, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-64"><a href="#cb2-64" tabindex="-1"></a>      res<span class="sc">$</span>gene <span class="ot">&lt;-</span> <span class="fu">row.names</span>(res)</span>
+<span id="cb2-65"><a href="#cb2-65" tabindex="-1"></a>      res<span class="sc">$</span>mode <span class="ot">&lt;-</span> mode</span>
+<span id="cb2-66"><a href="#cb2-66" tabindex="-1"></a>      </span>
+<span id="cb2-67"><a href="#cb2-67" tabindex="-1"></a>      res<span class="sc">$</span>alpha <span class="ot">&lt;-</span> <span class="fu">sapply</span>(res<span class="sc">$</span>gene, <span class="cf">function</span>(gene){</span>
+<span id="cb2-68"><a href="#cb2-68" tabindex="-1"></a>          res_rdata[[gene]][[<span class="st">&quot;dd&quot;</span>]][[<span class="st">&quot;res.alt&quot;</span>]]<span class="sc">$</span>alpha[<span class="dv">2</span>]</span>
+<span id="cb2-69"><a href="#cb2-69" tabindex="-1"></a>      })</span>
+<span id="cb2-70"><a href="#cb2-70" tabindex="-1"></a>      </span>
+<span id="cb2-71"><a href="#cb2-71" tabindex="-1"></a>      res<span class="sc">$</span>significant <span class="ot">&lt;-</span> res<span class="sc">$</span>dd.fdr <span class="sc">&lt;</span> <span class="fl">0.1</span></span>
+<span id="cb2-72"><a href="#cb2-72" tabindex="-1"></a>      </span>
+<span id="cb2-73"><a href="#cb2-73" tabindex="-1"></a>      <span class="cf">if</span> (include_nonsig) {</span>
+<span id="cb2-74"><a href="#cb2-74" tabindex="-1"></a>        numlist[[p]][[ <span class="fu">paste0</span>(tumor, <span class="st">&quot;_&quot;</span>, mode) ]] <span class="ot">&lt;-</span> res</span>
+<span id="cb2-75"><a href="#cb2-75" tabindex="-1"></a>      } <span class="cf">else</span> {</span>
+<span id="cb2-76"><a href="#cb2-76" tabindex="-1"></a>        sig_res <span class="ot">&lt;-</span> res[res<span class="sc">$</span>dd.fdr <span class="sc">&lt;</span> <span class="fl">0.1</span>, ]</span>
+<span id="cb2-77"><a href="#cb2-77" tabindex="-1"></a>        <span class="cf">if</span> (<span class="fu">nrow</span>(sig_res) <span class="sc">&gt;</span> <span class="dv">0</span>){</span>
+<span id="cb2-78"><a href="#cb2-78" tabindex="-1"></a>          numlist[[p]][[ <span class="fu">paste0</span>(tumor, <span class="st">&quot;_&quot;</span>, mode) ]] <span class="ot">&lt;-</span> sig_res</span>
+<span id="cb2-79"><a href="#cb2-79" tabindex="-1"></a>        }</span>
+<span id="cb2-80"><a href="#cb2-80" tabindex="-1"></a>      }</span>
+<span id="cb2-81"><a href="#cb2-81" tabindex="-1"></a>    }</span>
+<span id="cb2-82"><a href="#cb2-82" tabindex="-1"></a>    </span>
+<span id="cb2-83"><a href="#cb2-83" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">length</span>(numlist[[p]]) <span class="sc">==</span> <span class="dv">0</span>){</span>
+<span id="cb2-84"><a href="#cb2-84" tabindex="-1"></a>      numlist[[p]] <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb2-85"><a href="#cb2-85" tabindex="-1"></a>    }</span>
+<span id="cb2-86"><a href="#cb2-86" tabindex="-1"></a>  }</span>
+<span id="cb2-87"><a href="#cb2-87" tabindex="-1"></a>  </span>
+<span id="cb2-88"><a href="#cb2-88" tabindex="-1"></a>  combined_df <span class="ot">&lt;-</span> <span class="fu">do.call</span>(</span>
+<span id="cb2-89"><a href="#cb2-89" tabindex="-1"></a>    rbind,</span>
+<span id="cb2-90"><a href="#cb2-90" tabindex="-1"></a>    <span class="fu">lapply</span>(<span class="fu">names</span>(numlist), <span class="cf">function</span>(pheno) {</span>
+<span id="cb2-91"><a href="#cb2-91" tabindex="-1"></a>      numlist.pheno <span class="ot">&lt;-</span> numlist[[pheno]]</span>
+<span id="cb2-92"><a href="#cb2-92" tabindex="-1"></a>      df.pheno <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, <span class="fu">lapply</span>(<span class="fu">names</span>(numlist.pheno), <span class="cf">function</span>(tname) {</span>
+<span id="cb2-93"><a href="#cb2-93" tabindex="-1"></a>        df <span class="ot">&lt;-</span> numlist.pheno[[tname]]</span>
+<span id="cb2-94"><a href="#cb2-94" tabindex="-1"></a>        df<span class="sc">$</span>tumor <span class="ot">&lt;-</span> <span class="fu">sub</span>(<span class="st">&quot;_.*&quot;</span>, <span class="st">&quot;&quot;</span>, tname) </span>
+<span id="cb2-95"><a href="#cb2-95" tabindex="-1"></a>        df<span class="sc">$</span>mode  <span class="ot">&lt;-</span> <span class="fu">sub</span>(<span class="st">&quot;.*_&quot;</span>, <span class="st">&quot;&quot;</span>, tname) </span>
+<span id="cb2-96"><a href="#cb2-96" tabindex="-1"></a>        <span class="fu">return</span>(df)</span>
+<span id="cb2-97"><a href="#cb2-97" tabindex="-1"></a>      }))</span>
+<span id="cb2-98"><a href="#cb2-98" tabindex="-1"></a>      df.pheno<span class="sc">$</span>pheno <span class="ot">&lt;-</span> pheno</span>
+<span id="cb2-99"><a href="#cb2-99" tabindex="-1"></a>      <span class="fu">return</span>(df.pheno)</span>
+<span id="cb2-100"><a href="#cb2-100" tabindex="-1"></a>    })</span>
+<span id="cb2-101"><a href="#cb2-101" tabindex="-1"></a>  )</span>
+<span id="cb2-102"><a href="#cb2-102" tabindex="-1"></a>  <span class="fu">return</span>(combined_df)</span>
+<span id="cb2-103"><a href="#cb2-103" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>dirs <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  <span class="st">&quot;/dartfs/rc/lab/S/Szhao/qiruiz/diffdriver/temp/output/new_plot/immunesubtypes&quot;</span>,</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  <span class="st">&quot;/dartfs/rc/lab/S/Szhao/qiruiz/diffdriver/temp/output/new_plot/clinical&quot;</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>)</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>res_list <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="cf">for</span> (dir_path <span class="cf">in</span> dirs) {</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>  filedf <span class="ot">&lt;-</span> <span class="fu">get_files</span>(<span class="at">outputdir =</span> dir_path)</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>  </span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>  diff_table <span class="ot">&lt;-</span> <span class="fu">get_diff_table</span>(filedf, <span class="at">include_nonsig =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>  </span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>  diff_TGCT_KIT <span class="ot">&lt;-</span> <span class="fu">subset</span>(diff_table, mode <span class="sc">==</span> <span class="st">&quot;sig&quot;</span> <span class="sc">&amp;</span> tumor <span class="sc">==</span> <span class="st">&quot;TGCT&quot;</span> <span class="sc">&amp;</span> gene <span class="sc">==</span> <span class="st">&quot;KIT&quot;</span>)</span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>  </span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">nrow</span>(diff_TGCT_KIT) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a>    source_name <span class="ot">&lt;-</span> <span class="fu">basename</span>(dir_path)</span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a>    diff_TGCT_KIT<span class="sc">$</span>source <span class="ot">&lt;-</span> source_name</span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a>    </span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a>    res_list[[source_name]] <span class="ot">&lt;-</span> diff_TGCT_KIT</span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a>  }</span>
+<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a>}</span>
+<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a></span>
+<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a>all_res <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, res_list)</span>
+<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a>subset_res <span class="ot">&lt;-</span> all_res[<span class="fu">c</span>(<span class="st">&quot;pheno&quot;</span>, <span class="st">&quot;source&quot;</span>)]</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>prep_pheno_mut_data_full <span class="ot">&lt;-</span> <span class="cf">function</span>(mut, pheno) {</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  <span class="fu">library</span>(data.table)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>  mut   <span class="ot">&lt;-</span> <span class="fu">as.data.table</span>(mut)</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>  pheno <span class="ot">&lt;-</span> <span class="fu">as.data.table</span>(pheno)</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">grepl</span>(<span class="st">&quot;chr&quot;</span>, mut<span class="sc">$</span>Chromosome[<span class="dv">1</span>], <span class="at">fixed =</span> <span class="cn">TRUE</span>)) {</span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>    mut[ , Chromosome <span class="sc">:=</span> <span class="fu">paste0</span>(<span class="st">&quot;chr&quot;</span>, Chromosome)]</span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>  }</span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>  shared <span class="ot">&lt;-</span> <span class="fu">intersect</span>(mut<span class="sc">$</span>SampleID, pheno<span class="sc">$</span>SampleID)</span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">length</span>(shared) <span class="sc">&lt;</span> <span class="dv">10</span>)</span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">&quot;too few samples with both phenotype and mutation data.&quot;</span>)</span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a>  mut   <span class="ot">&lt;-</span> mut  [SampleID <span class="sc">%in%</span> shared]</span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a>  pheno <span class="ot">&lt;-</span> pheno[SampleID <span class="sc">%in%</span> shared]</span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a></span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">anyDuplicated</span>(pheno<span class="sc">$</span>SampleID)) {</span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a>    pheno <span class="ot">&lt;-</span> pheno[ , <span class="fu">lapply</span>(.SD, mean, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), by <span class="ot">=</span> SampleID]</span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a>  }</span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a></span>
+<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a>  ci <span class="ot">&lt;-</span> pheno[ , .(SampleID, <span class="at">cidx =</span> .I)]</span>
+<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a></span>
+<span id="cb4-24"><a href="#cb4-24" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">mut =</span> mut, <span class="at">pheno =</span> pheno, <span class="at">ci =</span> ci)</span>
+<span id="cb4-25"><a href="#cb4-25" tabindex="-1"></a>}</span>
+<span id="cb4-26"><a href="#cb4-26" tabindex="-1"></a></span>
+<span id="cb4-27"><a href="#cb4-27" tabindex="-1"></a></span>
+<span id="cb4-28"><a href="#cb4-28" tabindex="-1"></a>prep_mut_matrix <span class="ot">&lt;-</span> <span class="cf">function</span>(gene_name, mut, pheno,</span>
+<span id="cb4-29"><a href="#cb4-29" tabindex="-1"></a>                            <span class="at">totalnttype =</span> <span class="dv">96</span>,</span>
+<span id="cb4-30"><a href="#cb4-30" tabindex="-1"></a>                            <span class="at">anno_dir    =</span> <span class="st">&quot;.&quot;</span>,</span>
+<span id="cb4-31"><a href="#cb4-31" tabindex="-1"></a>                            <span class="at">output_prefix =</span> <span class="st">&quot;plot&quot;</span>,</span>
+<span id="cb4-32"><a href="#cb4-32" tabindex="-1"></a>                            <span class="at">output_dir    =</span> <span class="st">&quot;.&quot;</span>) {</span>
+<span id="cb4-33"><a href="#cb4-33" tabindex="-1"></a></span>
+<span id="cb4-34"><a href="#cb4-34" tabindex="-1"></a>  <span class="fu">library</span>(data.table)</span>
+<span id="cb4-35"><a href="#cb4-35" tabindex="-1"></a>  <span class="fu">library</span>(Matrix)</span>
+<span id="cb4-36"><a href="#cb4-36" tabindex="-1"></a></span>
+<span id="cb4-37"><a href="#cb4-37" tabindex="-1"></a>  mut        <span class="ot">&lt;-</span> <span class="fu">as.data.table</span>(mut)</span>
+<span id="cb4-38"><a href="#cb4-38" tabindex="-1"></a>  pheno_full <span class="ot">&lt;-</span> <span class="fu">as.data.table</span>(pheno)</span>
+<span id="cb4-39"><a href="#cb4-39" tabindex="-1"></a></span>
+<span id="cb4-40"><a href="#cb4-40" tabindex="-1"></a>  afileinfo <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb4-41"><a href="#cb4-41" tabindex="-1"></a>    <span class="at">file        =</span> <span class="fu">file.path</span>(anno_dir,</span>
+<span id="cb4-42"><a href="#cb4-42" tabindex="-1"></a>                            <span class="fu">paste0</span>(<span class="st">&quot;anno&quot;</span>, totalnttype,</span>
+<span id="cb4-43"><a href="#cb4-43" tabindex="-1"></a>                                   <span class="st">&quot;_nttypeXXX_annodata.txt&quot;</span>)),</span>
+<span id="cb4-44"><a href="#cb4-44" tabindex="-1"></a>    <span class="at">header      =</span> diffdriver<span class="sc">:::</span>aheader,</span>
+<span id="cb4-45"><a href="#cb4-45" tabindex="-1"></a>    <span class="at">coltype     =</span> diffdriver<span class="sc">:::</span>acoltype,</span>
+<span id="cb4-46"><a href="#cb4-46" tabindex="-1"></a>    <span class="at">totalntype  =</span> totalnttype)</span>
+<span id="cb4-47"><a href="#cb4-47" tabindex="-1"></a></span>
+<span id="cb4-48"><a href="#cb4-48" tabindex="-1"></a>  rdata <span class="ot">&lt;-</span> diffdriver<span class="sc">:::</span><span class="fu">prep_positional_data</span>(</span>
+<span id="cb4-49"><a href="#cb4-49" tabindex="-1"></a>              gene_name, afileinfo, <span class="at">BMRreg =</span> <span class="cn">NULL</span>,</span>
+<span id="cb4-50"><a href="#cb4-50" tabindex="-1"></a>              <span class="at">output_prefix =</span> output_prefix,</span>
+<span id="cb4-51"><a href="#cb4-51" tabindex="-1"></a>              <span class="at">output_dir    =</span> output_dir)</span>
+<span id="cb4-52"><a href="#cb4-52" tabindex="-1"></a></span>
+<span id="cb4-53"><a href="#cb4-53" tabindex="-1"></a>  fanno  <span class="ot">&lt;-</span> rdata<span class="sc">$</span>fanno</span>
+<span id="cb4-54"><a href="#cb4-54" tabindex="-1"></a>  ri     <span class="ot">&lt;-</span> rdata<span class="sc">$</span>ri</span>
+<span id="cb4-55"><a href="#cb4-55" tabindex="-1"></a>  ri[ , ridx <span class="sc">:=</span> .I]</span>
+<span id="cb4-56"><a href="#cb4-56" tabindex="-1"></a></span>
+<span id="cb4-57"><a href="#cb4-57" tabindex="-1"></a>  cdata <span class="ot">&lt;-</span> <span class="fu">prep_pheno_mut_data_full</span>(mut, pheno_full)</span>
+<span id="cb4-58"><a href="#cb4-58" tabindex="-1"></a>  mut   <span class="ot">&lt;-</span> cdata<span class="sc">$</span>mut</span>
+<span id="cb4-59"><a href="#cb4-59" tabindex="-1"></a>  pheno <span class="ot">&lt;-</span> cdata<span class="sc">$</span>pheno    </span>
+<span id="cb4-60"><a href="#cb4-60" tabindex="-1"></a>  ci    <span class="ot">&lt;-</span> cdata<span class="sc">$</span>ci</span>
+<span id="cb4-61"><a href="#cb4-61" tabindex="-1"></a></span>
+<span id="cb4-62"><a href="#cb4-62" tabindex="-1"></a>  nmutdt <span class="ot">&lt;-</span> <span class="fu">data.table</span>(<span class="fu">table</span>(mut<span class="sc">$</span>SampleID))</span>
+<span id="cb4-63"><a href="#cb4-63" tabindex="-1"></a>  <span class="fu">setnames</span>(nmutdt, <span class="fu">c</span>(<span class="st">&quot;SampleID&quot;</span>, <span class="st">&quot;Nmut&quot;</span>))</span>
+<span id="cb4-64"><a href="#cb4-64" tabindex="-1"></a>  pheno <span class="ot">&lt;-</span> <span class="fu">merge</span>(pheno, nmutdt, <span class="at">by =</span> <span class="st">&quot;SampleID&quot;</span>, <span class="at">all.x =</span> <span class="cn">TRUE</span>, <span class="at">sort =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb4-65"><a href="#cb4-65" tabindex="-1"></a></span>
+<span id="cb4-66"><a href="#cb4-66" tabindex="-1"></a>  muti <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(</span>
+<span id="cb4-67"><a href="#cb4-67" tabindex="-1"></a>            ci[ ri[mut,</span>
+<span id="cb4-68"><a href="#cb4-68" tabindex="-1"></a>                    <span class="at">on =</span> <span class="fu">c</span>(<span class="at">chrom =</span> <span class="st">&quot;Chromosome&quot;</span>,</span>
+<span id="cb4-69"><a href="#cb4-69" tabindex="-1"></a>                           <span class="at">start =</span> <span class="st">&quot;Position&quot;</span>,</span>
+<span id="cb4-70"><a href="#cb4-70" tabindex="-1"></a>                           <span class="at">ref   =</span> <span class="st">&quot;Ref&quot;</span>,</span>
+<span id="cb4-71"><a href="#cb4-71" tabindex="-1"></a>                           <span class="at">alt   =</span> <span class="st">&quot;Alt&quot;</span>)],</span>
+<span id="cb4-72"><a href="#cb4-72" tabindex="-1"></a>                <span class="at">on =</span> <span class="st">&quot;SampleID&quot;</span>])</span>
+<span id="cb4-73"><a href="#cb4-73" tabindex="-1"></a></span>
+<span id="cb4-74"><a href="#cb4-74" tabindex="-1"></a>  mutmtx <span class="ot">&lt;-</span> <span class="fu">sparseMatrix</span>(</span>
+<span id="cb4-75"><a href="#cb4-75" tabindex="-1"></a>              <span class="at">i =</span> muti<span class="sc">$</span>ridx,</span>
+<span id="cb4-76"><a href="#cb4-76" tabindex="-1"></a>              <span class="at">j =</span> muti<span class="sc">$</span>cidx,</span>
+<span id="cb4-77"><a href="#cb4-77" tabindex="-1"></a>              <span class="at">dims =</span> <span class="fu">c</span>(<span class="fu">max</span>(ri<span class="sc">$</span>ridx), <span class="fu">max</span>(ci<span class="sc">$</span>cidx)))</span>
+<span id="cb4-78"><a href="#cb4-78" tabindex="-1"></a></span>
+<span id="cb4-79"><a href="#cb4-79" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">fanno =</span> fanno, <span class="at">pheno =</span> pheno, <span class="at">mutmtx =</span> mutmtx)</span>
+<span id="cb4-80"><a href="#cb4-80" tabindex="-1"></a>}</span>
+<span id="cb4-81"><a href="#cb4-81" tabindex="-1"></a></span>
+<span id="cb4-82"><a href="#cb4-82" tabindex="-1"></a></span>
+<span id="cb4-83"><a href="#cb4-83" tabindex="-1"></a>plot_mut_multi <span class="ot">&lt;-</span> <span class="cf">function</span>(gene_name,</span>
+<span id="cb4-84"><a href="#cb4-84" tabindex="-1"></a>                           mut, pheno,</span>
+<span id="cb4-85"><a href="#cb4-85" tabindex="-1"></a>                           <span class="at">pheno_cols =</span> <span class="fu">colnames</span>(pheno)[<span class="sc">-</span><span class="dv">1</span>], </span>
+<span id="cb4-86"><a href="#cb4-86" tabindex="-1"></a>                           <span class="at">totalnttype =</span> <span class="dv">96</span>,</span>
+<span id="cb4-87"><a href="#cb4-87" tabindex="-1"></a>                           <span class="at">anno_dir    =</span> <span class="st">&quot;.&quot;</span>,</span>
+<span id="cb4-88"><a href="#cb4-88" tabindex="-1"></a>                           <span class="at">output_prefix =</span> <span class="st">&quot;plot&quot;</span>,</span>
+<span id="cb4-89"><a href="#cb4-89" tabindex="-1"></a>                           <span class="at">output_dir    =</span> <span class="st">&quot;.&quot;</span>,</span>
+<span id="cb4-90"><a href="#cb4-90" tabindex="-1"></a>                           <span class="at">mycolors =</span> <span class="fu">c</span>(<span class="st">&quot;#FF3D2E&quot;</span>, <span class="st">&quot;#2b8cbe&quot;</span>, <span class="co">#&quot;#fdae61&quot;,</span></span>
+<span id="cb4-91"><a href="#cb4-91" tabindex="-1"></a>                                        <span class="st">&quot;#41ab5d&quot;</span>, <span class="st">&quot;pink&quot;</span>, <span class="st">&quot;#8C2DA6&quot;</span>, <span class="st">&quot;#a65628&quot;</span>)) {</span>
+<span id="cb4-92"><a href="#cb4-92" tabindex="-1"></a></span>
+<span id="cb4-93"><a href="#cb4-93" tabindex="-1"></a>  pdata  <span class="ot">&lt;-</span> <span class="fu">prep_mut_matrix</span>(gene_name, mut, pheno,</span>
+<span id="cb4-94"><a href="#cb4-94" tabindex="-1"></a>                            totalnttype, anno_dir,</span>
+<span id="cb4-95"><a href="#cb4-95" tabindex="-1"></a>                            output_prefix, output_dir)</span>
+<span id="cb4-96"><a href="#cb4-96" tabindex="-1"></a>  fanno  <span class="ot">&lt;-</span> pdata<span class="sc">$</span>fanno</span>
+<span id="cb4-97"><a href="#cb4-97" tabindex="-1"></a>  pheno  <span class="ot">&lt;-</span> pdata<span class="sc">$</span>pheno</span>
+<span id="cb4-98"><a href="#cb4-98" tabindex="-1"></a>  mutmtx <span class="ot">&lt;-</span> pdata<span class="sc">$</span>mutmtx</span>
+<span id="cb4-99"><a href="#cb4-99" tabindex="-1"></a></span>
+<span id="cb4-100"><a href="#cb4-100" tabindex="-1"></a>  metr_mat <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb4-101"><a href="#cb4-101" tabindex="-1"></a>    <span class="at">Nonsyn =</span> Matrix<span class="sc">::</span><span class="fu">colSums</span>(mutmtx),</span>
+<span id="cb4-102"><a href="#cb4-102" tabindex="-1"></a>    <span class="co"># LoF    = Matrix::colSums(mutmtx[fanno$functypecode8 &gt; 0, ]),</span></span>
+<span id="cb4-103"><a href="#cb4-103" tabindex="-1"></a>    <span class="at">Cons.  =</span> Matrix<span class="sc">::</span><span class="fu">colSums</span>(mutmtx[fanno<span class="sc">$</span>mycons        <span class="sc">&gt;</span> <span class="dv">0</span>, ]),</span>
+<span id="cb4-104"><a href="#cb4-104" tabindex="-1"></a>    <span class="st">`</span><span class="at">#Mut</span><span class="st">`</span> <span class="ot">=</span> pheno<span class="sc">$</span>Nmut</span>
+<span id="cb4-105"><a href="#cb4-105" tabindex="-1"></a>  )</span>
+<span id="cb4-106"><a href="#cb4-106" tabindex="-1"></a></span>
+<span id="cb4-107"><a href="#cb4-107" tabindex="-1"></a>  pheno_mat <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">as.matrix</span>(pheno[, pheno_cols, <span class="at">with =</span> <span class="cn">FALSE</span>]))</span>
+<span id="cb4-108"><a href="#cb4-108" tabindex="-1"></a>  <span class="fu">rownames</span>(pheno_mat) <span class="ot">&lt;-</span> pheno_cols</span>
+<span id="cb4-109"><a href="#cb4-109" tabindex="-1"></a></span>
+<span id="cb4-110"><a href="#cb4-110" tabindex="-1"></a>  df  <span class="ot">&lt;-</span> <span class="fu">rbind</span>(pheno_mat, metr_mat)</span>
+<span id="cb4-111"><a href="#cb4-111" tabindex="-1"></a>  </span>
+<span id="cb4-112"><a href="#cb4-112" tabindex="-1"></a>  fac_C1 <span class="ot">&lt;-</span> df[<span class="st">&quot;C1&quot;</span>, ]            </span>
+<span id="cb4-113"><a href="#cb4-113" tabindex="-1"></a>  fac_C2 <span class="ot">&lt;-</span> df[<span class="st">&quot;C2&quot;</span>, ]</span>
+<span id="cb4-114"><a href="#cb4-114" tabindex="-1"></a>  val_FGA <span class="ot">&lt;-</span> df[<span class="st">&quot;FGA&quot;</span>, ]</span>
+<span id="cb4-115"><a href="#cb4-115" tabindex="-1"></a>  </span>
+<span id="cb4-116"><a href="#cb4-116" tabindex="-1"></a>  ord <span class="ot">&lt;-</span> <span class="fu">order</span>(fac_C1, fac_C2, val_FGA, <span class="at">na.last =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-117"><a href="#cb4-117" tabindex="-1"></a>  df  <span class="ot">&lt;-</span> df[, ord] </span>
+<span id="cb4-118"><a href="#cb4-118" tabindex="-1"></a>  </span>
+<span id="cb4-119"><a href="#cb4-119" tabindex="-1"></a>  n_row <span class="ot">&lt;-</span> <span class="fu">nrow</span>(df)</span>
+<span id="cb4-120"><a href="#cb4-120" tabindex="-1"></a>  <span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(n_row, <span class="dv">1</span>), <span class="at">mar =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="dv">12</span>, <span class="fl">0.5</span>, <span class="dv">1</span>))</span>
+<span id="cb4-121"><a href="#cb4-121" tabindex="-1"></a></span>
+<span id="cb4-122"><a href="#cb4-122" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(n_row)) {</span>
+<span id="cb4-123"><a href="#cb4-123" tabindex="-1"></a>    vec <span class="ot">&lt;-</span> df[i, ]</span>
+<span id="cb4-124"><a href="#cb4-124" tabindex="-1"></a></span>
+<span id="cb4-125"><a href="#cb4-125" tabindex="-1"></a>    unique_vals <span class="ot">&lt;-</span> <span class="fu">unique</span>(vec[<span class="sc">!</span><span class="fu">is.na</span>(vec)])</span>
+<span id="cb4-126"><a href="#cb4-126" tabindex="-1"></a>    current_label <span class="ot">&lt;-</span> <span class="fu">rownames</span>(df)[i]</span>
+<span id="cb4-127"><a href="#cb4-127" tabindex="-1"></a>    </span>
+<span id="cb4-128"><a href="#cb4-128" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">length</span>(unique_vals) <span class="sc">&lt;=</span> <span class="dv">2</span> <span class="sc">&amp;&amp;</span> i <span class="sc">&lt;=</span> <span class="fu">nrow</span>(pheno_mat)) {</span>
+<span id="cb4-129"><a href="#cb4-129" tabindex="-1"></a>      <span class="fu">barplot</span>(<span class="fu">rep</span>(<span class="dv">1</span>, <span class="fu">length</span>(vec)),</span>
+<span id="cb4-130"><a href="#cb4-130" tabindex="-1"></a>              <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;white&quot;</span>, <span class="st">&quot;salmon&quot;</span>)[<span class="fu">as.factor</span>(vec)],</span>
+<span id="cb4-131"><a href="#cb4-131" tabindex="-1"></a>              <span class="at">xaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">yaxt =</span> <span class="st">&quot;n&quot;</span>,</span>
+<span id="cb4-132"><a href="#cb4-132" tabindex="-1"></a>              <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>, <span class="at">border =</span> <span class="cn">NA</span>)</span>
+<span id="cb4-133"><a href="#cb4-133" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb4-134"><a href="#cb4-134" tabindex="-1"></a>      ylim_i <span class="ot">&lt;-</span> <span class="cf">if</span> (<span class="fu">rownames</span>(df)[i] <span class="sc">==</span> <span class="st">&quot;#Mut&quot;</span>) {</span>
+<span id="cb4-135"><a href="#cb4-135" tabindex="-1"></a>                  <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">quantile</span>(vec, <span class="fl">0.99</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)[[<span class="dv">1</span>]])</span>
+<span id="cb4-136"><a href="#cb4-136" tabindex="-1"></a>                } <span class="cf">else</span> <span class="cn">NULL</span></span>
+<span id="cb4-137"><a href="#cb4-137" tabindex="-1"></a></span>
+<span id="cb4-138"><a href="#cb4-138" tabindex="-1"></a>      <span class="fu">barplot</span>(vec,</span>
+<span id="cb4-139"><a href="#cb4-139" tabindex="-1"></a>              <span class="at">col =</span> <span class="cf">if</span> (i <span class="sc">&lt;=</span> <span class="fu">nrow</span>(pheno_mat))</span>
+<span id="cb4-140"><a href="#cb4-140" tabindex="-1"></a>                      <span class="st">&quot;grey70&quot;</span>  </span>
+<span id="cb4-141"><a href="#cb4-141" tabindex="-1"></a>                    <span class="cf">else</span></span>
+<span id="cb4-142"><a href="#cb4-142" tabindex="-1"></a>                      mycolors[i <span class="sc">-</span> <span class="fu">nrow</span>(pheno_mat) <span class="sc">+</span> <span class="dv">1</span>],</span>
+<span id="cb4-143"><a href="#cb4-143" tabindex="-1"></a>              <span class="at">xaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">yaxt =</span> <span class="st">&quot;n&quot;</span>,</span>
+<span id="cb4-144"><a href="#cb4-144" tabindex="-1"></a>              <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb4-145"><a href="#cb4-145" tabindex="-1"></a>              <span class="at">border =</span> <span class="cn">NA</span>,</span>
+<span id="cb4-146"><a href="#cb4-146" tabindex="-1"></a>              <span class="at">ylim =</span> ylim_i)</span>
+<span id="cb4-147"><a href="#cb4-147" tabindex="-1"></a>    }</span>
+<span id="cb4-148"><a href="#cb4-148" tabindex="-1"></a>    </span>
+<span id="cb4-149"><a href="#cb4-149" tabindex="-1"></a>    <span class="fu">mtext</span>(<span class="at">text =</span> current_label, <span class="at">side =</span> <span class="dv">2</span>, <span class="at">line =</span> <span class="fl">2.5</span>, <span class="at">las =</span> <span class="dv">1</span>, <span class="at">cex =</span> <span class="fl">1.2</span>)</span>
+<span id="cb4-150"><a href="#cb4-150" tabindex="-1"></a>    </span>
+<span id="cb4-151"><a href="#cb4-151" tabindex="-1"></a>    <span class="cf">if</span> (current_label <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Nonsyn&quot;</span>, <span class="st">&quot;LoF&quot;</span>, <span class="st">&quot;Cons.&quot;</span>)) {</span>
+<span id="cb4-152"><a href="#cb4-152" tabindex="-1"></a>        max_val <span class="ot">&lt;-</span> <span class="fu">max</span>(vec, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-153"><a href="#cb4-153" tabindex="-1"></a>        <span class="fu">axis</span>(<span class="at">side =</span> <span class="dv">2</span>, <span class="at">at =</span> <span class="dv">0</span><span class="sc">:</span>max_val, <span class="at">las =</span> <span class="dv">1</span>, <span class="at">cex.axis =</span> <span class="fl">1.2</span>, <span class="at">lwd =</span> <span class="dv">1</span>, <span class="at">lwd.ticks =</span> <span class="dv">1</span>)</span>
+<span id="cb4-154"><a href="#cb4-154" tabindex="-1"></a>      }</span>
+<span id="cb4-155"><a href="#cb4-155" tabindex="-1"></a>  }</span>
+<span id="cb4-156"><a href="#cb4-156" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>mut_path <span class="ot">&lt;-</span> <span class="st">&quot;/dartfs/rc/lab/S/Szhao/qiruiz/diffdriver/tumor_specific_input/TGCT/TGCT_mutations.txt&quot;</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>mut <span class="ot">&lt;-</span> <span class="fu">read.table</span>(mut_path, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>pheno_files <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="at">C1  =</span> <span class="st">&quot;/dartfs/rc/lab/S/Szhao/qiruiz/diffdriver/batch2/tumor_specific_input/TGCT/TGCT_C1.txt&quot;</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  <span class="at">C2 =</span> <span class="st">&quot;/dartfs/rc/lab/S/Szhao/qiruiz/diffdriver/batch2/tumor_specific_input/TGCT/TGCT_C2.txt&quot;</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>  <span class="at">FGA =</span> <span class="st">&quot;/dartfs/rc/lab/S/Szhao/qiruiz/diffdriver/cbioportal_download/Fraction.Genome.Altered.txt&quot;</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>)</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>pheno_list <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="fu">names</span>(pheno_files), <span class="cf">function</span>(nm) {</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>  dt <span class="ot">&lt;-</span> <span class="fu">fread</span>(pheno_files[[nm]], <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span>)</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>  <span class="fu">setnames</span>(dt, <span class="at">old =</span> <span class="fu">colnames</span>(dt)[<span class="dv">2</span>], <span class="at">new =</span> nm) </span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>  dt</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>})</span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a></span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>pheno_wide <span class="ot">&lt;-</span> <span class="fu">Reduce</span>(<span class="cf">function</span>(x, y) <span class="fu">merge</span>(x, y, <span class="at">by =</span> <span class="st">&quot;SampleID&quot;</span>, <span class="at">all =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a>                     pheno_list)</span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a></span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a>pheno_cols <span class="ot">&lt;-</span> <span class="fu">names</span>(pheno_files)</span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a></span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="fu">plot_mut_multi</span>(</span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a>  <span class="at">gene_name  =</span> <span class="st">&quot;KIT&quot;</span>,                      </span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a>  <span class="at">mut        =</span> mut,                        </span>
+<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a>  <span class="at">pheno      =</span> pheno_wide,                  </span>
+<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a>  <span class="at">pheno_cols =</span> pheno_cols,    </span>
+<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a>  <span class="at">anno_dir   =</span> <span class="st">&quot;/dartfs/rc/lab/S/Szhao/qiruiz/diffdriver/annodir96/&quot;</span></span>
+<span id="cb6-25"><a href="#cb6-25" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>Warning: package &#39;Matrix&#39; was built under R version 4.4.3</code></pre>
+<pre><code>[1] &quot;coding...&quot;
+[1] &quot;processing ...&quot;
+[1] &quot;for qnvars, filling in missing values ...&quot;
+[1] &quot;for cvars (0/1 categories), filling in missing values ...&quot;
+[1] &quot;normalizing categorical variables in annotation matrix ...&quot;</code></pre>
+<p><img src="figure/Individual_Genes.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>plot_mut_multi <span class="ot">&lt;-</span> <span class="cf">function</span>(gene_name,</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>                           mut, pheno,</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>                           <span class="at">pheno_cols =</span> <span class="fu">colnames</span>(pheno)[<span class="sc">-</span><span class="dv">1</span>], </span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>                           <span class="at">totalnttype =</span> <span class="dv">96</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>                           <span class="at">anno_dir    =</span> <span class="st">&quot;.&quot;</span>,</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>                           <span class="at">output_prefix =</span> <span class="st">&quot;plot&quot;</span>,</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>                           <span class="at">output_dir    =</span> <span class="st">&quot;.&quot;</span>,</span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>                           <span class="at">mycolors =</span> <span class="fu">c</span>(<span class="st">&quot;#FF3D2E&quot;</span>, <span class="st">&quot;#2b8cbe&quot;</span>, <span class="st">&quot;#fdae61&quot;</span>,</span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>                                        <span class="st">&quot;#41ab5d&quot;</span>, <span class="st">&quot;pink&quot;</span>, <span class="st">&quot;#8C2DA6&quot;</span>, <span class="st">&quot;#a65628&quot;</span>)) {</span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a></span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a>  pdata  <span class="ot">&lt;-</span> <span class="fu">prep_mut_matrix</span>(gene_name, mut, pheno,</span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a>                            totalnttype, anno_dir,</span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a>                            output_prefix, output_dir)</span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a>  fanno  <span class="ot">&lt;-</span> pdata<span class="sc">$</span>fanno</span>
+<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a>  pheno  <span class="ot">&lt;-</span> pdata<span class="sc">$</span>pheno</span>
+<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a>  mutmtx <span class="ot">&lt;-</span> pdata<span class="sc">$</span>mutmtx</span>
+<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a></span>
+<span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a>  metr_mat <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb9-19"><a href="#cb9-19" tabindex="-1"></a>    <span class="at">Nonsyn =</span> Matrix<span class="sc">::</span><span class="fu">colSums</span>(mutmtx),</span>
+<span id="cb9-20"><a href="#cb9-20" tabindex="-1"></a>    <span class="at">LoF    =</span> Matrix<span class="sc">::</span><span class="fu">colSums</span>(mutmtx[fanno<span class="sc">$</span>functypecode8 <span class="sc">&gt;</span> <span class="dv">0</span>, ]),</span>
+<span id="cb9-21"><a href="#cb9-21" tabindex="-1"></a>    <span class="at">Cons.  =</span> Matrix<span class="sc">::</span><span class="fu">colSums</span>(mutmtx[fanno<span class="sc">$</span>mycons         <span class="sc">&gt;</span> <span class="dv">0</span>, ]),</span>
+<span id="cb9-22"><a href="#cb9-22" tabindex="-1"></a>    <span class="st">`</span><span class="at">#Mut</span><span class="st">`</span> <span class="ot">=</span> pheno<span class="sc">$</span>Nmut</span>
+<span id="cb9-23"><a href="#cb9-23" tabindex="-1"></a>  )</span>
+<span id="cb9-24"><a href="#cb9-24" tabindex="-1"></a></span>
+<span id="cb9-25"><a href="#cb9-25" tabindex="-1"></a>  pheno_mat <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">as.matrix</span>(pheno[, pheno_cols, <span class="at">with =</span> <span class="cn">FALSE</span>]))</span>
+<span id="cb9-26"><a href="#cb9-26" tabindex="-1"></a>  <span class="fu">rownames</span>(pheno_mat) <span class="ot">&lt;-</span> pheno_cols</span>
+<span id="cb9-27"><a href="#cb9-27" tabindex="-1"></a></span>
+<span id="cb9-28"><a href="#cb9-28" tabindex="-1"></a>  df  <span class="ot">&lt;-</span> <span class="fu">rbind</span>(pheno_mat, metr_mat)</span>
+<span id="cb9-29"><a href="#cb9-29" tabindex="-1"></a>   </span>
+<span id="cb9-30"><a href="#cb9-30" tabindex="-1"></a>  fac_C1 <span class="ot">&lt;-</span> df[<span class="st">&quot;C1&quot;</span>, ]             </span>
+<span id="cb9-31"><a href="#cb9-31" tabindex="-1"></a>  fac_C2 <span class="ot">&lt;-</span> df[<span class="st">&quot;C2&quot;</span>, ]</span>
+<span id="cb9-32"><a href="#cb9-32" tabindex="-1"></a>  val_FGA <span class="ot">&lt;-</span> df[<span class="st">&quot;FGA&quot;</span>, ]</span>
+<span id="cb9-33"><a href="#cb9-33" tabindex="-1"></a>   </span>
+<span id="cb9-34"><a href="#cb9-34" tabindex="-1"></a>  ord <span class="ot">&lt;-</span> <span class="fu">order</span>(fac_C1, fac_C2, val_FGA, <span class="at">na.last =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb9-35"><a href="#cb9-35" tabindex="-1"></a>  df  <span class="ot">&lt;-</span> df[, ord] </span>
+<span id="cb9-36"><a href="#cb9-36" tabindex="-1"></a>   </span>
+<span id="cb9-37"><a href="#cb9-37" tabindex="-1"></a>  n_row <span class="ot">&lt;-</span> <span class="fu">nrow</span>(df)</span>
+<span id="cb9-38"><a href="#cb9-38" tabindex="-1"></a>  <span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(n_row, <span class="dv">1</span>), <span class="at">mar =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="dv">12</span>, <span class="fl">0.5</span>, <span class="dv">1</span>))</span>
+<span id="cb9-39"><a href="#cb9-39" tabindex="-1"></a></span>
+<span id="cb9-40"><a href="#cb9-40" tabindex="-1"></a>  target_rows <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Nonsyn&quot;</span>, <span class="st">&quot;LoF&quot;</span>, <span class="st">&quot;Cons.&quot;</span>)</span>
+<span id="cb9-41"><a href="#cb9-41" tabindex="-1"></a></span>
+<span id="cb9-42"><a href="#cb9-42" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(n_row)) {</span>
+<span id="cb9-43"><a href="#cb9-43" tabindex="-1"></a>    vec <span class="ot">&lt;-</span> df[i, ]</span>
+<span id="cb9-44"><a href="#cb9-44" tabindex="-1"></a></span>
+<span id="cb9-45"><a href="#cb9-45" tabindex="-1"></a>    unique_vals <span class="ot">&lt;-</span> <span class="fu">unique</span>(vec[<span class="sc">!</span><span class="fu">is.na</span>(vec)])</span>
+<span id="cb9-46"><a href="#cb9-46" tabindex="-1"></a>    current_label <span class="ot">&lt;-</span> <span class="fu">rownames</span>(df)[i]</span>
+<span id="cb9-47"><a href="#cb9-47" tabindex="-1"></a>    </span>
+<span id="cb9-48"><a href="#cb9-48" tabindex="-1"></a>    <span class="cf">if</span> (current_label <span class="sc">%in%</span> target_rows) {</span>
+<span id="cb9-49"><a href="#cb9-49" tabindex="-1"></a>        <span class="co"># 3 times width</span></span>
+<span id="cb9-50"><a href="#cb9-50" tabindex="-1"></a>        target_w <span class="ot">&lt;-</span> <span class="fl">3.0</span></span>
+<span id="cb9-51"><a href="#cb9-51" tabindex="-1"></a>        </span>
+<span id="cb9-52"><a href="#cb9-52" tabindex="-1"></a>        s_mid <span class="ot">&lt;-</span> (<span class="fl">1.2</span> <span class="sc">/</span> target_w) <span class="sc">-</span> <span class="dv">1</span></span>
+<span id="cb9-53"><a href="#cb9-53" tabindex="-1"></a>        s_start <span class="ot">&lt;-</span> (<span class="fl">0.7</span> <span class="sc">-</span> target_w <span class="sc">/</span> <span class="dv">2</span>) <span class="sc">/</span> target_w</span>
+<span id="cb9-54"><a href="#cb9-54" tabindex="-1"></a>        </span>
+<span id="cb9-55"><a href="#cb9-55" tabindex="-1"></a>        use_width <span class="ot">&lt;-</span> target_w</span>
+<span id="cb9-56"><a href="#cb9-56" tabindex="-1"></a>        use_space <span class="ot">&lt;-</span> <span class="fu">c</span>(s_start, <span class="fu">rep</span>(s_mid, <span class="fu">length</span>(vec) <span class="sc">-</span> <span class="dv">1</span>))</span>
+<span id="cb9-57"><a href="#cb9-57" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb9-58"><a href="#cb9-58" tabindex="-1"></a>        use_width <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb9-59"><a href="#cb9-59" tabindex="-1"></a>        use_space <span class="ot">&lt;-</span> <span class="fl">0.2</span></span>
+<span id="cb9-60"><a href="#cb9-60" tabindex="-1"></a>    }</span>
+<span id="cb9-61"><a href="#cb9-61" tabindex="-1"></a>    </span>
+<span id="cb9-62"><a href="#cb9-62" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">length</span>(unique_vals) <span class="sc">&lt;=</span> <span class="dv">2</span> <span class="sc">&amp;&amp;</span> i <span class="sc">&lt;=</span> <span class="fu">nrow</span>(pheno_mat)) {</span>
+<span id="cb9-63"><a href="#cb9-63" tabindex="-1"></a>      <span class="fu">barplot</span>(<span class="fu">rep</span>(<span class="dv">1</span>, <span class="fu">length</span>(vec)),</span>
+<span id="cb9-64"><a href="#cb9-64" tabindex="-1"></a>              <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;white&quot;</span>, <span class="st">&quot;salmon&quot;</span>)[<span class="fu">as.factor</span>(vec)],</span>
+<span id="cb9-65"><a href="#cb9-65" tabindex="-1"></a>              <span class="at">xaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">yaxt =</span> <span class="st">&quot;n&quot;</span>,</span>
+<span id="cb9-66"><a href="#cb9-66" tabindex="-1"></a>              <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>, <span class="at">border =</span> <span class="cn">NA</span>,</span>
+<span id="cb9-67"><a href="#cb9-67" tabindex="-1"></a>              <span class="at">width =</span> use_width, <span class="at">space =</span> use_space)</span>
+<span id="cb9-68"><a href="#cb9-68" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb9-69"><a href="#cb9-69" tabindex="-1"></a>      ylim_i <span class="ot">&lt;-</span> <span class="cf">if</span> (<span class="fu">rownames</span>(df)[i] <span class="sc">==</span> <span class="st">&quot;#Mut&quot;</span>) {</span>
+<span id="cb9-70"><a href="#cb9-70" tabindex="-1"></a>                  <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">quantile</span>(vec, <span class="fl">0.99</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)[[<span class="dv">1</span>]])</span>
+<span id="cb9-71"><a href="#cb9-71" tabindex="-1"></a>                } <span class="cf">else</span> <span class="cn">NULL</span></span>
+<span id="cb9-72"><a href="#cb9-72" tabindex="-1"></a></span>
+<span id="cb9-73"><a href="#cb9-73" tabindex="-1"></a>      <span class="fu">barplot</span>(vec,</span>
+<span id="cb9-74"><a href="#cb9-74" tabindex="-1"></a>              <span class="at">col =</span> <span class="cf">if</span> (i <span class="sc">&lt;=</span> <span class="fu">nrow</span>(pheno_mat))</span>
+<span id="cb9-75"><a href="#cb9-75" tabindex="-1"></a>                      <span class="st">&quot;grey70&quot;</span>  </span>
+<span id="cb9-76"><a href="#cb9-76" tabindex="-1"></a>                    <span class="cf">else</span></span>
+<span id="cb9-77"><a href="#cb9-77" tabindex="-1"></a>                      mycolors[i <span class="sc">-</span> <span class="fu">nrow</span>(pheno_mat) <span class="sc">+</span> <span class="dv">1</span>],</span>
+<span id="cb9-78"><a href="#cb9-78" tabindex="-1"></a>              <span class="at">xaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">yaxt =</span> <span class="st">&quot;n&quot;</span>,</span>
+<span id="cb9-79"><a href="#cb9-79" tabindex="-1"></a>              <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb9-80"><a href="#cb9-80" tabindex="-1"></a>              <span class="at">border =</span> <span class="cn">NA</span>,</span>
+<span id="cb9-81"><a href="#cb9-81" tabindex="-1"></a>              <span class="at">ylim =</span> ylim_i,</span>
+<span id="cb9-82"><a href="#cb9-82" tabindex="-1"></a>              <span class="at">width =</span> use_width, <span class="at">space =</span> use_space)</span>
+<span id="cb9-83"><a href="#cb9-83" tabindex="-1"></a>    }</span>
+<span id="cb9-84"><a href="#cb9-84" tabindex="-1"></a>    </span>
+<span id="cb9-85"><a href="#cb9-85" tabindex="-1"></a>    <span class="fu">mtext</span>(<span class="at">text =</span> current_label, <span class="at">side =</span> <span class="dv">2</span>, <span class="at">line =</span> <span class="fl">2.5</span>, <span class="at">las =</span> <span class="dv">1</span>, <span class="at">cex =</span> <span class="fl">1.5</span>)</span>
+<span id="cb9-86"><a href="#cb9-86" tabindex="-1"></a>    </span>
+<span id="cb9-87"><a href="#cb9-87" tabindex="-1"></a>    <span class="cf">if</span> (current_label <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Nonsyn&quot;</span>, <span class="st">&quot;LoF&quot;</span>, <span class="st">&quot;Cons.&quot;</span>)) {</span>
+<span id="cb9-88"><a href="#cb9-88" tabindex="-1"></a>        max_val <span class="ot">&lt;-</span> <span class="fu">max</span>(vec, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb9-89"><a href="#cb9-89" tabindex="-1"></a>        <span class="fu">axis</span>(<span class="at">side =</span> <span class="dv">2</span>, <span class="at">at =</span> <span class="dv">0</span><span class="sc">:</span>max_val, <span class="at">las =</span> <span class="dv">1</span>, <span class="at">cex.axis =</span> <span class="fl">1.75</span>, <span class="at">lwd =</span> <span class="dv">1</span>, <span class="at">lwd.ticks =</span> <span class="dv">1</span>)</span>
+<span id="cb9-90"><a href="#cb9-90" tabindex="-1"></a>      }</span>
+<span id="cb9-91"><a href="#cb9-91" tabindex="-1"></a>  }</span>
+<span id="cb9-92"><a href="#cb9-92" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>pheno_files <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>  <span class="at">C1  =</span> <span class="st">&quot;/dartfs/rc/lab/S/Szhao/qiruiz/diffdriver/batch2/tumor_specific_input/HNSC/HNSC_C1.txt&quot;</span>,</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>  <span class="at">C2 =</span> <span class="st">&quot;/dartfs/rc/lab/S/Szhao/qiruiz/diffdriver/batch2/tumor_specific_input/HNSC/HNSC_C2.txt&quot;</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>  <span class="at">FGA =</span> <span class="st">&quot;/dartfs/rc/lab/S/Szhao/qiruiz/diffdriver/cbioportal_download/Fraction.Genome.Altered.txt&quot;</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>)</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>pheno_list <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="fu">names</span>(pheno_files), <span class="cf">function</span>(nm) {</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>  dt <span class="ot">&lt;-</span> <span class="fu">fread</span>(pheno_files[[nm]], <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span>)</span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>  <span class="fu">setnames</span>(dt, <span class="at">old =</span> <span class="fu">colnames</span>(dt)[<span class="dv">2</span>], <span class="at">new =</span> nm) </span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a>  dt</span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a>})</span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a>pheno_wide <span class="ot">&lt;-</span> <span class="fu">Reduce</span>(<span class="cf">function</span>(x, y) <span class="fu">merge</span>(x, y, <span class="at">by =</span> <span class="st">&quot;SampleID&quot;</span>, <span class="at">all =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a>                     pheno_list)</span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a></span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a>pheno_cols <span class="ot">&lt;-</span> <span class="fu">names</span>(pheno_files)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>mut_path <span class="ot">&lt;-</span> <span class="st">&quot;/dartfs/rc/lab/S/Szhao/qiruiz/diffdriver/tumor_specific_input/HNSC/HNSC_mutations.txt&quot;</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>mut <span class="ot">&lt;-</span> <span class="fu">read.table</span>(mut_path, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="fu">plot_mut_multi</span>(</span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>  <span class="at">gene_name  =</span> <span class="st">&quot;HLA-B&quot;</span>,</span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>  <span class="at">mut        =</span> mut,</span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>  <span class="at">pheno      =</span> pheno_wide,</span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a>  <span class="at">pheno_cols =</span> pheno_cols,</span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a>  <span class="at">anno_dir   =</span> <span class="st">&quot;/dartfs/rc/lab/S/Szhao/qiruiz/diffdriver/temp/annodir96&quot;</span></span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>[1] &quot;coding...&quot;
+[1] &quot;processing ...&quot;
+[1] &quot;for qnvars, filling in missing values ...&quot;
+[1] &quot;for cvars (0/1 categories), filling in missing values ...&quot;
+[1] &quot;normalizing categorical variables in annotation matrix ...&quot;</code></pre>
+<p><img src="figure/Individual_Genes.Rmd/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<pre><code>R version 4.4.2 (2024-10-31)
+Platform: x86_64-conda-linux-gnu
+Running under: Ubuntu 24.04.1 LTS
+
+Matrix products: default
+BLAS/LAPACK: /dartfs-hpc/rc/home/p/f0070pp/.conda/envs/diffdriver/lib/libopenblasp-r0.3.29.so;  LAPACK version 3.12.0
+
+locale:
+ [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+ [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+
+time zone: Etc/UTC
+tzcode source: system (glibc)
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] Matrix_1.7-3      data.table_1.17.4 workflowr_1.7.1  
+
+loaded via a namespace (and not attached):
+ [1] jsonlite_2.0.0    compiler_4.4.2    promises_1.3.3    Rcpp_1.0.14      
+ [5] stringr_1.5.1     git2r_0.36.2      callr_3.7.6       later_1.4.2      
+ [9] jquerylib_0.1.4   yaml_2.3.10       fastmap_1.2.0     lattice_0.22-7   
+[13] R6_2.6.1          knitr_1.50        tibble_3.2.1      rprojroot_2.0.4  
+[17] bslib_0.9.0       pillar_1.10.2     diffdriver_0.1.6  rlang_1.1.6      
+[21] cachem_1.1.0      stringi_1.8.7     httpuv_1.6.16     xfun_0.52        
+[25] getPass_0.2-4     fs_1.6.6          sass_0.4.10       cli_3.6.5        
+[29] magrittr_2.0.3    ps_1.9.1          digest_0.6.37     grid_4.4.2       
+[33] processx_3.8.6    rstudioapi_0.17.1 lifecycle_1.0.4   vctrs_0.6.5      
+[37] evaluate_1.0.3    glue_1.8.0        whisker_0.4.1     rmarkdown_2.29   
+[41] httr_1.4.7        tools_4.4.2       pkgconfig_2.0.3   htmltools_0.5.8.1</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
