@@ -463,7 +463,7 @@ Figure is selected FDR, sort by fold enrichment. Top 20. Remove all redundancy.
 unique(a[a[, "age_all"]!="", "age_all"])
 ```
 
-```{r include-pdf-figure, out.width='85%', fig.cap="A caption for your PDF figure."}
+```{r include-png-figure, out.width='85%', fig.cap="Barplot of GO enrichment (age)"}
 knitr::include_graphics("output/barplot-GO-bio-age.png")
 ```
 
@@ -472,7 +472,7 @@ knitr::include_graphics("output/barplot-GO-bio-age.png")
 unique(a[a[, "tmb_all"]!="", "tmb_all"])
 ```
 
-```{r include-pdf-figure2, out.width='85%', fig.cap="A caption for your PDF figure."}
+```{r include-png-figure2, out.width='85%', fig.cap="Barplot of GO enrichment (TMB)"}
 knitr::include_graphics("output/barplot-GO-bio-tmb.png")
 ```
 
@@ -481,7 +481,7 @@ knitr::include_graphics("output/barplot-GO-bio-tmb.png")
 unique(a[a[, "instability_all"]!="", "instability_all"])
 ```
 
-```{r out.width='85%', fig.cap="A caption for your PDF figure."}
+```{r include-png-figure3, out.width='85%', fig.cap="Barplot of GO enrichment (INS)"}
 knitr::include_graphics("output/barplot-GO-bio-ins.png")
 ```
 
