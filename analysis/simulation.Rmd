@@ -11,6 +11,7 @@ editor_options:
 - [BMR](BMR.html)
 - [Simulation BMR](Simulation-BMR.html)
 - [Simulation Power](Simulation-Power.html)
+- [Simulation Code](simulation-code.html)
 
 
 
