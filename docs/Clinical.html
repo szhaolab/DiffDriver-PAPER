@@ -655,15 +655,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree878812b6afe82579c3cb4625e3e92c8301f5202dtargetblank878812ba">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtreee4a1f951808208e498d1a322bdbea340f54f786ctargetblanke4a1f95a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/878812b6afe82579c3cb4625e3e92c8301f5202d" target="_blank">878812b</a>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/e4a1f951808208e498d1a322bdbea340f54f786c" target="_blank">e4a1f95</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree878812b6afe82579c3cb4625e3e92c8301f5202dtargetblank878812ba"
+id="strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtreee4a1f951808208e498d1a322bdbea340f54f786ctargetblanke4a1f95a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -673,7 +673,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/878812b6afe82579c3cb4625e3e92c8301f5202d" target="_blank">878812b</a>.
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/e4a1f951808208e498d1a322bdbea340f54f786c" target="_blank">e4a1f95</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -690,11 +690,13 @@ were generated:
 Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
+    Ignored:    analysis/figure/
 
 Untracked files:
     Untracked:  LICENSE
     Untracked:  data/realdata/
     Untracked:  data/tsgsimple_LUAD_fixed_63/
+    Untracked:  material/
 
 Unstaged changes:
     Modified:   DiffDriver-PAPER.Rproj
@@ -744,6 +746,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/e4a1f951808208e498d1a322bdbea340f54f786c/analysis/Clinical.Rmd" target="_blank">e4a1f95</a>
+</td>
+<td>
+Qirui Zhang
+</td>
+<td>
+2026-02-12
+</td>
+<td>
+Add Source link to navbar
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/szhaolab/DiffDriver-PAPER/7c4e96c476d9b29c601243611959fa6c70551217/docs/Clinical.html" target="_blank">7c4e96c</a>
+</td>
+<td>
+Qirui Zhang
+</td>
+<td>
+2026-02-12
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1499,12 +1535,54 @@ enrichment. Top 20. Remove all redundancy.</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="fu">unique</span>(a[a[, <span class="st">&quot;age_all&quot;</span>]<span class="sc">!=</span><span class="st">&quot;&quot;</span>, <span class="st">&quot;age_all&quot;</span>])</span></code></pre></div>
 <pre><code> [1] &quot;FOXA1&quot;   &quot;CASP8&quot;   &quot;RAC1&quot;    &quot;NF1&quot;     &quot;PPP2R1A&quot; &quot;TP53&quot;    &quot;IDH1&quot;   
  [8] &quot;BRAF&quot;    &quot;PTEN&quot;    &quot;CTNNB1&quot; </code></pre>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">&quot;docs/material/barplot-GO-bio-age.png&quot;</span>)</span></code></pre></div>
+<div class="float">
+<img src="material/barplot-GO-bio-age.png"
+alt="Barplot of GO enrichment (age)" />
+<div class="figcaption">Barplot of GO enrichment (age)</div>
+</div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">&quot;material/barplot-GO-bio-age.png&quot;</span>)</span></code></pre></div>
 <div class="figure" style="text-align: center">
-<img src="docs/material/barplot-GO-bio-age.png" alt="Barplot of GO enrichment (age)" width="85%" />
+<img src="material/barplot-GO-bio-age.png" alt="Barplot of GO enrichment (age)" width="85%" />
 <p class="caption">
 Barplot of GO enrichment (age)
 </p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-barplot-GO-bio-age">
+Past versions of barplot-GO-bio-age.png
+</button>
+</p>
+<div id="fig-barplot-GO-bio-age" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/010447c9d20aef5cc170cdd8797fdfec9d50b87f/docs/material/barplot-GO-bio-age.png" target="_blank">010447c</a>
+</td>
+<td>
+Qirui Zhang
+</td>
+<td>
+2026-02-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 </div>
 <div id="differential-genes-for-tumor-mutation-burden"
@@ -1517,12 +1595,49 @@ class="section level2">
 [22] &quot;SETD2&quot;   &quot;STK11&quot;   &quot;NRAS&quot;    &quot;PPP6C&quot;   &quot;PTEN&quot;    &quot;ARID1A&quot;  &quot;CHD4&quot;   
 [29] &quot;CTCF&quot;    &quot;CTNNB1&quot;  &quot;FGFR2&quot;   &quot;PPP2R1A&quot; &quot;SPOP&quot;    &quot;NSD1&quot;    &quot;CDK12&quot;  
 [36] &quot;NF1&quot;    </code></pre>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">&quot;docs/material/barplot-GO-bio-tmb.png&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">&quot;material/barplot-GO-bio-tmb.png&quot;</span>)</span></code></pre></div>
 <div class="figure" style="text-align: center">
-<img src="docs/material/barplot-GO-bio-tmb.png" alt="Barplot of GO enrichment (TMB)" width="85%" />
+<img src="material/barplot-GO-bio-tmb.png" alt="Barplot of GO enrichment (TMB)" width="85%" />
 <p class="caption">
 Barplot of GO enrichment (TMB)
 </p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-barplot-GO-bio-tmb">
+Past versions of barplot-GO-bio-tmb.png
+</button>
+</p>
+<div id="fig-barplot-GO-bio-tmb" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/010447c9d20aef5cc170cdd8797fdfec9d50b87f/docs/material/barplot-GO-bio-tmb.png" target="_blank">010447c</a>
+</td>
+<td>
+Qirui Zhang
+</td>
+<td>
+2026-02-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 </div>
 <div id="differential-genes-for-genome-instability"
@@ -1534,12 +1649,49 @@ class="section level2">
 [15] &quot;KRAS&quot;    &quot;HNF1A&quot;   &quot;BRAF&quot;    &quot;SETD2&quot;   &quot;PTEN&quot;    &quot;CBFB&quot;    &quot;CDH1&quot;   
 [22] &quot;MAP2K4&quot;  &quot;PIK3CA&quot;  &quot;RUNX1&quot;   &quot;NF1&quot;     &quot;EPHA2&quot;   &quot;NOTCH1&quot;  &quot;KIT&quot;    
 [29] &quot;TP53&quot;    &quot;MAP2K1&quot;  &quot;PPP2R1A&quot; &quot;KEAP1&quot;  </code></pre>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">&quot;docs/material/barplot-GO-bio-ins.png&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">&quot;material/barplot-GO-bio-ins.png&quot;</span>)</span></code></pre></div>
 <div class="figure" style="text-align: center">
-<img src="docs/material/barplot-GO-bio-ins.png" alt="Barplot of GO enrichment (INS)" width="85%" />
+<img src="material/barplot-GO-bio-ins.png" alt="Barplot of GO enrichment (INS)" width="85%" />
 <p class="caption">
 Barplot of GO enrichment (INS)
 </p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-barplot-GO-bio-ins">
+Past versions of barplot-GO-bio-ins.png
+</button>
+</p>
+<div id="fig-barplot-GO-bio-ins" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/010447c9d20aef5cc170cdd8797fdfec9d50b87f/docs/material/barplot-GO-bio-ins.png" target="_blank">010447c</a>
+</td>
+<td>
+Qirui Zhang
+</td>
+<td>
+2026-02-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <p>For the KEGG pathway based enrichment analysis, tmb is mostly cancer
 related, and ins is mostly immune. See output/barplot-KEGG-ins.pdf and
