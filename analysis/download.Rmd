@@ -1,0 +1,20 @@
+---
+title: "Download"
+site: workflowr::wflow_site
+output:
+  workflowr::wflow_html:
+    toc: false
+editor_options:
+  chunk_output_type: console
+---
+
+- [Phenotype File](https://doi.org/10.5281/zenodo.18521355)
+- [Mutation File](https://doi.org/10.5281/zenodo.18521782)
+- [Gene List](https://doi.org/10.5281/zenodo.18521873)
+
+The package also relies on annotation files. There are two types of annotation files.
+
+- [9-annotation files]
+- [96-annotation files]
+
+Both sets of files can be downloaded at https://doi.org/10.5281/zenodo.15020658.

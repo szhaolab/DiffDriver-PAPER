@@ -1,0 +1,488 @@
+---
+title: "Clinical"
+author: "Qirui Zhang, Siming Zhao"
+date: "`r Sys.Date()`"
+output: 
+  workflowr::wflow_html:
+    theme: flatly
+    highlight: tango
+    toc: true
+    toc_float: true
+    code_folding: hide
+---
+
+
+```{r}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Overview
+
+In total, **120 analyses** were conducted across **20 tumor types**, involving the following **6 distinct phenotypes**:
+
+- Aneuploidy Score  
+- Fraction Genome Altered (FGA)
+- Months of Disease-specific Survival  
+- Tumor Mutation Burden (TMB)  
+- Diagnosis Age  
+- Progression-Free Survival Months  
+
+All **120 analyses** were successfully completed without errors.
+
+# Extracting and Summarizing Analysis Results
+This code segment scans through analysis output directories, identifies relevant result files (*_resdd.Rd), extracts corresponding tumor types, immune phenotypes, and analysis modes(sig/reg).
+
+```{r}
+get_files <- function(outputdir, tumors = NULL, phenotypes = NULL) {
+  files <- list.files(
+    path = outputdir,
+    pattern = "_resdd\\.Rd$",
+    recursive = TRUE,
+    full.names = TRUE
+  )
+  
+  matching_files_txt <- sub("\\.Rd$", ".txt", files)
+  
+  analysis_mode <- ifelse(grepl("_sig_", basename(files)), "sig", "reg")
+
+  inner_folder_names      <- basename(dirname(files))            # e.g. "Aneuploidy.Score_BLCA_mutations"
+  phenotype_folder_names  <- basename(dirname(dirname(files)))   # e.g. "Aneuploidy.Score"
+  
+  tumor_names <- mapply(function(inner_name, phen) {
+    pattern_front <- paste0("^", phen, "_")
+    tmp <- sub(pattern_front, "", inner_name)
+    tmp <- sub("_mutations$", "", tmp)
+    return(tmp)
+  }, inner_folder_names, phenotype_folder_names)
+  
+  phenos_all <- phenotype_folder_names
+  
+  filedf <- data.frame(
+    tumor      = tumor_names,
+    phenotype  = phenos_all,
+    mode       = analysis_mode,   
+    file       = files,
+    filetxt    = matching_files_txt,
+    stringsAsFactors = FALSE
+  )
+  
+  if (!is.null(tumors)) {
+    filedf <- filedf[filedf$tumor %in% tumors, ]
+  }
+  if (!is.null(phenotypes)) {
+    filedf <- filedf[filedf$phenotype %in% phenotypes, ]
+  }
+
+  rownames(filedf) <- NULL
+  return(filedf)
+}
+
+filedf <- get_files(
+  outputdir = "/dartfs/rc/lab/S/Szhao/qiruiz/diffdriver/temp/output/new_plot/clinical"
+)
+```
+
+# Summary Table of Significant Differential Genes
+The provided function extracts and compiles results from analyses, filtering specifically for significant differential genes based on a threshold (**`dd.fdr < 0.1`**). 
+```{r}
+get_diff_table <- function(filedf, include_nonsig = TRUE){
+  pheno_all <- unique(filedf$phenotype)
+  numlist <- list()
+  
+  for (p in pheno_all){
+    p_txtfiles <- filedf[filedf$phenotype == p, ]
+    numlist[[p]] <- list()
+    
+    for (t in seq_len(nrow(p_txtfiles))){
+      txtf  <- p_txtfiles[t, "filetxt"]
+      rdf   <- p_txtfiles[t, "file"] 
+      tumor <- p_txtfiles[t, "tumor"] 
+      mode  <- p_txtfiles[t, "mode"]     # reg / sig
+      
+      env <- new.env()
+      load(rdf, envir = env)
+      res_rdata <- env$res
+      
+      res <- read.table(txtf, header = TRUE)
+      res$gene <- row.names(res)
+      res$mode <- mode
+      
+      res$alpha <- sapply(res$gene, function(gene){
+          res_rdata[[gene]][["dd"]][["res.alt"]]$alpha[2]
+      })
+      
+      res$significant <- res$dd.fdr < 0.1
+      
+      if (include_nonsig) {
+        numlist[[p]][[ paste0(tumor, "_", mode) ]] <- res
+      } else {
+        sig_res <- res[res$dd.fdr < 0.1, ]
+        if (nrow(sig_res) > 0){
+          numlist[[p]][[ paste0(tumor, "_", mode) ]] <- sig_res
+        }
+      }
+    }
+    
+    if (length(numlist[[p]]) == 0){
+      numlist[[p]] <- NULL
+    }
+  }
+  
+  combined_df <- do.call(
+    rbind,
+    lapply(names(numlist), function(pheno) {
+      numlist.pheno <- numlist[[pheno]]
+      df.pheno <- do.call(rbind, lapply(names(numlist.pheno), function(tname) {
+        df <- numlist.pheno[[tname]]
+        df$tumor <- sub("_.*", "", tname) 
+        df$mode  <- sub(".*_", "", tname) 
+        return(df)
+      }))
+      df.pheno$pheno <- pheno
+      return(df.pheno)
+    })
+  )
+  return(combined_df)
+}
+
+diff_table_all <- get_diff_table(filedf, include_nonsig = TRUE)
+diff_table <-  get_diff_table(filedf, include_nonsig = FALSE)
+```
+
+```{r}
+library(DT)
+diff_table_sig <- subset(diff_table, mode == "sig")
+datatable(
+  diff_table_sig,
+  extensions = 'Buttons',
+  options = list(
+    dom        = 'Bfrtip', 
+    buttons    = c('copy', 'csv', 'excel', 'pdf', 'print'),
+    pageLength = 10
+  )
+)
+```
+
+# Plotting the Number of Significant Differential Genes
+The provided function generates bar plots illustrating the number of significantly differentially expressed genes (**`dd.fdr < 0.1`**) for each tumor type across different phenotype contexts.
+```{r}
+library(scales)
+
+phenotype_label_map <- c(
+  "Diagnosis.Age"                     = "Patient Age",
+  "Months.of.disease.specific.survival" = "Disease-Specific Survival",
+  "Progress.Free.Survival.Months"     = "Progression-Free Survival",
+  "TMB.nonsynonymous"                 = "Tumor Mutational Burden (TMB)",
+  "Fraction.Genome.Altered"           = "Fraction of Genome Altered (FGA)",
+  "Aneuploidy.Score"                  = "Aneuploidy Score"
+)
+
+plot_diff_number <- function(filedf, mode = c("reg", "sig")){
+  
+  filedf <- filedf[filedf$mode == mode, ]
+  
+  pheno_all <- unique(filedf$phenotype)
+  numlist <- list()
+  
+  pt <- scales::pseudo_log_trans()
+  mar = c(3,5,2,1)
+  for (p in pheno_all){
+    p_txtfiles <- filedf[filedf$phenotype == p, ]
+    numlist[[p]] <- list()
+    for (t in 1:nrow(p_txtfiles)){
+      txtf <- p_txtfiles[t, "filetxt"]
+      tumor <- p_txtfiles[t, "tumor"]
+      res <- read.table(txtf, header = TRUE)
+      numlist[[p]][[tumor]] <- c(
+        nrow(res[res$dd.fdr < 0.1,]),
+        nrow(res) - nrow(res[res$dd.fdr < 0.1,])
+      )
+    }
+  }
+  
+  # par(mfrow = c(length(numlist),1), mar = c(1,5,2,0))
+  n_plots <- length(numlist)
+  layout_matrix <- matrix(1:n_plots, ncol = 1)
+  plot_heights <- c(rep(1, n_plots - 1), 1.4)
+  layout(layout_matrix, heights = plot_heights)
+  
+  last_pheno <- tail(names(numlist), 1)
+  
+  for (phenotype in names(numlist)) {
+    
+    if (phenotype == last_pheno) {
+      par(mar = c(8, 5, 2, 0))
+    } else {
+      par(mar = c(1, 5, 2, 0))
+    }
+    
+    colors <- rainbow(length(numlist[[phenotype]]))
+    max_height <- max(unlist(lapply(numlist[[phenotype]], function(x) sum(x))))
+    
+    max_plot_height <- pt$transform(max_height)
+    
+    plot(
+      NULL,
+      xlim = c(0.5, length(numlist[[phenotype]]) + 0.5),
+      ylim = c(0, max_plot_height * 1.3),
+      xlab = "",
+      ylab = "",
+      main = paste("Context:", ifelse(phenotype %in% names(phenotype_label_map),
+                                      phenotype_label_map[phenotype], phenotype)),
+      xaxt = "n", yaxt = "n", bty = 'n',
+      cex.main = 2.5
+    )
+    
+    title(
+      ylab = "No. Genes",
+      cex.lab = 2.3
+    )
+
+    if (phenotype == last_pheno) {
+       title(xlab = "Tumor Type", cex.lab = 2, line = 6)
+    }
+    
+    y_ticks <- c(0, 1, 2, 5, 10, 30, 60)
+    y_ticks <- y_ticks[y_ticks <= max_height]
+    axis(2, at = pt$transform(y_ticks), labels = y_ticks, cex.axis = 1.8, xpd = NA)
+    
+    grid()
+
+    if (phenotype == last_pheno) {
+      axis(
+        1,
+        at = 1:length(numlist[[phenotype]]),
+        labels = names(numlist[[phenotype]]),
+        las = 2,
+        cex.axis = 1.8
+      )
+    } else {
+      axis(
+        1,
+        at = 1:length(numlist[[phenotype]]),
+        labels = FALSE,
+        tick = FALSE
+      )
+    }
+    
+    for (i in seq_along(numlist[[phenotype]])) {
+      sig_count <- numlist[[phenotype]][[i]][1]
+      nonsig_count <- numlist[[phenotype]][[i]][2]
+
+      rect(i - 0.4, pt$transform(sig_count), i + 0.4, 
+          pt$transform(sig_count + nonsig_count),
+          col = adjustcolor(colors[i], alpha.f = 0.15), 
+          border = NA)
+      
+      if (sig_count > 0) {
+        rect(i - 0.4, pt$transform(0), i + 0.4, pt$transform(sig_count),
+             col = colors[i], border = NA)
+        text(i, pt$transform(sig_count) * 1.2, sig_count, cex = 1.0)
+      }
+    }
+    
+  }
+}
+```
+
+## Visualization under "Sig" Mode
+```{r, fig.width=7, fig.height=20} 
+plot_diff_number(filedf, mode = "sig")
+```
+
+# Multi-Faceted Dot Plot for Differential Gene Analysis
+This function generates a series of dot plots to illustrate differential gene analysis results across various tumors and phenotypes. Each plot highlights significance (positive, negative, non-significant), p-values, and relative effect sizes.
+```{r}
+library(dplyr)
+library(ggplot2)
+
+plot_diff_gene <- function(diff_table_all, filedf, mode = c("sig", "reg")) {
+  dt <- diff_table_all[diff_table_all$mode == mode, ]
+  
+  all_tumors <- sort(unique(filedf$tumor))
+  all_phenos <- sort(unique(filedf$phenotype))
+   
+  dt <- dt %>%
+    mutate(
+      tumor = factor(tumor, levels = all_tumors),
+      pheno = factor(pheno, levels = all_phenos)
+    )
+  
+  gene_order <- dt %>%
+    group_by(gene) %>%
+    summarise(n = n()) %>%
+    arrange(desc(n)) %>%
+    pull(gene)
+  
+  dt <- dt %>% mutate(gene = factor(gene, levels = gene_order))
+
+  all_genes  <- levels(dt$gene)
+
+  plots_list <- list()
+
+  for (current_gene in all_genes) {
+    df_gene <- dt %>% filter(gene == current_gene)
+    
+    full_grid <- expand.grid(
+      tumor = all_tumors,
+      pheno = all_phenos,
+      KEEP.OUT.ATTRS = FALSE
+    )
+    full_grid$tumor <- factor(full_grid$tumor, levels = all_tumors)
+    full_grid$pheno <- factor(full_grid$pheno, levels = all_phenos)
+    
+    df_plot <- full_grid %>%
+      left_join(df_gene, by = c("tumor", "pheno")) %>%
+      mutate(
+        signcat = case_when(
+          is.na(significant)                 ~ "none",
+          significant == FALSE               ~ "ns",
+          significant == TRUE & alpha > 0    ~ "pos",
+          significant == TRUE & alpha < 0    ~ "neg"
+        ),
+        pvalue = dd.p,
+        log_pvalue = case_when(
+          !is.na(dd.p) & dd.p > 0 ~ -log10(dd.p),
+          !is.na(dd.p) & dd.p == 0 ~ 10,
+          TRUE ~ NA_real_
+        ),
+        signed_log_pvalue = case_when(
+          signcat == "pos" ~ log_pvalue,
+          signcat == "neg" ~ -log_pvalue,
+          TRUE ~ NA_real_
+        )
+    ) %>%
+    group_by(pheno) %>%
+      mutate(
+        ref_alpha = median(abs(alpha), na.rm = TRUE),  # mean/max/a specified tumor
+        ratio_alpha = if_else(is.na(ref_alpha) | ref_alpha == 0, 
+                              NA_real_, 
+                              abs(alpha) / ref_alpha), 
+        size_value = case_when(
+          signcat %in% c("pos", "neg", "ns") ~ ratio_alpha,
+          TRUE                               ~ NA_real_
+        )
+      ) %>%
+      ungroup()
+    
+    p <- ggplot() +
+      # For significant points (both positive and negative)
+      geom_point(
+        data = df_plot %>% filter(signcat %in% c("pos", "neg")),
+        aes(x = tumor, y = pheno, size = size_value, fill = signed_log_pvalue),
+        shape = 21,
+        color = "black", 
+        stroke = 0.2, 
+        na.rm = TRUE
+      ) +
+      # For non-significant points
+      geom_point(
+        data = df_plot %>% filter(signcat == "ns"),
+        aes(x = tumor, y = pheno, size = size_value),
+        shape = 21,
+        fill = "grey90",
+        color = "black",
+        stroke = 0.2,
+        alpha = 0.3,
+        na.rm = TRUE
+      ) +
+      geom_blank(
+        data = df_plot %>% filter(signcat == "none"),
+        aes(x = tumor, y = pheno)
+      ) +
+      
+      scale_fill_gradient2(
+        low = "darkblue", 
+        mid = "white",
+        high = "darkred",
+        midpoint = 0,
+        name = "Directional Significance\n(-log10 p-value)",
+        guide = guide_colorbar(direction = "vertical"),
+        na.value = "#FF6700",
+        limits = c(-10, 10),
+        oob = scales::squish
+      ) +
+  
+      scale_size_continuous(
+        range = c(1, 8), 
+        name = "Relative size (|alpha| / ref)"
+      ) +
+      
+      scale_x_discrete(drop = FALSE) +
+      scale_y_discrete(
+        drop = FALSE,
+        labels = function(x) ifelse(x %in% names(phenotype_label_map),
+                              phenotype_label_map[x], x)
+        ) +
+      
+      theme_bw(base_size = 18) +
+      theme(
+        axis.text.x = element_text(size = 18, angle = 90, vjust = 0.5, hjust = 1),
+        axis.text.y = element_text(size = 22),
+        axis.title  = element_text(size = 26),
+        legend.position = "right",
+        legend.box = "vertical",
+        plot.title = element_text(hjust = 0.5, face = "bold", size = 28)
+      ) +
+      labs(
+        x = "Tumor",
+        y = "Phenotype",
+        title = paste(current_gene)
+      )
+    
+    plots_list[[current_gene]] <- p
+  }
+  
+  return(plots_list)
+}
+```
+
+```{r, fig.width=13.5, fig.height=5.5}
+plots <- plot_diff_gene(diff_table_all, filedf, mode = "sig")
+print(plots[["TP53"]])
+print(plots[["KRAS"]])
+```
+
+# Clinical Traits Enrichment
+```{r }
+a <- read.csv("output/Clinical.csv")
+```
+
+```{r}
+allg <- read.table("output/all_diffdriver_genes.txt")[,1]
+allg <- unique(allg)
+length(allg)
+```
+
+Test enrichment for diffdriver significant genes against background. Put in https://bioinformatics.sdstate.edu/go/, FDR 0.1, max gene 5000, min 2 GO terms
+Figure is selected FDR, sort by fold enrichment. Top 20. Remove all redundancy.
+
+## Differential genes for age
+```{r}
+unique(a[a[, "age_all"]!="", "age_all"])
+```
+
+```{r include-pdf-figure, out.width='85%', fig.cap="A caption for your PDF figure."}
+knitr::include_graphics("output/barplot-GO-bio-age.png")
+```
+
+##  Differential genes for tumor mutation burden
+```{r}
+unique(a[a[, "tmb_all"]!="", "tmb_all"])
+```
+
+```{r include-pdf-figure2, out.width='85%', fig.cap="A caption for your PDF figure."}
+knitr::include_graphics("output/barplot-GO-bio-tmb.png")
+```
+
+##  Differential genes for genome instability
+```{r}
+unique(a[a[, "instability_all"]!="", "instability_all"])
+```
+
+```{r out.width='85%', fig.cap="A caption for your PDF figure."}
+knitr::include_graphics("output/barplot-GO-bio-ins.png")
+```
+
+For the KEGG pathway based enrichment analysis, tmb is mostly cancer related, and ins is mostly immune. See output/barplot-KEGG-ins.pdf and output/barplot-KEGG-tmb.pdf

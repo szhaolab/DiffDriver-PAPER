@@ -8,4 +8,5 @@ editor_options:
   chunk_output_type: console
 ---
 
-Welcome to my research website.
+
+DiffDriver is a model-based approach to identifying Differential Positive Selection across cancer patients. Our software is available at https://github.com/szhaolab/diffdriver.

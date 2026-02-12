@@ -1,0 +1,180 @@
+---
+title: "Immune Subtypes"
+author: "Qirui Zhang, Siming Zhao"
+date: "`r Sys.Date()`"
+output: 
+  workflowr::wflow_html:
+    theme: flatly
+    highlight: tango
+    toc: true
+    toc_float: true
+    code_folding: hide
+---
+
+```{r}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Overview
+
+In total, **80 analyses** were conducted across **20 tumor types**, each classified into **4 distinct immune phenotype groups (C1–C4)**. Among these analyses, **70 completed successfully**, while **10 encountered errors**. The specific tumor type and phenotype combinations for unsuccessful analyses are detailed below.
+
+# Summary of Unsuccessful Analyses
+
+The table below summarizes analyses that failed, along with explanations for their failure:
+
+```{r, echo=FALSE}
+library(knitr)
+library(kableExtra)
+library(dplyr)
+
+failure_data <- data.frame(
+  Combination = c("C1_SKCM_mutations", "C2_SKCM_mutations", "C2_GBM_mutations", "C2_KICH_mutations",
+                  "C3_GBM_mutations", "C3_CESC_mutations", "C3_LUSC_mutations", "C3_SKCM_mutations", 
+                  "C3_UCS_mutations","C4_SKCM_mutations"),
+  Reason = c("Insufficient data (only two samples)",
+             "Insufficient data (only two samples)",
+             rep("Lacked phenotype variation (all samples category 0)", 5),
+             "Insufficient data (only two samples)",
+             "Lacked phenotype variation (all samples category 0)",
+             "Insufficient data (only two samples)")
+)
+
+kable(failure_data, format = "html", col.names = c("Phenotype and Tumor Type", "Reason for Failure"), align = 'l') %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = F) %>%
+  row_spec(0, bold = TRUE, background = "#337ab7", color = "white") 
+```
+
+# Extracting and Summarizing Analysis Results
+This code segment scans through analysis output directories, identifies relevant result files (*_resdd.Rd), extracts corresponding tumor types, immune phenotypes, and analysis modes(sig/reg).
+```{r}
+get_files <- function(outputdir, tumors = NULL, phenotypes = NULL) {
+  files <- list.files(
+    path = outputdir,
+    pattern = "_resdd\\.Rd$",
+    recursive = TRUE,
+    full.names = TRUE
+  )
+  
+  matching_files_txt <- sub("\\.Rd$", ".txt", files)
+  
+  analysis_mode <- ifelse(grepl("_sig_", basename(files)), "sig", "reg")
+
+  inner_folder_names      <- basename(dirname(files))            
+  phenotype_folder_names  <- basename(dirname(dirname(files)))  
+  
+  tumor_names <- mapply(function(inner_name, phen) {
+    pattern_front <- paste0("^", phen, "_")
+    tmp <- sub(pattern_front, "", inner_name)
+    tmp <- sub("_mutations$", "", tmp)
+    return(tmp)
+  }, inner_folder_names, phenotype_folder_names)
+  
+  phenos_all <- phenotype_folder_names
+  
+  filedf <- data.frame(
+    tumor      = tumor_names,
+    phenotype  = phenos_all,
+    mode       = analysis_mode,   
+    file       = files,
+    filetxt    = matching_files_txt,
+    stringsAsFactors = FALSE
+  )
+  
+  if (!is.null(tumors)) {
+    filedf <- filedf[filedf$tumor %in% tumors, ]
+  }
+  if (!is.null(phenotypes)) {
+    filedf <- filedf[filedf$phenotype %in% phenotypes, ]
+  }
+
+  rownames(filedf) <- NULL
+  return(filedf)
+}
+
+filedf <- get_files(
+  outputdir = "/dartfs/rc/lab/S/Szhao/qiruiz/diffdriver/temp/output/new_plot/immunesubtypes"
+)
+```
+
+# Summary Table of Significant Differential Genes
+The provided function extracts and compiles results from analyses, filtering specifically for significant differential genes based on a threshold (**`dd.fdr < 0.1`**).  
+```{r}
+get_diff_table <- function(filedf, include_nonsig = TRUE){
+  pheno_all <- unique(filedf$phenotype)
+  numlist <- list()
+  
+  for (p in pheno_all){
+    p_txtfiles <- filedf[filedf$phenotype == p, ]
+    numlist[[p]] <- list()
+    
+    for (t in seq_len(nrow(p_txtfiles))){
+      txtf  <- p_txtfiles[t, "filetxt"]
+      rdf   <- p_txtfiles[t, "file"] 
+      tumor <- p_txtfiles[t, "tumor"] 
+      mode  <- p_txtfiles[t, "mode"]     # reg / sig
+      
+      env <- new.env()
+      load(rdf, envir = env)
+      res_rdata <- env$res
+      
+      res <- read.table(txtf, header = TRUE)
+      res$gene <- row.names(res)
+      res$mode <- mode
+      
+      res$alpha <- sapply(res$gene, function(gene){
+          res_rdata[[gene]][["dd"]][["res.alt"]]$alpha[2]
+      })
+      
+      res$significant <- res$dd.fdr < 0.1
+      
+      if (include_nonsig) {
+        numlist[[p]][[ paste0(tumor, "_", mode) ]] <- res
+      } else {
+        sig_res <- res[res$dd.fdr < 0.1, ]
+        if (nrow(sig_res) > 0){
+          numlist[[p]][[ paste0(tumor, "_", mode) ]] <- sig_res
+        }
+      }
+    }
+    
+    if (length(numlist[[p]]) == 0){
+      numlist[[p]] <- NULL
+    }
+  }
+  
+  combined_df <- do.call(
+    rbind,
+    lapply(names(numlist), function(pheno) {
+      numlist.pheno <- numlist[[pheno]]
+      df.pheno <- do.call(rbind, lapply(names(numlist.pheno), function(tname) {
+        df <- numlist.pheno[[tname]]
+        df$tumor <- sub("_.*", "", tname) 
+        df$mode  <- sub(".*_", "", tname) 
+        return(df)
+      }))
+      df.pheno$pheno <- pheno
+      return(df.pheno)
+    })
+  )
+  return(combined_df)
+}
+
+diff_table_all <- get_diff_table(filedf, include_nonsig = TRUE)
+diff_table <-  get_diff_table(filedf, include_nonsig = FALSE)
+```
+
+```{r}
+library(DT)
+diff_table_sig <- subset(diff_table, mode == "sig")
+datatable(
+  diff_table_sig,
+  extensions = 'Buttons',
+  options = list(
+    dom        = 'Bfrtip', 
+    buttons    = c('copy', 'csv', 'excel', 'pdf', 'print'),
+    pageLength = 10
+  )
+)
+```
+

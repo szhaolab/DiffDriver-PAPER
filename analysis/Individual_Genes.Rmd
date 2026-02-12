@@ -1,0 +1,468 @@
+---
+title: "Individual Genes"
+author: "Qirui Zhang, Siming Zhao"
+date: "`r Sys.Date()`"
+output: 
+  workflowr::wflow_html:
+    theme: flatly
+    highlight: tango
+    toc: true
+    toc_float: true
+    code_folding: hide
+---
+
+```{r}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+get_files <- function(outputdir, tumors = NULL, phenotypes = NULL) {
+  files <- list.files(
+    path = outputdir,
+    pattern = "_resdd\\.Rd$",
+    recursive = TRUE,
+    full.names = TRUE
+  )
+  
+  matching_files_txt <- sub("\\.Rd$", ".txt", files)
+  
+  analysis_mode <- ifelse(grepl("_sig_", basename(files)), "sig", "reg")
+
+  inner_folder_names      <- basename(dirname(files))            
+  phenotype_folder_names  <- basename(dirname(dirname(files)))  
+  
+  tumor_names <- mapply(function(inner_name, phen) {
+    pattern_front <- paste0("^", phen, "_")
+    tmp <- sub(pattern_front, "", inner_name)
+    tmp <- sub("_mutations$", "", tmp)
+    return(tmp)
+  }, inner_folder_names, phenotype_folder_names)
+  
+  phenos_all <- phenotype_folder_names
+  
+  filedf <- data.frame(
+    tumor      = tumor_names,
+    phenotype  = phenos_all,
+    mode       = analysis_mode,   
+    file       = files,
+    filetxt    = matching_files_txt,
+    stringsAsFactors = FALSE
+  )
+  
+  if (!is.null(tumors)) {
+    filedf <- filedf[filedf$tumor %in% tumors, ]
+  }
+  if (!is.null(phenotypes)) {
+    filedf <- filedf[filedf$phenotype %in% phenotypes, ]
+  }
+
+  rownames(filedf) <- NULL
+  return(filedf)
+}
+
+get_diff_table <- function(filedf, include_nonsig = TRUE){
+  pheno_all <- unique(filedf$phenotype)
+  numlist <- list()
+  
+  for (p in pheno_all){
+    p_txtfiles <- filedf[filedf$phenotype == p, ]
+    numlist[[p]] <- list()
+    
+    for (t in seq_len(nrow(p_txtfiles))){
+      txtf  <- p_txtfiles[t, "filetxt"]
+      rdf   <- p_txtfiles[t, "file"] 
+      tumor <- p_txtfiles[t, "tumor"] 
+      mode  <- p_txtfiles[t, "mode"]     # reg / sig
+      
+      env <- new.env()
+      load(rdf, envir = env)
+      res_rdata <- env$res
+      
+      res <- read.table(txtf, header = TRUE)
+      res$gene <- row.names(res)
+      res$mode <- mode
+      
+      res$alpha <- sapply(res$gene, function(gene){
+          res_rdata[[gene]][["dd"]][["res.alt"]]$alpha[2]
+      })
+      
+      res$significant <- res$dd.fdr < 0.1
+      
+      if (include_nonsig) {
+        numlist[[p]][[ paste0(tumor, "_", mode) ]] <- res
+      } else {
+        sig_res <- res[res$dd.fdr < 0.1, ]
+        if (nrow(sig_res) > 0){
+          numlist[[p]][[ paste0(tumor, "_", mode) ]] <- sig_res
+        }
+      }
+    }
+    
+    if (length(numlist[[p]]) == 0){
+      numlist[[p]] <- NULL
+    }
+  }
+  
+  combined_df <- do.call(
+    rbind,
+    lapply(names(numlist), function(pheno) {
+      numlist.pheno <- numlist[[pheno]]
+      df.pheno <- do.call(rbind, lapply(names(numlist.pheno), function(tname) {
+        df <- numlist.pheno[[tname]]
+        df$tumor <- sub("_.*", "", tname) 
+        df$mode  <- sub(".*_", "", tname) 
+        return(df)
+      }))
+      df.pheno$pheno <- pheno
+      return(df.pheno)
+    })
+  )
+  return(combined_df)
+}
+```
+
+```{r}
+dirs <- c(
+  "/dartfs/rc/lab/S/Szhao/qiruiz/diffdriver/temp/output/new_plot/immunesubtypes",
+  "/dartfs/rc/lab/S/Szhao/qiruiz/diffdriver/temp/output/new_plot/clinical"
+)
+
+res_list <- list()
+
+for (dir_path in dirs) {
+  filedf <- get_files(outputdir = dir_path)
+  
+  diff_table <- get_diff_table(filedf, include_nonsig = FALSE)
+  
+  diff_TGCT_KIT <- subset(diff_table, mode == "sig" & tumor == "TGCT" & gene == "KIT")
+  
+  if (nrow(diff_TGCT_KIT) > 0) {
+    source_name <- basename(dir_path)
+    diff_TGCT_KIT$source <- source_name
+    
+    res_list[[source_name]] <- diff_TGCT_KIT
+  }
+}
+
+all_res <- do.call(rbind, res_list)
+subset_res <- all_res[c("pheno", "source")]
+```
+
+```{r}
+prep_pheno_mut_data_full <- function(mut, pheno) {
+  library(data.table)
+
+  mut   <- as.data.table(mut)
+  pheno <- as.data.table(pheno)
+
+  if (!grepl("chr", mut$Chromosome[1], fixed = TRUE)) {
+    mut[ , Chromosome := paste0("chr", Chromosome)]
+  }
+
+  shared <- intersect(mut$SampleID, pheno$SampleID)
+  if (length(shared) < 10)
+    stop("too few samples with both phenotype and mutation data.")
+
+  mut   <- mut  [SampleID %in% shared]
+  pheno <- pheno[SampleID %in% shared]
+
+  if (anyDuplicated(pheno$SampleID)) {
+    pheno <- pheno[ , lapply(.SD, mean, na.rm = TRUE), by = SampleID]
+  }
+
+  ci <- pheno[ , .(SampleID, cidx = .I)]
+
+  list(mut = mut, pheno = pheno, ci = ci)
+}
+
+
+prep_mut_matrix <- function(gene_name, mut, pheno,
+                            totalnttype = 96,
+                            anno_dir    = ".",
+                            output_prefix = "plot",
+                            output_dir    = ".") {
+
+  library(data.table)
+  library(Matrix)
+
+  mut        <- as.data.table(mut)
+  pheno_full <- as.data.table(pheno)
+
+  afileinfo <- list(
+    file        = file.path(anno_dir,
+                            paste0("anno", totalnttype,
+                                   "_nttypeXXX_annodata.txt")),
+    header      = diffdriver:::aheader,
+    coltype     = diffdriver:::acoltype,
+    totalntype  = totalnttype)
+
+  rdata <- diffdriver:::prep_positional_data(
+              gene_name, afileinfo, BMRreg = NULL,
+              output_prefix = output_prefix,
+              output_dir    = output_dir)
+
+  fanno  <- rdata$fanno
+  ri     <- rdata$ri
+  ri[ , ridx := .I]
+
+  cdata <- prep_pheno_mut_data_full(mut, pheno_full)
+  mut   <- cdata$mut
+  pheno <- cdata$pheno    
+  ci    <- cdata$ci
+
+  nmutdt <- data.table(table(mut$SampleID))
+  setnames(nmutdt, c("SampleID", "Nmut"))
+  pheno <- merge(pheno, nmutdt, by = "SampleID", all.x = TRUE, sort = FALSE)
+
+  muti <- na.omit(
+            ci[ ri[mut,
+                    on = c(chrom = "Chromosome",
+                           start = "Position",
+                           ref   = "Ref",
+                           alt   = "Alt")],
+                on = "SampleID"])
+
+  mutmtx <- sparseMatrix(
+              i = muti$ridx,
+              j = muti$cidx,
+              dims = c(max(ri$ridx), max(ci$cidx)))
+
+  list(fanno = fanno, pheno = pheno, mutmtx = mutmtx)
+}
+
+
+plot_mut_multi <- function(gene_name,
+                           mut, pheno,
+                           pheno_cols = colnames(pheno)[-1], 
+                           totalnttype = 96,
+                           anno_dir    = ".",
+                           output_prefix = "plot",
+                           output_dir    = ".",
+                           mycolors = c("#FF3D2E", "#2b8cbe", #"#fdae61",
+                                        "#41ab5d", "pink", "#8C2DA6", "#a65628")) {
+
+  pdata  <- prep_mut_matrix(gene_name, mut, pheno,
+                            totalnttype, anno_dir,
+                            output_prefix, output_dir)
+  fanno  <- pdata$fanno
+  pheno  <- pdata$pheno
+  mutmtx <- pdata$mutmtx
+
+  metr_mat <- rbind(
+    Nonsyn = Matrix::colSums(mutmtx),
+    # LoF    = Matrix::colSums(mutmtx[fanno$functypecode8 > 0, ]),
+    Cons.  = Matrix::colSums(mutmtx[fanno$mycons        > 0, ]),
+    `#Mut` = pheno$Nmut
+  )
+
+  pheno_mat <- t(as.matrix(pheno[, pheno_cols, with = FALSE]))
+  rownames(pheno_mat) <- pheno_cols
+
+  df  <- rbind(pheno_mat, metr_mat)
+  
+  fac_C1 <- df["C1", ]            
+  fac_C2 <- df["C2", ]
+  val_FGA <- df["FGA", ]
+  
+  ord <- order(fac_C1, fac_C2, val_FGA, na.last = TRUE)
+  df  <- df[, ord] 
+  
+  n_row <- nrow(df)
+  par(mfrow = c(n_row, 1), mar = c(0.5, 12, 0.5, 1))
+
+  for (i in seq_len(n_row)) {
+    vec <- df[i, ]
+
+    unique_vals <- unique(vec[!is.na(vec)])
+    current_label <- rownames(df)[i]
+    
+    if (length(unique_vals) <= 2 && i <= nrow(pheno_mat)) {
+      barplot(rep(1, length(vec)),
+              col = c("white", "salmon")[as.factor(vec)],
+              xaxt = "n", yaxt = "n",
+              ylab = "", border = NA)
+    } else {
+      ylim_i <- if (rownames(df)[i] == "#Mut") {
+                  c(0, quantile(vec, 0.99, na.rm = TRUE)[[1]])
+                } else NULL
+
+      barplot(vec,
+              col = if (i <= nrow(pheno_mat))
+                      "grey70"  
+                    else
+                      mycolors[i - nrow(pheno_mat) + 1],
+              xaxt = "n", yaxt = "n",
+              ylab = "",
+              border = NA,
+              ylim = ylim_i)
+    }
+    
+    mtext(text = current_label, side = 2, line = 2.5, las = 1, cex = 1.2)
+    
+    if (current_label %in% c("Nonsyn", "LoF", "Cons.")) {
+        max_val <- max(vec, na.rm = TRUE)
+        axis(side = 2, at = 0:max_val, las = 1, cex.axis = 1.2, lwd = 1, lwd.ticks = 1)
+      }
+  }
+}
+```
+
+```{r}
+mut_path <- "/dartfs/rc/lab/S/Szhao/qiruiz/diffdriver/tumor_specific_input/TGCT/TGCT_mutations.txt"
+mut <- read.table(mut_path, header = TRUE, sep = "\t")
+```
+
+```{r}
+library(data.table)
+pheno_files <- list(
+  C1  = "/dartfs/rc/lab/S/Szhao/qiruiz/diffdriver/batch2/tumor_specific_input/TGCT/TGCT_C1.txt",
+  C2 = "/dartfs/rc/lab/S/Szhao/qiruiz/diffdriver/batch2/tumor_specific_input/TGCT/TGCT_C2.txt",
+  FGA = "/dartfs/rc/lab/S/Szhao/qiruiz/diffdriver/cbioportal_download/Fraction.Genome.Altered.txt"
+)
+
+pheno_list <- lapply(names(pheno_files), function(nm) {
+  dt <- fread(pheno_files[[nm]], header = TRUE, sep = "\t")
+  setnames(dt, old = colnames(dt)[2], new = nm) 
+  dt
+})
+
+pheno_wide <- Reduce(function(x, y) merge(x, y, by = "SampleID", all = TRUE),
+                     pheno_list)
+
+pheno_cols <- names(pheno_files)
+
+plot_mut_multi(
+  gene_name  = "KIT",                      
+  mut        = mut,                        
+  pheno      = pheno_wide,                  
+  pheno_cols = pheno_cols,    
+  anno_dir   = "/dartfs/rc/lab/S/Szhao/qiruiz/diffdriver/annodir96/"
+)
+```
+
+```{r}
+plot_mut_multi <- function(gene_name,
+                           mut, pheno,
+                           pheno_cols = colnames(pheno)[-1], 
+                           totalnttype = 96,
+                           anno_dir    = ".",
+                           output_prefix = "plot",
+                           output_dir    = ".",
+                           mycolors = c("#FF3D2E", "#2b8cbe", "#fdae61",
+                                        "#41ab5d", "pink", "#8C2DA6", "#a65628")) {
+
+  pdata  <- prep_mut_matrix(gene_name, mut, pheno,
+                            totalnttype, anno_dir,
+                            output_prefix, output_dir)
+  fanno  <- pdata$fanno
+  pheno  <- pdata$pheno
+  mutmtx <- pdata$mutmtx
+
+  metr_mat <- rbind(
+    Nonsyn = Matrix::colSums(mutmtx),
+    LoF    = Matrix::colSums(mutmtx[fanno$functypecode8 > 0, ]),
+    Cons.  = Matrix::colSums(mutmtx[fanno$mycons         > 0, ]),
+    `#Mut` = pheno$Nmut
+  )
+
+  pheno_mat <- t(as.matrix(pheno[, pheno_cols, with = FALSE]))
+  rownames(pheno_mat) <- pheno_cols
+
+  df  <- rbind(pheno_mat, metr_mat)
+   
+  fac_C1 <- df["C1", ]             
+  fac_C2 <- df["C2", ]
+  val_FGA <- df["FGA", ]
+   
+  ord <- order(fac_C1, fac_C2, val_FGA, na.last = TRUE)
+  df  <- df[, ord] 
+   
+  n_row <- nrow(df)
+  par(mfrow = c(n_row, 1), mar = c(0.5, 12, 0.5, 1))
+
+  target_rows <- c("Nonsyn", "LoF", "Cons.")
+
+  for (i in seq_len(n_row)) {
+    vec <- df[i, ]
+
+    unique_vals <- unique(vec[!is.na(vec)])
+    current_label <- rownames(df)[i]
+    
+    if (current_label %in% target_rows) {
+        # 3 times width
+        target_w <- 3.0
+        
+        s_mid <- (1.2 / target_w) - 1
+        s_start <- (0.7 - target_w / 2) / target_w
+        
+        use_width <- target_w
+        use_space <- c(s_start, rep(s_mid, length(vec) - 1))
+    } else {
+        use_width <- 1
+        use_space <- 0.2
+    }
+    
+    if (length(unique_vals) <= 2 && i <= nrow(pheno_mat)) {
+      barplot(rep(1, length(vec)),
+              col = c("white", "salmon")[as.factor(vec)],
+              xaxt = "n", yaxt = "n",
+              ylab = "", border = NA,
+              width = use_width, space = use_space)
+    } else {
+      ylim_i <- if (rownames(df)[i] == "#Mut") {
+                  c(0, quantile(vec, 0.99, na.rm = TRUE)[[1]])
+                } else NULL
+
+      barplot(vec,
+              col = if (i <= nrow(pheno_mat))
+                      "grey70"  
+                    else
+                      mycolors[i - nrow(pheno_mat) + 1],
+              xaxt = "n", yaxt = "n",
+              ylab = "",
+              border = NA,
+              ylim = ylim_i,
+              width = use_width, space = use_space)
+    }
+    
+    mtext(text = current_label, side = 2, line = 2.5, las = 1, cex = 1.5)
+    
+    if (current_label %in% c("Nonsyn", "LoF", "Cons.")) {
+        max_val <- max(vec, na.rm = TRUE)
+        axis(side = 2, at = 0:max_val, las = 1, cex.axis = 1.75, lwd = 1, lwd.ticks = 1)
+      }
+  }
+}
+```
+
+```{r}
+pheno_files <- list(
+  C1  = "/dartfs/rc/lab/S/Szhao/qiruiz/diffdriver/batch2/tumor_specific_input/HNSC/HNSC_C1.txt",
+  C2 = "/dartfs/rc/lab/S/Szhao/qiruiz/diffdriver/batch2/tumor_specific_input/HNSC/HNSC_C2.txt",
+  FGA = "/dartfs/rc/lab/S/Szhao/qiruiz/diffdriver/cbioportal_download/Fraction.Genome.Altered.txt"
+)
+
+pheno_list <- lapply(names(pheno_files), function(nm) {
+  dt <- fread(pheno_files[[nm]], header = TRUE, sep = "\t")
+  setnames(dt, old = colnames(dt)[2], new = nm) 
+  dt
+})
+
+pheno_wide <- Reduce(function(x, y) merge(x, y, by = "SampleID", all = TRUE),
+                     pheno_list)
+
+pheno_cols <- names(pheno_files)
+```
+
+```{r}
+mut_path <- "/dartfs/rc/lab/S/Szhao/qiruiz/diffdriver/tumor_specific_input/HNSC/HNSC_mutations.txt"
+mut <- read.table(mut_path, header = TRUE, sep = "\t")
+
+plot_mut_multi(
+  gene_name  = "HLA-B",
+  mut        = mut,
+  pheno      = pheno_wide,
+  pheno_cols = pheno_cols,
+  anno_dir   = "/dartfs/rc/lab/S/Szhao/qiruiz/diffdriver/temp/annodir96"
+)
+```
