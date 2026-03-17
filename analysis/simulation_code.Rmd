@@ -1,5 +1,5 @@
 ---
-title: "Code to Run Simulation"
+title: "Simulation Study for DiffDriver"
 author: "Jie Zhou, Siming Zhao"
 date: "`r Sys.Date()`"
 output:
@@ -10,88 +10,105 @@ output:
     toc_float: true
 ---
 
-```{r}
+## Overview
+
+This document runs a simulation study to evaluate the power of the DiffDriver
+model. The simulation pipeline has three steps:
+
+1. **Simulate phenotype and mutations** — Given a gene's positional annotation
+   and functional features, generate binary (case/control) phenotypes and
+   somatic mutations under a selection model (`simulate_selection`).
+2. **Test for differential driver signal** — Apply `ddmodel_binary` (or
+   `ddmodel` for continuous phenotypes) to the simulated data to obtain a
+   p-value (`run_one_iteration`).
+3. **Repeat** — Run multiple iterations to estimate power (`run_simulation`).
+
+### Source files
+
+| File | Description |
+|------|-------------|
+| `code/simulate_functions.R` | `hotspotseq()` — generates hotspot indicator sequence via HMM; `simulate_selection()` — simulates phenotypes, selection, and mutations for one gene |
+| `code/run_simulation.R`     | `run_one_iteration()` — single iteration: simulate then test; `run_simulation()` — loop over iterations |
+
+## Setup
+
+```{r setup, message=FALSE}
 library("diffdriver")
 library("data.table")
 source("code/simulate_functions.R")
+source("code/run_simulation.R")
 set.seed(1)
-
-# load initial data and parameters for simulating mutations
-load("data/ri200.Rd")
-load("data/fanno200.Rd")
-load("data/beta_tsg.Rd")
-betaf0 = 1
-number_sample = 1200
-rho = 0.4
-gene_index <- 1
-ifbinary <- TRUE
-Niter <- 100
-
-simuresdiff=power_comparediff9(binary=ifbinary,Nite=100,sganno=ri200[[gene_index]],sgmatrix=fanno200[[gene_index]],bmrpars=log(BMR),Nsample=number_sample,betaf0=i1,beta_gc=beta_gc,para=c(0.5,0.5),rho=rho,tau=1,hot=0,hmm=hmm)
-
-
-power_comparediff9 <- function(binary, Niter, sganno,sgmatrix,Nsample,para,rho,tau=1,bmrpars,betaf0,beta_gc,hot=0,hmm){
-  m1.pvalue <- rep(1,Niter)
-  a=c()
-  b=c()
-
-  for (iter in 1:Niter) {
-    print(iter)
-    simdata <- simulate_1funcv9(binary=binary,sganno=sganno,sgmatrix=sgmatrix, bmrpars=bmrpars, betaf0=betaf0, Nsample=Nsample, beta_gc=beta_gc, para=para,rho=rho,tau=tau,hot=hot,hmm=hmm)
-    ssgdata=simdata$annodata
-    mut <- do.call(rbind, simdata$mutlist)
-    bmrmtx <- do.call(rbind, simdata$bmrmtxlist)
-    e <- simdata$pheno
-    ef <- simdata$efsize
-    fe <- ef$diffFe
-    mr <- bmrmtx
-    if (sum(mut) ==0) {next}
-
-    if (binary == F){
-      res.m1 <- ddmodel(mut,e,mr, fe)
-    }else{
-      res.m1 <- ddmodel_binary(mut,e,mr,fe)
-    }
-    m1.pvalue[iter] <-  res.m1$pvalue
-    parameters=c(ef$beta_gc,ef$avbetaf1,ef$avbetaf2,ef$betaf1f2,ef$avbetaf1f2)
-    a=rbind(a,parameters)
-    nummut=sum(mut)
-    b=c(b,nummut)
-  }
-  return(list("parameters"=a, "m1.pvalue" =m1.pvalue,"#mut"=b))
-}
-
-
-
-power_comparediff9Fix <- function(binary, Niter, sganno,sgmatrix,Nsample,para,rho,tau=1,bmrpars,betaf0,beta_gc,beta_gcFix=beta_gc,hot=0,hmm){
-  m1.pvalue <- rep(1,Niter)
-  a=c()
-  b=c()
-
-  for (iter in 1:Niter) {
-    print(iter)
-    simdata <- simulate_1funcv9(binary=binary,sganno=sganno,sgmatrix=sgmatrix, bmrpars=bmrpars, betaf0=betaf0, Nsample=Nsample, beta_gc=beta_gc,beta_gcFix=beta_gcFix, para=para,rho=rho,tau=tau,hot=hot,hmm=hmm)
-    ssgdata=simdata$annodata
-    mut <- do.call(rbind, simdata$mutlist)
-    bmrmtx <- do.call(rbind, simdata$bmrmtxlist)
-    e <- simdata$pheno
-    ef <- simdata$efsize
-    fe <- ef$diffFeFix
-    mr <- bmrmtx
-    if (sum(mut) ==0) {next}
-
-    if (binary == F){
-      res.m1 <- ddmodel(mut,e,mr, fe)
-    }else{
-      res.m1 <- ddmodel_binary(mut,e,mr,fe)
-    }
-    m1.pvalue[iter] <-  res.m1$pvalue
-    parameters=c(ef$beta_gc,ef$avbetaf1,ef$avbetaf2,ef$betaf1f2,ef$avbetaf1f2)
-    a=rbind(a,parameters)
-    nummut=sum(mut)
-    b=c(b,nummut)
-  }
-  return(list("parameters"=a, "m1.pvalue" =m1.pvalue,"#mut"=b))
-}
 ```
 
+### Load data
+
+- **ri200** — list of 239 genes; each element is a list of 9 annotation
+  data.frames (one per nucleotide type), containing positional and mutation
+  type information.
+- **fanno200** — matching list of functional annotation matrices (features
+  used in the selection model: intercept, functypecode8, conservation scores,
+  etc.).
+- **beta_gc** — TSG functional effect coefficients (from `TSGpars`):
+  intercept, functypecode8, mycons, sift, phylop100, MA.
+- **BMR** — background mutation rates, one per nucleotide type (9 values).
+- **hmm** — HMM parameters for hotspot detection: transition probabilities
+  and logistic regression coefficients (10 values).
+
+```{r load-data}
+load("data/ri200.Rd")
+load("data/fanno200.Rd")
+load("data/beta_tsg.Rd")   # loads beta_gc
+load("data/BMR.rda")        # loads BMR
+load("data/hmm.rda")        # loads hmm
+```
+
+## Simulation parameters
+
+| Parameter | Value | Description |
+|-----------|-------|-------------|
+| `betaf0`  | 1     | Baseline functional effect size (log-scale fold change) |
+| `number_sample` | 120 | Total number of samples (split equally into case/control) |
+| `rho`     | 0.4   | Correlation between phenotype and BMR fold change |
+| `gene_index` | 1  | Index into ri200/fanno200 for the target gene |
+| `ifbinary` | TRUE | Use binary (case/control) phenotype |
+| `Niter`   | 1     | Number of simulation iterations |
+| `para`    | (0.5, 0.5) | Binary: c(selection prob for cases, selection prob for controls). Continuous: c(mean, sd, intercept, slope) where intercept and slope are logistic regression coefficients determining selection probability as a function of phenotype |
+| `tau`     | 1     | BMR fold-change scaling factor |
+| `hot`     | 0     | Hotspot flag (0 = no hotspot effect) |
+
+```{r parameters}
+betaf0 <- 1
+number_sample <- 1200
+rho <- 0
+gene_index <- 1 # pick a gene from the 239 genes to run. 
+ifbinary <- TRUE
+Niter <- 1
+para <- c(0.5, 0.5)
+```
+
+## Run simulation
+
+```{r run-simulation}
+simuresdiff <- run_simulation(
+  binary   = ifbinary,
+  Niter    = Niter,
+  sganno   = ri200[[gene_index]],
+  sgmatrix = fanno200[[gene_index]],
+  bmrpars  = log(BMR),
+  Nsample  = number_sample,
+  betaf0   = betaf0,
+  beta_gc  = beta_gc,
+  para     = para,
+  rho      = rho,
+  tau      = 1,
+  hot      = 0,
+  hmm      = hmm
+)
+```
+
+## Results
+
+```{r results}
+cat("P-values:", simuresdiff$pvalues, "\n")
+cat("Number of mutations:", simuresdiff$nummuts, "\n")
+```

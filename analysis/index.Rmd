@@ -1,12 +1,39 @@
 ---
-title: "Home"
+title: "DiffDriver: Differential Positive Selection in Cancer"
 site: workflowr::wflow_site
 output:
   workflowr::wflow_html:
-    toc: false
+    toc: true
+    toc_float: true
 editor_options:
   chunk_output_type: console
 ---
 
+DiffDriver is a model-based approach to identifying Differential Positive
+Selection across cancer patients. Our software is available at
+https://github.com/szhaolab/diffdriver.
 
-DiffDriver is a model-based approach to identifying Differential Positive Selection across cancer patients. Our software is available at https://github.com/szhaolab/diffdriver.
+## Simulation
+
+- [Simulation Code](simulation_code.html) — Code and documentation for the simulation pipeline
+- [Simulation Power](Simulation-Power.html) — Sensitivity and FDR comparison across algorithms (binary phenotype, 200 genes)
+- [Simulation BMR](Simulation-BMR.html) — Power comparison when BMR relates to phenotype (with hotspots)
+- [BMR Prediction](BMR.html) — Mutation prediction: signature vs regular methods
+
+## Real Data
+
+### Clinical
+
+- [Clinical](Clinical.html) — 120 clinical tests across 20 tumor types, 6 phenotypes (Aneuploidy Score, FGA, Disease-specific Survival, TMB, Diagnosis Age, Progression-Free Survival)
+
+### Immune Subtypes
+
+- [Immune Subtypes](Immune_Subtypes.html) — 80 tests across 20 tumor types, 4 immune phenotype groups (C1--C4)
+
+### Individual Genes
+
+- [Individual Genes](Individual_Genes.html) — Gene-specific results filtered by tumor type and phenotype
+
+## Data Availability
+
+- [Download](download.html) — Links to phenotype files, mutation files, gene lists, and annotation files

@@ -11,7 +11,7 @@ editor_options:
 - [BMR](BMR.html)
 - [Simulation BMR](Simulation-BMR.html)
 - [Simulation Power](Simulation-Power.html)
-- [Simulation Code](https://github.com/szhaolab/DiffDriver-PAPER/tree/main/code/simulate.R)
+- [Simulation Code](simulation_code.html)
 
 
 

@@ -1,8 +1,8 @@
 ---
-title: "Selected Simulation results"
+title: "Simulation Power Results"
 author: "Jie Zhou, Siming Zhao"
 date: "`r Sys.Date()`"
-output: 
+output:
   workflowr::wflow_html:
     theme: flatly
     highlight: tango
@@ -11,24 +11,44 @@ output:
     code_folding: hide
 ---
 
-
-```{r}
+```{r setup}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+## Overview
 
-## Results 2: for TSG and binary phenotype, diffdriver has high power while low FDR
+For 200 genes with five functional annotations, we compare the power (sensitivity)
+and false positive rate (FPR) of DiffDriver against benchmark methods: Linear
+regression, Fisher's exact test, Binomial test, and Logistic Regression.
 
+The first 50 genes have differential selection while the remaining 150 do not.
+FDR is controlled at 0.1 using the BH procedure.
 
-For 200 genes, using five functional annotations, we compare the sensitivity and false discovery rate of different algorithms using binary phenotype based on robust brglm algorithm.  The first 50 genes have differential selection while the left 150 genes do not. The parameter are
-`beta_f0=0,1`, `beta_gc=(0.8,0.2)`.For functional effects,old TSG is  drivermap's TSG parameter for   `(functypecode8,       mycons,         sift,    phylop100,           MA, intercept)= (0.45817859, 0.13676461, 0.12436937, 0.08272142, 0.30626015, 0.85127726)`  , while new BRCA's TSG parameter is `((Intercept), functypecode8,        mycons,          sift,     phylop100)=(0.8512773,     0.6136798,     0.3753932,     0.1661389,     0.358036,    0.2229025)` .  The diffdrdiver model use new TSG parameter to simulate and infer while diffdriverFix use new parameter to simulate data and old parameter to select genes, diffdriverFix2 use old parameter to simulate data and infer parameter. 
+### Simulation parameters
 
+These simulations use the same pipeline described in
+[Simulation Code](simulation_code.html). The key parameters are:
 
+| Parameter | Description |
+|-----------|-------------|
+| `betaf0`  | Baseline functional effect size: 0 or 1 |
+| `para`    | Binary: selection probabilities c(prob_case, prob_control). Continuous: c(mean, sd, intercept, slope) |
+| `beta_gc` | Functional effect coefficients (TSGpars or OGpars) |
+| `Nsample` | Varies: 200, 400, 600, 800, 1000, 1200, 1500 |
+| `Niter`   | 100 (binary) or 50 (continuous) per gene |
 
+### Functional effect coefficients
 
-### para=c(0.8,0.2)
+- **TSG parameters**: `(Intercept)=0.851, functypecode8=0.458, mycons=0.137, sift=0.124, phylop100=0.083, MA=0.306`
+- **OG parameters**: `(Intercept)=0.450, functypecode8=-0.186, mycons=0.316, sift=0.020, phylop100=0.256, MA=0.140`
 
-```{r}
+---
+
+## TSG, Binary Phenotype
+
+### para = c(0.8, 0.2)
+
+```{r tsg-binary-08}
 Nsim <- 100
 rr <- 0.1
 mycol=c("#FF3D2E","#00AFBB","#aa00ff","#0001f6","#fdae61","#FFFF00", "#2b2930")
@@ -42,10 +62,10 @@ for (i1 in 0) {
   for (i3 in sample_sizes) {
     n <- n + 1
     for (i2 in 1:200) {
-      load(paste0("/dartfs/rc/lab/S/Szhao/jiezhou/diffdata/gene239/conti/TSG_BRCA/diff/pppower_betaf0=",i1,"_sample",i3,"_",i2,".Rd"))
-      load(paste0("/dartfs/rc/lab/S/Szhao/jiezhou/diffdata/gene239/conti/TSG_BRCA/diffFix/pppower_betaf0=",i1,"_sample",i3,"_",i2,".Rd"))
-      load(paste0("/dartfs/rc/lab/S/Szhao/jiezhou/diffdata/gene239/conti/TSG_BRCA/other/pppower_betaf0=",i1,"_sample",i3,"_",i2,".Rd"))
-      load(paste0("/dartfs/rc/lab/S/Szhao/jiezhou/diffdata/gene239/conti/TSG_BRCA/diffFixFix/pppower_betaf0=",i1,"_sample",i3,"_",i2,".Rd"))
+      load(paste0("/Volumes/Szhao/jiezhou/diffdata/gene239/conti/TSG_BRCA/diff/pppower_betaf0=",i1,"_sample",i3,"_",i2,".Rd"))
+      load(paste0("/Volumes/Szhao/jiezhou/diffdata/gene239/conti/TSG_BRCA/diffFix/pppower_betaf0=",i1,"_sample",i3,"_",i2,".Rd"))
+      load(paste0("/Volumes/Szhao/jiezhou/diffdata/gene239/conti/TSG_BRCA/other/pppower_betaf0=",i1,"_sample",i3,"_",i2,".Rd"))
+      load(paste0("/Volumes/Szhao/jiezhou/diffdata/gene239/conti/TSG_BRCA/diffFixFix/pppower_betaf0=",i1,"_sample",i3,"_",i2,".Rd"))
 
       m.pvalue[[1]][i2, ] <- simuresdiffFix[["m1.pvalue"]]
       m.pvalue[[2]][i2, ] <- simuresother[["m1.pvalue"]]
@@ -65,44 +85,35 @@ for (i1 in 0) {
   }
 }
 
-# pdf("/dartfs/rc/lab/S/Szhao/qiruiz/diffdriver/paper/2.a.pdf", width = 7.8, height = 5.5)
 par(mfrow = c(1, 2), mar = c(5, 6, 4, 2))
 for (i in 1:2) {
-  if (i == 1){
-    mylist <- mylist1
-  } else {
-    mylist <- mylist2
-  }
+  mylist <- if (i == 1) mylist1 else mylist2
   outdt <- sapply(mylist, function(x) sapply(x, mean))
   rownames(outdt) <- methods
   colnames(outdt) <- sample_sizes
-  plot(1:dim(outdt)[2], ylim = c(0, ifelse(i == 1, 0.4, 1)), col = "white", ylab = ifelse(i == 1, "Power", "FPR"), 
-       xlab = "Number of samples", yaxt = "n", xaxt = "n", bty= 'n', cex.lab = 1.3, mgp=c(4, 1, 0))
-  title(paste("para=", ifelse(i == 1, "(0.8,0.2)", "(0.5,0.5), FDR=0.1")))
+  plot(1:dim(outdt)[2], ylim = c(0, ifelse(i == 1, 0.4, 1)), col = "white",
+       ylab = ifelse(i == 1, "Power", "FPR"),
+       xlab = "Number of samples", yaxt = "n", xaxt = "n", bty = 'n',
+       cex.lab = 1.3, mgp = c(4, 1, 0))
+  title(paste("para =", ifelse(i == 1, "(0.8, 0.2)", "(0.5, 0.5), FDR = 0.1")))
   yticks_val <- seq(0, ifelse(i == 1, 0.4, 1), 0.1)
-  axis(2, at = yticks_val, lab = paste0(yticks_val*100, "%"), las = 2, cex.axis = 1.3)
+  axis(2, at = yticks_val, lab = paste0(yticks_val * 100, "%"), las = 2, cex.axis = 1.3)
   axis(1, at = 1:dim(outdt)[2], lab = colnames(outdt), cex.axis = 1.3)
   grid()
   for (r in 1:nrow(outdt)) {
-    y <- outdt[r, ]
-    points(1:dim(outdt)[2], y, col = mycol[r], pch = 19, cex = 1.8)
-    lines(1:dim(outdt)[2], y, col = mycol[r], lwd=1.5)
+    points(1:dim(outdt)[2], outdt[r, ], col = mycol[r], pch = 19, cex = 1.8)
+    lines(1:dim(outdt)[2], outdt[r, ], col = mycol[r], lwd = 1.5)
   }
   if (i == 1) {
-    legend("topleft", legend = methods, 
-           col = mycol[1:length(methods)], lwd = 1, bty = "n", lty=rep(NA,5), pch=rep(19,5))
-    # legend("topleft", legend = methods, 
-    #        col = mycol[1:length(methods)], lwd = 1, bty = "n", lty=rep(NA,5), pch=rep(19,5), cex = 1.3)
+    legend("topleft", legend = methods, col = mycol[1:length(methods)],
+           lwd = 1, bty = "n", lty = rep(NA, 5), pch = rep(19, 5))
   }
 }
-# dev.off()
 ```
 
+### para = c(0.9, 0.1)
 
-
-### para=c(0.9,0.1)
-
-```{r}
+```{r tsg-binary-09}
 Nsim <- 100
 rr <- 0.1
 mycol=c("#FF3D2E","#00AFBB","#aa00ff","#0001f6","#fdae61","#FFFF00", "#2b2930")
@@ -116,10 +127,10 @@ for (i1 in 0) {
   for (i3 in sample_sizes) {
     n <- n + 1
     for (i2 in 1:200) {
-     load(paste0("/dartfs/rc/lab/S/Szhao/jiezhou/diffdata/gene239/conti/TSG_BRCA/TSG0.9/TSG_gene/diff/pppower_betaf0=",i1,"_sample",i3,"_",i2,".Rd"))
-     load(paste0("/dartfs/rc/lab/S/Szhao/jiezhou/diffdata/gene239/conti/TSG_BRCA/TSG0.9/TSG_gene/diffFix/pppower_betaf0=",i1,"_sample",i3,"_",i2,".Rd"))
-     load(paste0("/dartfs/rc/lab/S/Szhao/jiezhou/diffdata/gene239/conti/TSG_BRCA/TSG0.9/TSG_gene/other/pppower_betaf0=",i1,"_sample",i3,"_",i2,".Rd"))
-     load(paste0("/dartfs/rc/lab/S/Szhao/jiezhou/diffdata/gene239/conti/TSG_BRCA/TSG0.9/TSG_gene/diffFixFix/pppower_betaf0=",i1,"_sample",i3,"_",i2,".Rd"))
+     load(paste0("/Volumes/Szhao/jiezhou/diffdata/gene239/conti/TSG_BRCA/TSG0.9/TSG_gene/diff/pppower_betaf0=",i1,"_sample",i3,"_",i2,".Rd"))
+     load(paste0("/Volumes/Szhao/jiezhou/diffdata/gene239/conti/TSG_BRCA/TSG0.9/TSG_gene/diffFix/pppower_betaf0=",i1,"_sample",i3,"_",i2,".Rd"))
+     load(paste0("/Volumes/Szhao/jiezhou/diffdata/gene239/conti/TSG_BRCA/TSG0.9/TSG_gene/other/pppower_betaf0=",i1,"_sample",i3,"_",i2,".Rd"))
+     load(paste0("/Volumes/Szhao/jiezhou/diffdata/gene239/conti/TSG_BRCA/TSG0.9/TSG_gene/diffFixFix/pppower_betaf0=",i1,"_sample",i3,"_",i2,".Rd"))
 
       m.pvalue[[1]][i2, ] <- simuresdiffFix[["m1.pvalue"]]
       m.pvalue[[2]][i2, ] <- simuresother[["m1.pvalue"]]
@@ -139,411 +150,226 @@ for (i1 in 0) {
   }
 }
 
-# pdf("/dartfs/rc/lab/S/Szhao/qiruiz/diffdriver/paper/2.b.pdf", width = 7.8, height = 5.5)
 par(mfrow = c(1, 2), mar = c(5, 6, 4, 2))
 for (i in 1:2) {
-  if (i == 1){
-    mylist <- mylist1
-  } else {
-    mylist <- mylist2
-  }
+  mylist <- if (i == 1) mylist1 else mylist2
   outdt <- sapply(mylist, function(x) sapply(x, mean))
   rownames(outdt) <- methods
   colnames(outdt) <- sample_sizes
-  plot(1:dim(outdt)[2], ylim = c(0, ifelse(i == 1, 0.4, 1)), col = "white", ylab = ifelse(i == 1, "Power", "FPR"), 
-       xlab = "Number of samples", yaxt = "n", xaxt = "n", bty= 'n', cex.lab = 1.3, mgp=c(4, 1, 0))
-  title(paste("para=", ifelse(i == 1, "(0.9,0.1)", "(0.5,0.5), FDR=0.1")))
+  plot(1:dim(outdt)[2], ylim = c(0, ifelse(i == 1, 0.4, 1)), col = "white",
+       ylab = ifelse(i == 1, "Power", "FPR"),
+       xlab = "Number of samples", yaxt = "n", xaxt = "n", bty = 'n',
+       cex.lab = 1.3, mgp = c(4, 1, 0))
+  title(paste("para =", ifelse(i == 1, "(0.9, 0.1)", "(0.5, 0.5), FDR = 0.1")))
   yticks_val <- seq(0, ifelse(i == 1, 0.4, 1), 0.1)
-  axis(2, at = yticks_val, lab = paste0(yticks_val*100, "%"), las = 2, cex.axis=1.3)
-  axis(1, at = 1:dim(outdt)[2], lab = colnames(outdt), cex.axis=1.3)
+  axis(2, at = yticks_val, lab = paste0(yticks_val * 100, "%"), las = 2, cex.axis = 1.3)
+  axis(1, at = 1:dim(outdt)[2], lab = colnames(outdt), cex.axis = 1.3)
   grid()
   for (r in 1:nrow(outdt)) {
-    y <- outdt[r, ]
-    points(1:dim(outdt)[2], y, col = mycol[r], pch = 19, cex = 1.8)
-    lines(1:dim(outdt)[2], y, col = mycol[r], lwd=1.5)
+    points(1:dim(outdt)[2], outdt[r, ], col = mycol[r], pch = 19, cex = 1.8)
+    lines(1:dim(outdt)[2], outdt[r, ], col = mycol[r], lwd = 1.5)
   }
-  # legend("topleft", legend = methods, 
-  #        col = mycol[1:length(methods)], lwd = 1, bty = "n", lty = NA, pch = 19)
 }
-# dev.off()
 ```
 
+---
 
+## TSG, Continuous Phenotype
 
-## Results 3: TSG and continuous phenotype, diffdriver has high power and low FDR
+Continuous phenotype with `para = c(0, 2, 0, 1)`: phenotype ~ N(0, 2), selection
+probability determined by logistic regression with intercept = 0 and slope = 1.
 
+### betaf0 = 0
 
-For 200 genes, using five functional annotations, we compare the sensitivity and false discovery rate of different algorithms using binary phenotype based on robust brglm algorithm.  The first 50 genes have differential selection while the left 150 genes do not. The parameter are
+```{r tsg-conti-f0}
+Nsim <- 50
+rr <- 0.1
+methods <- c("DiffDriver", "Linear", "Fisher", "Binomial", "LogisticR")
+sample_sizes <- c(200, 400, 600, 800, 1000, 1200)
+mycol <- c("#FF3D2E","#00AFBB","#aa00ff","#0001f6","#fdae61")
+mylist1 <- mylist2 <- list()
+m.pvalue <- lapply(1:6, function(x) matrix(nrow = 200, ncol = Nsim))
 
-`beta_f0=0,1`, `beta_gc=(0,2,0,1)`.
+for (i1 in c(0)) {
+  n <- 0
+  for (i3 in sample_sizes) {
+    n <- n + 1
+    sensitivity1=c(); specificity1=c()
+    sensitivity2=c(); specificity2=c()
+    sensitivity3=c(); specificity3=c()
+    sensitivity4=c(); specificity4=c()
+    sensitivity5=c(); specificity5=c()
+    sensitivity6=c(); specificity6=c()
 
-For functional effects,old TSG is  drivermap's TSG parameterfor   
+    for (i2 in 1:200) {
+      load(paste0("/Volumes/Szhao/jiezhou/diffdata/gene239/conti/TSG_BRCA/conti/conti2/diff/pppower_betaf0=",i1,"_sample",i3,"_",i2,".Rd"))
+      load(paste0("/Volumes/Szhao/jiezhou/diffdata/gene239/conti/TSG_BRCA/conti/conti2/diffFix/pppower_betaf0=",i1,"_sample",i3,"_",i2,".Rd"))
+      load(paste0("/Volumes/Szhao/jiezhou/diffdata/gene239/conti/TSG_BRCA/conti/conti2/other/pppower_betaf0=",i1,"_sample",i3,"_",i2,".Rd"))
 
-`(functypecode8,       mycons,         sift,    phylop100,           MA, intercept)= (0.45817859, 0.13676461, 0.12436937, 0.08272142, 0.30626015, 0.85127726)`  , while new BRCA's TSG parameter is `((Intercept), functypecode8,        mycons,          sift,     phylop100)=(0.8512773,     0.6136798,     0.3753932,     0.1661389,     0.358036,    0.2229025)` .  The diffdrdiver model use new TSG parameter to simulate and infer while diffdriverFix use new parameter to simulate data and old parameter to select genes, diffdriverFix2 use old parameter to simulate data and infer parameter. 
-
-
-
-
-```{r}
-Nsim=50
-rr=0.1
-mylist1 <- list()
-mylist2 <- list()
-m1.pvalue=matrix(nrow = 200,ncol = Nsim)
-m2.pvalue=matrix(nrow = 200,ncol = Nsim)
-m3.pvalue=matrix(nrow = 200,ncol = Nsim)
-m4.pvalue=matrix(nrow = 200,ncol = Nsim)
-m5.pvalue=matrix(nrow = 200,ncol = Nsim)
-m6.pvalue=matrix(nrow = 200,ncol = Nsim)
-m7.pvalue=matrix(nrow=200,ncol=Nsim)
-m1.fdr=matrix(nrow = 200,ncol = Nsim)
-m2.fdr=matrix(nrow = 200,ncol = Nsim)
-m3.fdr=matrix(nrow = 200,ncol = Nsim)
-m4.fdr=matrix(nrow = 200,ncol = Nsim)
-m5.fdr=matrix(nrow = 200,ncol = Nsim)
-m6.fdr=matrix(nrow = 200,ncol = Nsim)
-m7.fdr=matrix(nrow = 200,ncol = Nsim)
-
-for (i1 in c(0)){
-    n<-0
-    for(i3 in c(200,400,600, 800,1000,1200)){
-      n <- n+1
-	for (i2 in 1:200){
-load(paste0("/dartfs/rc/lab/S/Szhao/jiezhou/diffdata/gene239/conti/TSG_BRCA/conti/conti2/diff/pppower_betaf0=",i1,"_sample",i3,"_",i2,".Rd"))
-load(paste0("/dartfs/rc/lab/S/Szhao/jiezhou/diffdata/gene239/conti/TSG_BRCA/conti/conti2/diffFix/pppower_betaf0=",i1,"_sample",i3,"_",i2,".Rd"))
-load(paste0("/dartfs/rc/lab/S/Szhao/jiezhou/diffdata/gene239/conti/TSG_BRCA/conti/conti2/other/pppower_betaf0=",i1,"_sample",i3,"_",i2,".Rd"))
-
-
-       ##
-     sensitivity1=c()
-     specificity1=c()
-     sensitivity2=c()
-     specificity2=c()
-     sensitivity3=c()
-     specificity3=c()
-     sensitivity4=c()
-     specificity4=c()
-     sensitivity5=c()
-     specificity5=c()
-     sensitivity6=c()
-     specificity6=c()
-     sensitivity7=c()
-     specificity7=c()
-           
-              m1.pvalue[i2,]=simuresother[["m1.pvalue"]]
-              m2.pvalue[i2,]=simuresother[["m2.pvalue"]]
-              m3.pvalue[i2,]=simuresother[["m3.pvalue"]]
-              m4.pvalue[i2,]=simuresother[["m4.pvalue"]]
-              m5.pvalue[i2,]=simuresdiffFix[["m1.pvalue"]]
-              m6.pvalue[i2,]=simuresdiff[["m1.pvalue"]]
-
-            
-}
-     for (j2 in 1:Nsim) {
-         index1=which(p.adjust(m1.pvalue[,j2],method = "BH")<rr)
-            sensitivity1=c(sensitivity1,length(which(index1<51))/50)
-if (length(index1)!=0){
-                     specificity1=c(specificity1,length(which(index1>50))/length(index1))
-            }else{
-     specificity1=c(specificity1,0)
-}
-            
-             index1=which(p.adjust(m2.pvalue[,j2],method = "BH")<rr)
-             sensitivity2=c(sensitivity2,length(which(index1<51))/50)
-if (length(index1)!=0){
-                     specificity2=c(specificity2,length(which(index1>50))/length(index1))
-            }else{
-     specificity2=c(specificity2,0)
-}           
-
-           
-             index1=which(p.adjust(m3.pvalue[,j2],method = "BH")<rr)
-            sensitivity3=c(sensitivity3, length(which(index1<51))/50)
-if (length(index1)!=0){
-                     specificity3=c(specificity3,length(which(index1>50))/length(index1))
-            }else{
-     specificity3=c(specificity3,0)
-}
-
-
-
-             index1=which(p.adjust(m4.pvalue[,j2],method = "BH")<rr)
-            sensitivity4=c(sensitivity4,length(which(index1<51))/50)
-             if (length(index1)!=0){
-                     specificity4=c(specificity4,length(which(index1>50))/length(index1))
-            }else{
-     specificity4=c(specificity4,0)
-}
-
-            
-               index1=which(p.adjust(m5.pvalue[,j2],method = "BH")<rr)
-             sensitivity5=c(sensitivity5, length(which(index1<51))/50)
-               if (length(index1)!=0){
-                     specificity5=c(specificity5,length(which(index1>50))/length(index1))
-            }else{
-     specificity5=c(specificity5,0)
-}
-            
-             index1=which(p.adjust(m6.pvalue[,j2],method = "BH")<rr)
-                 sensitivity6=c(sensitivity6,length(which(index1<51))/50)
-      if (length(index1)!=0){
-                     specificity6=c(specificity6,length(which(index1>50))/length(index1))
-            }else{
-     specificity6=c(specificity6,0)
-}
-
-          }
-
-     
+      m.pvalue[[1]][i2,] <- simuresother[["m1.pvalue"]]
+      m.pvalue[[2]][i2,] <- simuresother[["m2.pvalue"]]
+      m.pvalue[[3]][i2,] <- simuresother[["m3.pvalue"]]
+      m.pvalue[[4]][i2,] <- simuresother[["m4.pvalue"]]
+      m.pvalue[[5]][i2,] <- simuresdiffFix[["m1.pvalue"]]
+      m.pvalue[[6]][i2,] <- simuresdiff[["m1.pvalue"]]
+    }
+    for (j2 in 1:Nsim) {
+      for (k in 1:5) {
+        idx <- k
+        if (k == 1) idx <- 5  # DiffDriver
+        if (k == 2) idx <- 1  # Linear
+        if (k == 3) idx <- 2  # Fisher
+        if (k == 4) idx <- 3  # Binomial
+        if (k == 5) idx <- 4  # LogisticR
+        index1 <- which(p.adjust(m.pvalue[[idx]][, j2], method = "BH") < rr)
+        sens <- ifelse(length(index1) != 0, length(which(index1 < 51)) / 50, 0)
+        spec <- ifelse(length(index1) != 0, length(which(index1 > 50)) / length(index1), 0)
+        if (k == 1) { sensitivity5 <- c(sensitivity5, sens); specificity5 <- c(specificity5, spec) }
+        if (k == 2) { sensitivity1 <- c(sensitivity1, sens); specificity1 <- c(specificity1, spec) }
+        if (k == 3) { sensitivity2 <- c(sensitivity2, sens); specificity2 <- c(specificity2, spec) }
+        if (k == 4) { sensitivity3 <- c(sensitivity3, sens); specificity3 <- c(specificity3, spec) }
+        if (k == 5) { sensitivity4 <- c(sensitivity4, sens); specificity4 <- c(specificity4, spec) }
+      }
+    }
     mylist1[[n]] <- c(mean(sensitivity5), mean(sensitivity1), mean(sensitivity2), mean(sensitivity3), mean(sensitivity4))
     mylist2[[n]] <- c(mean(specificity5), mean(specificity1), mean(specificity2), mean(specificity3), mean(specificity4))
-    }
+  }
 
-    outdt <- do.call(cbind, mylist1)
-#pdf("brglm5.pdf")   
-    rownames(outdt)=c("DiffDriver", "Linear", "Fisher", "Binomial", "LogisticR")
-    colnames(outdt) <- c(200,400, 600,800,1000,1200)
-    mycol=c("#FF3D2E","#00AFBB","#aa00ff","#0001f6","#fdae61")
- # mycol=c("#00AFBB","#2b8cbe","#aa00ff","#0001f6","#fdae61","#FF3D2E")
-x=1:dim(outdt)[2] 
+  outdt <- do.call(cbind, mylist1)
+  rownames(outdt) <- methods
+  colnames(outdt) <- sample_sizes
+  x <- 1:dim(outdt)[2]
 
-# pdf("/dartfs/rc/lab/S/Szhao/qiruiz/diffdriver/paper/3.a.pdf", width = 7.5, height = 5.5)
-par(mfrow=c(1,2), mar=c(5, 6, 4, 2))
+  par(mfrow = c(1, 2), mar = c(5, 6, 4, 2))
+  plot(x, ylim = c(0, 0.6), col = "white", ylab = "Power",
+       xlab = "Number of samples", yaxt = "n", xaxt = "n", bty = "n",
+       cex.lab = 1.3, mgp = c(4, 1, 0))
+  title(paste("betaf0 =", i1, ", para = (0, 2, 0, 1)"))
+  axis(2, at = seq(0, 0.6, 0.1), lab = paste0(seq(0, 60, 10), "%"), las = 2, cex.axis = 1.3)
+  axis(1, at = x, lab = colnames(outdt), cex.axis = 1.3)
+  grid()
+  for (r in 1:5) {
+    points(x, outdt[r, ], col = mycol[r], pch = 19, cex = 1.8)
+    lines(x, outdt[r, ], col = mycol[r], lwd = 1.5)
+  }
+  legend("topleft", legend = methods, col = mycol[1:5], lwd = 1, bty = "n",
+         lty = rep(NA, 5), pch = rep(19, 5))
 
-     plot(x,ylim=c(0,0.6), col="white", ylab = "Power", xlab="Number of samples", yaxt="n", xaxt="n", bty="n", cex.lab=1.3, mgp=c(4, 1, 0))
-      # title(paste("f0=",i1,",", "beta_gc=(",i2,",","1.513", ")", "P(E=1) =0.5", "P(positive selection|E=1)=0.8", "P(positive selection|E=1)=0.2", sep=" "))
-    title( paste( "beta_0=",i1,",","para=(0,2,0,2)",  sep=" "))
-    #yticks_val <- pretty(outdt)
-    yticks_val <- seq(0,0.6,0.1)
-    #axis(2, lab=paste0(yticks_val/Nsim * 100, " %"),las=2)
-    axis(2, at=yticks_val, lab=paste0(yticks_val*100, "%"),las=2, cex.axis=1.3)
-    axis(1, at=1:dim(outdt)[2], lab=colnames(outdt), cex.axis=1.3)
-    grid()
-    for (r in 1:5){
-y=outdt[r,]
-#y.sd=sddt[r,]
-      points(x,y,col=mycol[r], pch=19, cex=1.8)
-      lines(x,y,col=mycol[r], lwd=1.5)
- #    arrows(x0=x, y0=y-y.sd, x1=x, y1=y+y.sd, code=3, angle=90, length=0.1,col=mycol[r])
-    }
-    legend("topleft", legend = c("DiffDriver", "Linear", "Fisher", "Binomial", "LogisticR"), col= mycol[1:5], lwd=1, bty="n", lty=rep(NA,5), pch=rep(19,5))
-    
-    
-    
-     outdt <- do.call(cbind, mylist2)
-    
-     rownames(outdt)=c("DiffDriver", "Linear", "Fisher", "Binomial", "LogisticR")
-    colnames(outdt) <- c(200,400, 600,800,1000,1200)
-    mycol=c("#FF3D2E","#00AFBB","#aa00ff","#0001f6","#fdae61")
- # mycol=c("#00AFBB","#2b8cbe","#aa00ff","#0001f6","#fdae61","#FF3D2E")
-     plot(1:dim(outdt)[2],ylim=c(0,1), col="white", ylab = "FPR", xlab="Number of samples", yaxt="n", xaxt="n", bty="n", cex.lab=1.3, mgp=c(4, 1, 0))
-      # title(paste("f0=",i1,",", "beta_gc=(",i2,",","1.513", ")", "P(E=1) =0.5", "P(positive selection|E=1)=0.8", "P(positive selection|E=1)=0.2", sep=" "))
-     title( "para=(0,2,0,0), FDR=0.1")
-    #yticks_val <- pretty(outdt)
-    yticks_val <- seq(0,1,0.1)
-    #axis(2, lab=paste0(yticks_val/Nsim * 100, " %"),las=2)
-    axis(2, at=yticks_val, lab=paste0(yticks_val*100, "%"),las=2, cex.axis=1.3)
-    axis(1, at=1:dim(outdt)[2], lab=colnames(outdt), cex.axis=1.3)
-    grid()
-    for (r in 1:5){
-y=outdt[r,]
-#y.sd=sddt[r,]
-      points(x,y,col=mycol[r], pch=19, cex=1.8)
-      lines(x,y,col=mycol[r], lwd=1.5)
-#	arrows(x0=x, y0=y-y.sd, x1=x, y1=y+y.sd, code=3, angle=90, length=0.1,col=mycol[r])
-    }
-    
+  outdt2 <- do.call(cbind, mylist2)
+  rownames(outdt2) <- methods
+  colnames(outdt2) <- sample_sizes
+  plot(x, ylim = c(0, 1), col = "white", ylab = "FPR",
+       xlab = "Number of samples", yaxt = "n", xaxt = "n", bty = "n",
+       cex.lab = 1.3, mgp = c(4, 1, 0))
+  title("para = (0, 2, 0, 0), FDR = 0.1")
+  axis(2, at = seq(0, 1, 0.1), lab = paste0(seq(0, 100, 10), "%"), las = 2, cex.axis = 1.3)
+  axis(1, at = x, lab = colnames(outdt2), cex.axis = 1.3)
+  grid()
+  for (r in 1:5) {
+    points(x, outdt2[r, ], col = mycol[r], pch = 19, cex = 1.8)
+    lines(x, outdt2[r, ], col = mycol[r], lwd = 1.5)
+  }
 }
-# dev.off()
 ```
 
+### betaf0 = 1
 
-```{r}
-Nsim=50
-rr=0.1
-mylist1 <- list()
-mylist2 <- list()
-m1.pvalue=matrix(nrow = 200,ncol = Nsim)
-m2.pvalue=matrix(nrow = 200,ncol = Nsim)
-m3.pvalue=matrix(nrow = 200,ncol = Nsim)
-m4.pvalue=matrix(nrow = 200,ncol = Nsim)
-m5.pvalue=matrix(nrow = 200,ncol = Nsim)
-m6.pvalue=matrix(nrow = 200,ncol = Nsim)
-m7.pvalue=matrix(nrow=200,ncol=Nsim)
-m1.fdr=matrix(nrow = 200,ncol = Nsim)
-m2.fdr=matrix(nrow = 200,ncol = Nsim)
-m3.fdr=matrix(nrow = 200,ncol = Nsim)
-m4.fdr=matrix(nrow = 200,ncol = Nsim)
-m5.fdr=matrix(nrow = 200,ncol = Nsim)
-m6.fdr=matrix(nrow = 200,ncol = Nsim)
-m7.fdr=matrix(nrow = 200,ncol = Nsim)
+```{r tsg-conti-f1}
+Nsim <- 50
+rr <- 0.1
+methods <- c("DiffDriver", "Linear", "Fisher", "Binomial", "LogisticR")
+sample_sizes <- c(200, 400, 600, 800, 1000, 1200)
+mycol <- c("#FF3D2E","#00AFBB","#aa00ff","#0001f6","#fdae61")
+mylist1 <- mylist2 <- list()
+m.pvalue <- lapply(1:6, function(x) matrix(nrow = 200, ncol = Nsim))
 
-for (i1 in c(1)){
-    n<-0
-    for(i3 in c(200,400,600, 800,1000,1200)){
-      n <- n+1
-	for (i2 in 1:200){
-load(paste0("/dartfs/rc/lab/S/Szhao/jiezhou/diffdata/gene239/conti/TSG_BRCA/conti/conti2/diff/pppower_betaf0=",i1,"_sample",i3,"_",i2,".Rd"))
-load(paste0("/dartfs/rc/lab/S/Szhao/jiezhou/diffdata/gene239/conti/TSG_BRCA/conti/conti2/diffFix/pppower_betaf0=",i1,"_sample",i3,"_",i2,".Rd"))
-load(paste0("/dartfs/rc/lab/S/Szhao/jiezhou/diffdata/gene239/conti/TSG_BRCA/conti/conti2/other/pppower_betaf0=",i1,"_sample",i3,"_",i2,".Rd"))
+for (i1 in c(1)) {
+  n <- 0
+  for (i3 in sample_sizes) {
+    n <- n + 1
+    sensitivity1=c(); specificity1=c()
+    sensitivity2=c(); specificity2=c()
+    sensitivity3=c(); specificity3=c()
+    sensitivity4=c(); specificity4=c()
+    sensitivity5=c(); specificity5=c()
+    sensitivity6=c(); specificity6=c()
 
+    for (i2 in 1:200) {
+      load(paste0("/Volumes/Szhao/jiezhou/diffdata/gene239/conti/TSG_BRCA/conti/conti2/diff/pppower_betaf0=",i1,"_sample",i3,"_",i2,".Rd"))
+      load(paste0("/Volumes/Szhao/jiezhou/diffdata/gene239/conti/TSG_BRCA/conti/conti2/diffFix/pppower_betaf0=",i1,"_sample",i3,"_",i2,".Rd"))
+      load(paste0("/Volumes/Szhao/jiezhou/diffdata/gene239/conti/TSG_BRCA/conti/conti2/other/pppower_betaf0=",i1,"_sample",i3,"_",i2,".Rd"))
 
-       ##
-     sensitivity1=c()
-     specificity1=c()
-     sensitivity2=c()
-     specificity2=c()
-     sensitivity3=c()
-     specificity3=c()
-     sensitivity4=c()
-     specificity4=c()
-     sensitivity5=c()
-     specificity5=c()
-     sensitivity6=c()
-     specificity6=c()
-     sensitivity7=c()
-     specificity7=c()
-           
-              m1.pvalue[i2,]=simuresother[["m1.pvalue"]]
-              m2.pvalue[i2,]=simuresother[["m2.pvalue"]]
-              m3.pvalue[i2,]=simuresother[["m3.pvalue"]]
-              m4.pvalue[i2,]=simuresother[["m4.pvalue"]]
-              m5.pvalue[i2,]=simuresdiffFix[["m1.pvalue"]]
-              m6.pvalue[i2,]=simuresdiff[["m1.pvalue"]]
-
-            
-}
-     for (j2 in 1:Nsim) {
-         index1=which(p.adjust(m1.pvalue[,j2],method = "BH")<rr)
-            sensitivity1=c(sensitivity1,length(which(index1<51))/50)
-if (length(index1)!=0){
-                     specificity1=c(specificity1,length(which(index1>50))/length(index1))
-            }else{
-     specificity1=c(specificity1,0)
-}
-            
-             index1=which(p.adjust(m2.pvalue[,j2],method = "BH")<rr)
-             sensitivity2=c(sensitivity2,length(which(index1<51))/50)
-if (length(index1)!=0){
-                     specificity2=c(specificity2,length(which(index1>50))/length(index1))
-            }else{
-     specificity2=c(specificity2,0)
-}           
-
-           
-             index1=which(p.adjust(m3.pvalue[,j2],method = "BH")<rr)
-            sensitivity3=c(sensitivity3, length(which(index1<51))/50)
-if (length(index1)!=0){
-                     specificity3=c(specificity3,length(which(index1>50))/length(index1))
-            }else{
-     specificity3=c(specificity3,0)
-}
-
-
-
-             index1=which(p.adjust(m4.pvalue[,j2],method = "BH")<rr)
-            sensitivity4=c(sensitivity4,length(which(index1<51))/50)
-             if (length(index1)!=0){
-                     specificity4=c(specificity4,length(which(index1>50))/length(index1))
-            }else{
-     specificity4=c(specificity4,0)
-}
-
-            
-               index1=which(p.adjust(m5.pvalue[,j2],method = "BH")<rr)
-             sensitivity5=c(sensitivity5, length(which(index1<51))/50)
-               if (length(index1)!=0){
-                     specificity5=c(specificity5,length(which(index1>50))/length(index1))
-            }else{
-     specificity5=c(specificity5,0)
-}
-            
-             index1=which(p.adjust(m6.pvalue[,j2],method = "BH")<rr)
-                 sensitivity6=c(sensitivity6,length(which(index1<51))/50)
-      if (length(index1)!=0){
-                     specificity6=c(specificity6,length(which(index1>50))/length(index1))
-            }else{
-     specificity6=c(specificity6,0)
-}
-
-          }
-
-     
+      m.pvalue[[1]][i2,] <- simuresother[["m1.pvalue"]]
+      m.pvalue[[2]][i2,] <- simuresother[["m2.pvalue"]]
+      m.pvalue[[3]][i2,] <- simuresother[["m3.pvalue"]]
+      m.pvalue[[4]][i2,] <- simuresother[["m4.pvalue"]]
+      m.pvalue[[5]][i2,] <- simuresdiffFix[["m1.pvalue"]]
+      m.pvalue[[6]][i2,] <- simuresdiff[["m1.pvalue"]]
+    }
+    for (j2 in 1:Nsim) {
+      for (k in 1:5) {
+        idx <- k
+        if (k == 1) idx <- 5
+        if (k == 2) idx <- 1
+        if (k == 3) idx <- 2
+        if (k == 4) idx <- 3
+        if (k == 5) idx <- 4
+        index1 <- which(p.adjust(m.pvalue[[idx]][, j2], method = "BH") < rr)
+        sens <- ifelse(length(index1) != 0, length(which(index1 < 51)) / 50, 0)
+        spec <- ifelse(length(index1) != 0, length(which(index1 > 50)) / length(index1), 0)
+        if (k == 1) { sensitivity5 <- c(sensitivity5, sens); specificity5 <- c(specificity5, spec) }
+        if (k == 2) { sensitivity1 <- c(sensitivity1, sens); specificity1 <- c(specificity1, spec) }
+        if (k == 3) { sensitivity2 <- c(sensitivity2, sens); specificity2 <- c(specificity2, spec) }
+        if (k == 4) { sensitivity3 <- c(sensitivity3, sens); specificity3 <- c(specificity3, spec) }
+        if (k == 5) { sensitivity4 <- c(sensitivity4, sens); specificity4 <- c(specificity4, spec) }
+      }
+    }
     mylist1[[n]] <- c(mean(sensitivity5), mean(sensitivity1), mean(sensitivity2), mean(sensitivity3), mean(sensitivity4))
     mylist2[[n]] <- c(mean(specificity5), mean(specificity1), mean(specificity2), mean(specificity3), mean(specificity4))
-    }
+  }
 
-    outdt <- do.call(cbind, mylist1)
-#pdf("brglm5.pdf")   
-    rownames(outdt)=c("DiffDriver", "Linear", "Fisher", "Binomial", "LogisticR")
-    colnames(outdt) <- c(200,400, 600,800,1000,1200)
-    mycol=c("#FF3D2E","#00AFBB","#aa00ff","#0001f6","#fdae61")
- # mycol=c("#00AFBB","#2b8cbe","#aa00ff","#0001f6","#fdae61","#FF3D2E")
-x=1:dim(outdt)[2]   
+  outdt <- do.call(cbind, mylist1)
+  rownames(outdt) <- methods
+  colnames(outdt) <- sample_sizes
+  x <- 1:dim(outdt)[2]
 
-# pdf("/dartfs/rc/lab/S/Szhao/qiruiz/diffdriver/paper/3.b.pdf", width = 7.5, height = 5.5)
-par(mfrow=c(1,2), mar=c(5, 6, 4, 2))
+  par(mfrow = c(1, 2), mar = c(5, 6, 4, 2))
+  plot(x, ylim = c(0, 0.6), col = "white", ylab = "Power",
+       xlab = "Number of samples", yaxt = "n", xaxt = "n", bty = "n",
+       cex.lab = 1.3, mgp = c(4, 1, 0))
+  title(paste("betaf0 =", i1, ", para = (0, 2, 0, 2)"))
+  axis(2, at = seq(0, 1, 0.1), lab = paste0(seq(0, 100, 10), "%"), las = 2, cex.axis = 1.3)
+  axis(1, at = x, lab = colnames(outdt), cex.axis = 1.3)
+  grid()
+  for (r in 1:5) {
+    points(x, outdt[r, ], col = mycol[r], pch = 19, cex = 1.8)
+    lines(x, outdt[r, ], col = mycol[r], lwd = 1.5)
+  }
 
-     plot(x,ylim=c(0,0.6), col="white", ylab = "Power", xlab="Number of samples", yaxt="n", xaxt="n", bty="n", cex.lab=1.3, mgp=c(4, 1, 0))
-      # title(paste("f0=",i1,",", "beta_gc=(",i2,",","1.513", ")", "P(E=1) =0.5", "P(positive selection|E=1)=0.8", "P(positive selection|E=1)=0.2", sep=" "))
-     title( paste( "beta_0=",i1,",","para=(0,2,0,2)",  sep=" "))
-    #yticks_val <- pretty(outdt)
-    yticks_val <- seq(0,1,0.1)
-    #axis(2, lab=paste0(yticks_val/Nsim * 100, " %"),las=2)
-    axis(2, at=yticks_val, lab=paste0(yticks_val*100, "%"),las=2, cex.axis=1.3)
-    axis(1, at=1:dim(outdt)[2], lab=colnames(outdt), cex.axis=1.3)
-    grid()
-    for (r in 1:5){
-y=outdt[r,]
-#y.sd=sddt[r,]
-      points(x,y,col=mycol[r], pch=19, cex=1.8)
-      lines(x,y,col=mycol[r], lwd=1.5)
- #    arrows(x0=x, y0=y-y.sd, x1=x, y1=y+y.sd, code=3, angle=90, length=0.1,col=mycol[r])
-    }
-    # legend("topleft", legend = c("DiffDriver", "Linear", "Fisher", "Binomial", "LogisticR"), col= mycol[1:5], lwd=1, bty="n", lty=rep(NA,5), pch=rep(19,5))
-    
-    
-    
-     outdt <- do.call(cbind, mylist2)
-    
-     rownames(outdt)=c("DiffDriver", "Linear", "Fisher", "Binomial", "LogisticR")
-    colnames(outdt) <- c(200,400, 600,800,1000,1200)
-    mycol=c("#FF3D2E","#00AFBB","#aa00ff","#0001f6","#fdae61")
- # mycol=c("#00AFBB","#2b8cbe","#aa00ff","#0001f6","#fdae61","#FF3D2E")
-     plot(1:dim(outdt)[2],ylim=c(0,1), col="white", ylab = "FPR", xlab="Number of samples", yaxt="n", xaxt="n", bty="n", cex.lab=1.3, mgp=c(4, 1, 0))
-      # title(paste("f0=",i1,",", "beta_gc=(",i2,",","1.513", ")", "P(E=1) =0.5", "P(positive selection|E=1)=0.8", "P(positive selection|E=1)=0.2", sep=" "))
-     title( "para=(0,2,0,0), FDR=0.1")
-    #yticks_val <- pretty(outdt)
-    yticks_val <- seq(0,1,0.1)
-    #axis(2, lab=paste0(yticks_val/Nsim * 100, " %"),las=2)
-    axis(2, at=yticks_val, lab=paste0(yticks_val*100, "%"),las=2, cex.axis=1.3)
-    axis(1, at=1:dim(outdt)[2], lab=colnames(outdt), cex.axis=1.3)
-    grid()
-    for (r in 1:5){
-y=outdt[r,]
-#y.sd=sddt[r,]
-      points(x,y,col=mycol[r], pch=19, cex=1.8)
-      lines(x,y,col=mycol[r], lwd=1.5)
-#	arrows(x0=x, y0=y-y.sd, x1=x, y1=y+y.sd, code=3, angle=90, length=0.1,col=mycol[r])
-    }
-    
+  outdt2 <- do.call(cbind, mylist2)
+  rownames(outdt2) <- methods
+  colnames(outdt2) <- sample_sizes
+  plot(x, ylim = c(0, 1), col = "white", ylab = "FPR",
+       xlab = "Number of samples", yaxt = "n", xaxt = "n", bty = "n",
+       cex.lab = 1.3, mgp = c(4, 1, 0))
+  title("para = (0, 2, 0, 0), FDR = 0.1")
+  axis(2, at = seq(0, 1, 0.1), lab = paste0(seq(0, 100, 10), "%"), las = 2, cex.axis = 1.3)
+  axis(1, at = x, lab = colnames(outdt2), cex.axis = 1.3)
+  grid()
+  for (r in 1:5) {
+    points(x, outdt2[r, ], col = mycol[r], pch = 19, cex = 1.8)
+    lines(x, outdt2[r, ], col = mycol[r], lwd = 1.5)
+  }
 }
-
-# dev.off()
 ```
 
+---
 
+## OG, Binary Phenotype
 
-## Results 4: OG and binary phenotype, diffdriver has high power and low FDR
+### para = c(0.8, 0.2)
 
-
- For 200 genes, using five functional annotatio:ns,    we compare the sensitivity and false discovery rate of different algorithms using binary phenotype based on robust brglm algorithm.  The first 50 genes have differential selection while the left 150 genes do not. The parameter are
-`beta_f0=0,1`, `beta_gc=(0.8,0.2)`.For functional effects,old OG is  drivermap's OG parameterfor 
-  `(functypecode8,       mycons,         sift,    phylop100,           MA, intercept)= (-0.18617161,    0.31563535,    0.01956273,    0.25640862,    0.13973529, 0.44973800)`  , while new BRCA's OG parameter is `((Intercept), functypecode8,        mycons,          sift,     phylop100)=`(0.44973800,    0.04907636,    0.80603212,   -0.07773702,    0.66444635,  0.08851684)` .  The diffdrdiver model use new OG parameter to simulate and infer while diffdriverFix use new parameter to simulate data and old parameter to select genes, diffdriverFix2 use old parameter to simulate data and infer parameter. 
-
-### para=c(0.8,0.2)
-
-```{r}
+```{r og-binary-08}
 Nsim <- 100
 rr <- 0.1
 mycol=c("#FF3D2E","#00AFBB","#aa00ff","#0001f6","#fdae61","#FFFF00", "#2b2930")
@@ -557,16 +383,15 @@ for (i1 in 0.8) {
   for (i3 in sample_sizes) {
     n <- n + 1
     for (i2 in 1:200) {
-      load(paste0("/dartfs/rc/lab/S/Szhao/jiezhou/diffdata/binaryEM/OG_gene/diff/pppower_betaf0=0_sample",i3,"_",i1,"_",i2,".Rd"))
-      load(paste0("/dartfs/rc/lab/S/Szhao/jiezhou/diffdata/binaryEM/OG_gene/diffFix/pppower_betaf0=0_sample",i3,"_",i1,"_",i2,".Rd"))
-      load(paste0("/dartfs/rc/lab/S/Szhao/jiezhou/diffdata/binaryEM/OG_gene/other/pppower_betaf0=0_sample",i3,"_",i1,"_",i2,".Rd"))
-     
+      load(paste0("/Volumes/Szhao/jiezhou/diffdata/binaryEM/OG_gene/diff/pppower_betaf0=0_sample",i3,"_",i1,"_",i2,".Rd"))
+      load(paste0("/Volumes/Szhao/jiezhou/diffdata/binaryEM/OG_gene/diffFix/pppower_betaf0=0_sample",i3,"_",i1,"_",i2,".Rd"))
+      load(paste0("/Volumes/Szhao/jiezhou/diffdata/binaryEM/OG_gene/other/pppower_betaf0=0_sample",i3,"_",i1,"_",i2,".Rd"))
+
       m.pvalue[[1]][i2, ] <- simuresdiffFix[["m1.pvalue"]]
       m.pvalue[[2]][i2, ] <- simuresother[["m1.pvalue"]]
       m.pvalue[[3]][i2, ] <- simuresother[["m2.pvalue"]]
       m.pvalue[[4]][i2, ] <- simuresother[["m3.pvalue"]]
       m.pvalue[[5]][i2, ] <- simuresother[["m4.pvalue"]]
-      
     }
     for (j2 in 1:Nsim) {
       for (k in 1:length(methods)) {
@@ -580,41 +405,35 @@ for (i1 in 0.8) {
   }
 }
 
-# pdf("/dartfs/rc/lab/S/Szhao/qiruiz/diffdriver/paper/4.a.pdf", width = 7.8, height = 5.5)
 par(mfrow = c(1, 2), mar = c(5, 6, 4, 2))
 for (i in 1:2) {
-  if (i == 1){
-    mylist <- mylist1
-  } else {
-    mylist <- mylist2
-  }
+  mylist <- if (i == 1) mylist1 else mylist2
   outdt <- sapply(mylist, function(x) sapply(x, mean))
   rownames(outdt) <- methods
   colnames(outdt) <- sample_sizes
-  plot(1:dim(outdt)[2], ylim = c(0, ifelse(i == 1, 0.5, 1)), col = "white", ylab = ifelse(i == 1, "Power", "FPR"), 
-       xlab = "Number of samples", yaxt = "n", xaxt = "n", bty= 'n', cex.lab = 1.3, mgp=c(4, 1, 0))
-  title(paste("para=", ifelse(i == 1, "(0.8,0.2)", "(0.5,0.5), FDR=0.1")))
+  plot(1:dim(outdt)[2], ylim = c(0, ifelse(i == 1, 0.5, 1)), col = "white",
+       ylab = ifelse(i == 1, "Power", "FPR"),
+       xlab = "Number of samples", yaxt = "n", xaxt = "n", bty = 'n',
+       cex.lab = 1.3, mgp = c(4, 1, 0))
+  title(paste("para =", ifelse(i == 1, "(0.8, 0.2)", "(0.5, 0.5), FDR = 0.1")))
   yticks_val <- seq(0, ifelse(i == 1, 0.5, 1), 0.1)
-  axis(2, at = yticks_val, lab = paste0(yticks_val*100, "%"), las = 2, cex.axis=1.3)
-  axis(1, at = 1:dim(outdt)[2], lab = colnames(outdt), cex.axis=1.3)
+  axis(2, at = yticks_val, lab = paste0(yticks_val * 100, "%"), las = 2, cex.axis = 1.3)
+  axis(1, at = 1:dim(outdt)[2], lab = colnames(outdt), cex.axis = 1.3)
   grid()
   for (r in 1:nrow(outdt)) {
-    y <- outdt[r, ]
-    points(1:dim(outdt)[2], y, col = mycol[r], pch = 19, cex = 1.8, cex.axis=1.3)
-    lines(1:dim(outdt)[2], y, col = mycol[r], lwd=1.5, cex.axis=1.5)
+    points(1:dim(outdt)[2], outdt[r, ], col = mycol[r], pch = 19, cex = 1.8)
+    lines(1:dim(outdt)[2], outdt[r, ], col = mycol[r], lwd = 1.5)
   }
   if (i == 1) {
-  legend("topleft", legend = methods, 
-         col = mycol[1:length(methods)], lwd = 1, bty = "n", lty = NA, pch = 19)
+    legend("topleft", legend = methods, col = mycol[1:length(methods)],
+           lwd = 1, bty = "n", lty = NA, pch = 19)
   }
 }
-# dev.off()
 ```
 
+### para = c(0.9, 0.1)
 
-### para=c(0.9,0.1)
-
-```{r}
+```{r og-binary-09}
 Nsim <- 100
 rr <- 0.1
 mycol=c("#FF3D2E","#00AFBB","#aa00ff","#0001f6","#fdae61","#FFFF00", "#2b2930")
@@ -628,17 +447,15 @@ for (i1 in 0.9) {
   for (i3 in sample_sizes) {
     n <- n + 1
     for (i2 in 1:200) {
-      load(paste0("/dartfs/rc/lab/S/Szhao/jiezhou/diffdata/binaryEM/OG_gene/diff/pppower_betaf0=0_sample",i3,"_",i1,"_",i2,".Rd"))
-      load(paste0("/dartfs/rc/lab/S/Szhao/jiezhou/diffdata/binaryEM/OG_gene/diffFix/pppower_betaf0=0_sample",i3,"_",i1,"_",i2,".Rd"))
-      load(paste0("/dartfs/rc/lab/S/Szhao/jiezhou/diffdata/binaryEM/OG_gene/other/pppower_betaf0=0_sample",i3,"_",i1,"_",i2,".Rd"))
-
+      load(paste0("/Volumes/Szhao/jiezhou/diffdata/binaryEM/OG_gene/diff/pppower_betaf0=0_sample",i3,"_",i1,"_",i2,".Rd"))
+      load(paste0("/Volumes/Szhao/jiezhou/diffdata/binaryEM/OG_gene/diffFix/pppower_betaf0=0_sample",i3,"_",i1,"_",i2,".Rd"))
+      load(paste0("/Volumes/Szhao/jiezhou/diffdata/binaryEM/OG_gene/other/pppower_betaf0=0_sample",i3,"_",i1,"_",i2,".Rd"))
 
       m.pvalue[[1]][i2, ] <- simuresdiffFix[["m1.pvalue"]]
       m.pvalue[[2]][i2, ] <- simuresother[["m1.pvalue"]]
       m.pvalue[[3]][i2, ] <- simuresother[["m2.pvalue"]]
       m.pvalue[[4]][i2, ] <- simuresother[["m3.pvalue"]]
       m.pvalue[[5]][i2, ] <- simuresother[["m4.pvalue"]]
-      
     }
     for (j2 in 1:Nsim) {
       for (k in 1:length(methods)) {
@@ -652,590 +469,215 @@ for (i1 in 0.9) {
   }
 }
 
-# pdf("/dartfs/rc/lab/S/Szhao/qiruiz/diffdriver/paper/4.b.pdf", width = 7.8, height = 5.5)
 par(mfrow = c(1, 2), mar = c(5, 6, 4, 2))
 for (i in 1:2) {
-  if (i == 1){
-    mylist <- mylist1
-  } else {
-    mylist <- mylist2
-  }
+  mylist <- if (i == 1) mylist1 else mylist2
   outdt <- sapply(mylist, function(x) sapply(x, mean))
   rownames(outdt) <- methods
   colnames(outdt) <- sample_sizes
-  plot(1:dim(outdt)[2], ylim = c(0, ifelse(i == 1, 0.5, 1)), col = "white", ylab = ifelse(i == 1, "Power", "FPR"), 
-       xlab = "Number of samples", yaxt = "n", xaxt = "n", bty= 'n', cex.lab = 1.3, mgp=c(4, 1, 0))
-  title(paste("para=", ifelse(i == 1, "(0.9,0.1)", "(0.5,0.5), FDR=0.1")))
+  plot(1:dim(outdt)[2], ylim = c(0, ifelse(i == 1, 0.5, 1)), col = "white",
+       ylab = ifelse(i == 1, "Power", "FPR"),
+       xlab = "Number of samples", yaxt = "n", xaxt = "n", bty = 'n',
+       cex.lab = 1.3, mgp = c(4, 1, 0))
+  title(paste("para =", ifelse(i == 1, "(0.9, 0.1)", "(0.5, 0.5), FDR = 0.1")))
   yticks_val <- seq(0, ifelse(i == 1, 0.5, 1), 0.1)
-  axis(2, at = yticks_val, lab = paste0(yticks_val*100, "%"), las = 2, cex.axis=1.3)
-  axis(1, at = 1:dim(outdt)[2], lab = colnames(outdt), cex.axis=1.3)
+  axis(2, at = yticks_val, lab = paste0(yticks_val * 100, "%"), las = 2, cex.axis = 1.3)
+  axis(1, at = 1:dim(outdt)[2], lab = colnames(outdt), cex.axis = 1.3)
   grid()
   for (r in 1:nrow(outdt)) {
-    y <- outdt[r, ]
-    points(1:dim(outdt)[2], y, col = mycol[r], pch = 19, cex = 1.8)
-    lines(1:dim(outdt)[2], y, col = mycol[r], lwd=1.5)
+    points(1:dim(outdt)[2], outdt[r, ], col = mycol[r], pch = 19, cex = 1.8)
+    lines(1:dim(outdt)[2], outdt[r, ], col = mycol[r], lwd = 1.5)
   }
-  # legend("topleft", legend = methods, 
-  #        col = mycol[1:length(methods)], lwd = 1, bty = "n", lty = NA, pch = 19)
 }
-# dev.off()
 ```
 
+---
 
-## Results 5: OG and continuous phenotype, diffdriver has high power and low FDR
+## OG, Continuous Phenotype
 
-For 200 genes, using five functional annotatio:ns,    we compare the sensitivity and false discovery rate of different algorithms using binary phenotype based on robust brglm algorithm.  The first 50 genes have differential selection while the left 150 genes do not. The parameter are
+Continuous phenotype with `para = c(0, 2, 0, 1)`: phenotype ~ N(0, 2), selection
+probability determined by logistic regression with intercept = 0 and slope = 1.
 
-`beta_f0=0,1`, `beta_gc=(0,2,0,1)`. 
-FFor functional effects,old OG is  drivermap's OG parameterfor   `(functypecode8,       mycons,         sift,    phylop100,           MA, intercept)= (0.44973800,    0.04907636, 0.80603212, -0.07773702, 0.66444635, 0.08851684)`  , while new BRCA's OG parameter is `((Intercept), functypecode8,        mycons,          sift,     phylop100)=`(-0.18617161,0.31563535,0.01956273,0.25640862,0.13973529,0.44973800)` . 
-The diffdrdiver model use new OG parameter to simulate and infer while diffdriverFix use new parameter to simulate data and old parameter to select genes, diffdriverFix2 use old parameter to simulate data and infer parameter. 
+### betaf0 = 0
 
+```{r og-conti-f0}
+Nsim <- 50
+rr <- 0.1
+methods <- c("DiffDriver", "Linear", "Fisher", "Binomial", "LogisticR")
+sample_sizes <- c(200, 400, 600, 800, 1000, 1200)
+mycol <- c("#FF3D2E","#00AFBB","#aa00ff","#0001f6","#fdae61")
+mylist1 <- mylist2 <- list()
+m.pvalue <- lapply(1:6, function(x) matrix(nrow = 200, ncol = Nsim))
 
-```{r}
-Nsim=50
-rr=0.1
-mylist1 <- list()
-mylist2 <- list()
-m1.pvalue=matrix(nrow = 200,ncol = Nsim)
-m2.pvalue=matrix(nrow = 200,ncol = Nsim)
-m3.pvalue=matrix(nrow = 200,ncol = Nsim)
-m4.pvalue=matrix(nrow = 200,ncol = Nsim)
-m5.pvalue=matrix(nrow = 200,ncol = Nsim)
-m6.pvalue=matrix(nrow = 200,ncol = Nsim)
-m7.pvalue=matrix(nrow=200,ncol=Nsim)
-m1.fdr=matrix(nrow = 200,ncol = Nsim)
-m2.fdr=matrix(nrow = 200,ncol = Nsim)
-m3.fdr=matrix(nrow = 200,ncol = Nsim)
-m4.fdr=matrix(nrow = 200,ncol = Nsim)
-m5.fdr=matrix(nrow = 200,ncol = Nsim)
-m6.fdr=matrix(nrow = 200,ncol = Nsim)
-m7.fdr=matrix(nrow = 200,ncol = Nsim)
+for (i1 in c(0)) {
+  n <- 0
+  for (i3 in sample_sizes) {
+    n <- n + 1
+    sensitivity1=c(); specificity1=c()
+    sensitivity2=c(); specificity2=c()
+    sensitivity3=c(); specificity3=c()
+    sensitivity4=c(); specificity4=c()
+    sensitivity5=c(); specificity5=c()
+    sensitivity6=c(); specificity6=c()
 
+    for (i2 in 1:200) {
+      load(paste0("/Volumes/Szhao/jiezhou/diffdata/gene239/conti/OCG/OG_gene/diff/pppower_betaf0=",i1,"_sample",i3,"_",i2,".Rd"))
+      load(paste0("/Volumes/Szhao/jiezhou/diffdata/gene239/conti/OCG/OG_gene/diffFix/pppower_betaf0=",i1,"_sample",i3,"_",i2,".Rd"))
+      load(paste0("/Volumes/Szhao/jiezhou/diffdata/gene239/conti/OCG/OG_gene/other/pppower_betaf0=",i1,"_sample",i3,"_",i2,".Rd"))
 
-
-for (i1 in c(0)){
-    n<-0
-    for(i3 in c(200,400,600, 800,1000,1200)){
-      n <- n+1
-	for (i2 in 1:200){
-load(paste0("/dartfs/rc/lab/S/Szhao/jiezhou/diffdata/gene239/conti/OCG/OG_gene/diff/pppower_betaf0=",i1,"_sample",i3,"_",i2,".Rd"))
-load(paste0("/dartfs/rc/lab/S/Szhao/jiezhou/diffdata/gene239/conti/OCG/OG_gene/diffFix/pppower_betaf0=",i1,"_sample",i3,"_",i2,".Rd"))
-load(paste0("/dartfs/rc/lab/S/Szhao/jiezhou/diffdata/gene239/conti/OCG/OG_gene/other/pppower_betaf0=",i1,"_sample",i3,"_",i2,".Rd"))
-
-
-       ##
-     sensitivity1=c()
-     specificity1=c()
-     sensitivity2=c()
-     specificity2=c()
-     sensitivity3=c()
-     specificity3=c()
-     sensitivity4=c()
-     specificity4=c()
-     sensitivity5=c()
-     specificity5=c()
-     sensitivity6=c()
-     specificity6=c()
-     sensitivity7=c()
-     specificity7=c()
-           
-              m1.pvalue[i2,]=simuresother[["m1.pvalue"]]
-              m2.pvalue[i2,]=simuresother[["m2.pvalue"]]
-              m3.pvalue[i2,]=simuresother[["m3.pvalue"]]
-              m4.pvalue[i2,]=simuresother[["m4.pvalue"]]
-              m5.pvalue[i2,]=simuresdiffFix[["m1.pvalue"]]
-              m6.pvalue[i2,]=simuresdiff[["m1.pvalue"]]
-
-            
-}
-     for (j2 in 1:Nsim) {
-         index1=which(p.adjust(m1.pvalue[,j2],method = "BH")<rr)
-            sensitivity1=c(sensitivity1,length(which(index1<51))/50)
-if (length(index1)!=0){
-                     specificity1=c(specificity1,length(which(index1>50))/length(index1))
-            }else{
-     specificity1=c(specificity1,0)
-}
-            
-             index1=which(p.adjust(m2.pvalue[,j2],method = "BH")<rr)
-             sensitivity2=c(sensitivity2,length(which(index1<51))/50)
-if (length(index1)!=0){
-                     specificity2=c(specificity2,length(which(index1>50))/length(index1))
-            }else{
-     specificity2=c(specificity2,0)
-}           
-
-           
-             index1=which(p.adjust(m3.pvalue[,j2],method = "BH")<rr)
-            sensitivity3=c(sensitivity3, length(which(index1<51))/50)
-if (length(index1)!=0){
-                     specificity3=c(specificity3,length(which(index1>50))/length(index1))
-            }else{
-     specificity3=c(specificity3,0)
-}
-
-
-
-             index1=which(p.adjust(m4.pvalue[,j2],method = "BH")<rr)
-            sensitivity4=c(sensitivity4,length(which(index1<51))/50)
-             if (length(index1)!=0){
-                     specificity4=c(specificity4,length(which(index1>50))/length(index1))
-            }else{
-     specificity4=c(specificity4,0)
-}
-
-            
-               index1=which(p.adjust(m5.pvalue[,j2],method = "BH")<rr)
-             sensitivity5=c(sensitivity5, length(which(index1<51))/50)
-               if (length(index1)!=0){
-                     specificity5=c(specificity5,length(which(index1>50))/length(index1))
-            }else{
-     specificity5=c(specificity5,0)
-}
-            
-             index1=which(p.adjust(m6.pvalue[,j2],method = "BH")<rr)
-                 sensitivity6=c(sensitivity6,length(which(index1<51))/50)
-      if (length(index1)!=0){
-                     specificity6=c(specificity6,length(which(index1>50))/length(index1))
-            }else{
-     specificity6=c(specificity6,0)
-}
-
-          }
-
-
+      m.pvalue[[1]][i2,] <- simuresother[["m1.pvalue"]]
+      m.pvalue[[2]][i2,] <- simuresother[["m2.pvalue"]]
+      m.pvalue[[3]][i2,] <- simuresother[["m3.pvalue"]]
+      m.pvalue[[4]][i2,] <- simuresother[["m4.pvalue"]]
+      m.pvalue[[5]][i2,] <- simuresdiffFix[["m1.pvalue"]]
+      m.pvalue[[6]][i2,] <- simuresdiff[["m1.pvalue"]]
+    }
+    for (j2 in 1:Nsim) {
+      for (k in 1:5) {
+        idx <- k
+        if (k == 1) idx <- 5
+        if (k == 2) idx <- 1
+        if (k == 3) idx <- 2
+        if (k == 4) idx <- 3
+        if (k == 5) idx <- 4
+        index1 <- which(p.adjust(m.pvalue[[idx]][, j2], method = "BH") < rr)
+        sens <- ifelse(length(index1) != 0, length(which(index1 < 51)) / 50, 0)
+        spec <- ifelse(length(index1) != 0, length(which(index1 > 50)) / length(index1), 0)
+        if (k == 1) { sensitivity5 <- c(sensitivity5, sens); specificity5 <- c(specificity5, spec) }
+        if (k == 2) { sensitivity1 <- c(sensitivity1, sens); specificity1 <- c(specificity1, spec) }
+        if (k == 3) { sensitivity2 <- c(sensitivity2, sens); specificity2 <- c(specificity2, spec) }
+        if (k == 4) { sensitivity3 <- c(sensitivity3, sens); specificity3 <- c(specificity3, spec) }
+        if (k == 5) { sensitivity4 <- c(sensitivity4, sens); specificity4 <- c(specificity4, spec) }
+      }
+    }
     mylist1[[n]] <- c(mean(sensitivity5), mean(sensitivity1), mean(sensitivity2), mean(sensitivity3), mean(sensitivity4))
     mylist2[[n]] <- c(mean(specificity5), mean(specificity1), mean(specificity2), mean(specificity3), mean(specificity4))
-    
-    }
+  }
 
-    outdt <- do.call(cbind, mylist1)
-#pdf("brglm5.pdf")   
-    rownames(outdt)=c("DiffDriver", "Linear", "Fisher", "Binomial", "LogisticR")
-    colnames(outdt) <- c(200,400, 600,800,1000,1200)
-    mycol=c("#FF3D2E","#00AFBB","#aa00ff","#0001f6","#fdae61")
- # mycol=c("#00AFBB","#2b8cbe","#aa00ff","#0001f6","#fdae61","#FF3D2E")
-x=1:dim(outdt)[2]  
+  outdt <- do.call(cbind, mylist1)
+  rownames(outdt) <- methods
+  colnames(outdt) <- sample_sizes
+  x <- 1:dim(outdt)[2]
 
-## Save pdf
-# pdf("/dartfs/rc/lab/S/Szhao/qiruiz/diffdriver/paper/5.a.pdf", width = 7.5, height = 5.5)
+  par(mfrow = c(1, 2), mar = c(5, 6, 4, 2))
+  plot(x, ylim = c(0, 0.6), col = "white", ylab = "Power",
+       xlab = "Number of samples", yaxt = "n", xaxt = "n", bty = "n",
+       cex.lab = 1.3, mgp = c(4, 1, 0))
+  title(paste("betaf0 =", i1, ", para = (0, 2, 0, 1)"))
+  axis(2, at = seq(0, 0.6, 0.1), lab = paste0(seq(0, 60, 10), "%"), las = 2, cex.axis = 1.3)
+  axis(1, at = x, lab = colnames(outdt), cex.axis = 1.3)
+  grid()
+  for (r in 1:5) {
+    points(x, outdt[r, ], col = mycol[r], pch = 19, cex = 1.8)
+    lines(x, outdt[r, ], col = mycol[r], lwd = 1.5)
+  }
+  legend("topleft", legend = methods, col = mycol[1:5], lwd = 1, bty = "n",
+         lty = rep(NA, 5), pch = rep(19, 5))
 
-par(mfrow=c(1,2), mar=c(5, 6, 4, 2))
-     plot(x,ylim=c(0,0.7), col="white", ylab = "Power", xlab="Number of samples", yaxt="n", xaxt="n", bty="n", cex.lab=1.3, mgp=c(4, 1, 0))
-      # title(paste("f0=",i1,",", "beta_gc=(",i2,",","1.513", ")", "P(E=1) =0.5", "P(positive selection|E=1)=0.8", "P(positive selection|E=1)=0.2", sep=" "))
-     title( paste( "beta_0=",i1,",","para=(0,2,0,2)",  sep=" "))
-    #yticks_val <- pretty(outdt)
-    yticks_val <- seq(0,0.7,0.1)
-    #axis(2, lab=paste0(yticks_val/Nsim * 100, " %"),las=2)
-    axis(2, at=yticks_val, lab=paste0(yticks_val*100, "%"),las=2, cex.axis=1.3)
-    axis(1, at=1:dim(outdt)[2], lab=colnames(outdt), cex.axis=1.3)
-    grid()
-    for (r in 1:5){
-y=outdt[r,]
-#y.sd=sddt[r,]
-      points(x,y,col=mycol[r], pch=19, cex=1.8)
-      lines(x,y,col=mycol[r], lwd=1.5)
- #    arrows(x0=x, y0=y-y.sd, x1=x, y1=y+y.sd, code=3, angle=90, length=0.1,col=mycol[r])
-    }
-    legend("topleft", legend = c("DiffDriver", "Linear", "Fisher", "Binomial", "LogisticR"), col= mycol[1:5], lwd=1, bty="n", lty=rep(NA,5), pch=rep(19,5))
-    
-    
-    
-     outdt <- do.call(cbind, mylist2)
-    
-     rownames(outdt)=c("DiffDriver", "Linear", "Fisher", "Binomial", "LogisticR")
-    colnames(outdt) <- c(200,400, 600,800,1000,1200)
-    mycol=c("#FF3D2E","#00AFBB","#aa00ff","#0001f6","#fdae61")
- # mycol=c("#00AFBB","#2b8cbe","#aa00ff","#0001f6","#fdae61","#FF3D2E")
-     plot(1:dim(outdt)[2],ylim=c(0,1), col="white", ylab = "FPR", xlab="Number of samples", yaxt="n", xaxt="n", bty="n", cex.lab=1.3, mgp=c(4, 1, 0))
-      # title(paste("f0=",i1,",", "beta_gc=(",i2,",","1.513", ")", "P(E=1) =0.5", "P(positive selection|E=1)=0.8", "P(positive selection|E=1)=0.2", sep=" "))
-     title( "para=(0,2,0,0), FDR=0.1")
-    #yticks_val <- pretty(outdt)
-    yticks_val <- seq(0,1,0.1)
-    #axis(2, lab=paste0(yticks_val/Nsim * 100, " %"),las=2)
-    axis(2, at=yticks_val, lab=paste0(yticks_val*100, "%"),las=2, cex.axis=1.3)
-    axis(1, at=1:dim(outdt)[2], lab=colnames(outdt), cex.axis=1.3)
-    grid()
-    for (r in 1:5){
-y=outdt[r,]
-#y.sd=sddt[r,]
-      points(x,y,col=mycol[r], pch=19, cex=1.8)
-      lines(x,y,col=mycol[r], lwd=1.5)
-#	arrows(x0=x, y0=y-y.sd, x1=x, y1=y+y.sd, code=3, angle=90, length=0.1,col=mycol[r])
-    }
-    # legend("topleft", legend = c("DiffDriver", "Linear", "Fisher", "Binomial", "LogisticR"), col= mycol[1:5], lwd=1, bty="n", lty=rep(NA,5), pch=rep(19,5))
+  outdt2 <- do.call(cbind, mylist2)
+  rownames(outdt2) <- methods
+  colnames(outdt2) <- sample_sizes
+  plot(x, ylim = c(0, 1), col = "white", ylab = "FPR",
+       xlab = "Number of samples", yaxt = "n", xaxt = "n", bty = "n",
+       cex.lab = 1.3, mgp = c(4, 1, 0))
+  title("para = (0, 2, 0, 0), FDR = 0.1")
+  axis(2, at = seq(0, 1, 0.1), lab = paste0(seq(0, 100, 10), "%"), las = 2, cex.axis = 1.3)
+  axis(1, at = x, lab = colnames(outdt2), cex.axis = 1.3)
+  grid()
+  for (r in 1:5) {
+    points(x, outdt2[r, ], col = mycol[r], pch = 19, cex = 1.8)
+    lines(x, outdt2[r, ], col = mycol[r], lwd = 1.5)
+  }
 }
-
-# dev.off()
 ```
 
+### betaf0 = 1
 
+```{r og-conti-f1}
+Nsim <- 50
+rr <- 0.1
+methods <- c("DiffDriver", "Linear", "Fisher", "Binomial", "LogisticR")
+sample_sizes <- c(200, 400, 600, 800, 1000, 1200)
+mycol <- c("#FF3D2E","#00AFBB","#aa00ff","#0001f6","#fdae61")
+mylist1 <- mylist2 <- list()
+m.pvalue <- lapply(1:6, function(x) matrix(nrow = 200, ncol = Nsim))
 
-```{r}
-Nsim=50
-rr=0.1
-mylist1 <- list()
-mylist2 <- list()
-m1.pvalue=matrix(nrow = 200,ncol = Nsim)
-m2.pvalue=matrix(nrow = 200,ncol = Nsim)
-m3.pvalue=matrix(nrow = 200,ncol = Nsim)
-m4.pvalue=matrix(nrow = 200,ncol = Nsim)
-m5.pvalue=matrix(nrow = 200,ncol = Nsim)
-m6.pvalue=matrix(nrow = 200,ncol = Nsim)
-m7.pvalue=matrix(nrow=200,ncol=Nsim)
-m1.fdr=matrix(nrow = 200,ncol = Nsim)
-m2.fdr=matrix(nrow = 200,ncol = Nsim)
-m3.fdr=matrix(nrow = 200,ncol = Nsim)
-m4.fdr=matrix(nrow = 200,ncol = Nsim)
-m5.fdr=matrix(nrow = 200,ncol = Nsim)
-m6.fdr=matrix(nrow = 200,ncol = Nsim)
-m7.fdr=matrix(nrow = 200,ncol = Nsim)
+for (i1 in c(1)) {
+  n <- 0
+  for (i3 in sample_sizes) {
+    n <- n + 1
+    sensitivity1=c(); specificity1=c()
+    sensitivity2=c(); specificity2=c()
+    sensitivity3=c(); specificity3=c()
+    sensitivity4=c(); specificity4=c()
+    sensitivity5=c(); specificity5=c()
+    sensitivity6=c(); specificity6=c()
 
-for (i1 in c(1)){
-    n<-0
-    for(i3 in c(200,400,600, 800,1000,1200)){
-      n <- n+1
-	for (i2 in 1:200){
-load(paste0("/dartfs/rc/lab/S/Szhao/jiezhou/diffdata/gene239/conti/OCG/OG_gene/diff/pppower_betaf0=",i1,"_sample",i3,"_",i2,".Rd"))
-load(paste0("/dartfs/rc/lab/S/Szhao/jiezhou/diffdata/gene239/conti/OCG/OG_gene/diffFix/pppower_betaf0=",i1,"_sample",i3,"_",i2,".Rd"))
-load(paste0("/dartfs/rc/lab/S/Szhao/jiezhou/diffdata/gene239/conti/OCG/OG_gene/other/pppower_betaf0=",i1,"_sample",i3,"_",i2,".Rd"))
+    for (i2 in 1:200) {
+      load(paste0("/Volumes/Szhao/jiezhou/diffdata/gene239/conti/OCG/OG_gene/diff/pppower_betaf0=",i1,"_sample",i3,"_",i2,".Rd"))
+      load(paste0("/Volumes/Szhao/jiezhou/diffdata/gene239/conti/OCG/OG_gene/diffFix/pppower_betaf0=",i1,"_sample",i3,"_",i2,".Rd"))
+      load(paste0("/Volumes/Szhao/jiezhou/diffdata/gene239/conti/OCG/OG_gene/other/pppower_betaf0=",i1,"_sample",i3,"_",i2,".Rd"))
 
-
-       ##
-     sensitivity1=c()
-     specificity1=c()
-     sensitivity2=c()
-     specificity2=c()
-     sensitivity3=c()
-     specificity3=c()
-     sensitivity4=c()
-     specificity4=c()
-     sensitivity5=c()
-     specificity5=c()
-     sensitivity6=c()
-     specificity6=c()
-     sensitivity7=c()
-     specificity7=c()
-           
-              m1.pvalue[i2,]=simuresother[["m1.pvalue"]]
-              m2.pvalue[i2,]=simuresother[["m2.pvalue"]]
-              m3.pvalue[i2,]=simuresother[["m3.pvalue"]]
-              m4.pvalue[i2,]=simuresother[["m4.pvalue"]]
-              m5.pvalue[i2,]=simuresdiffFix[["m1.pvalue"]]
-              m6.pvalue[i2,]=simuresdiff[["m1.pvalue"]]
-
-            
-}
-     for (j2 in 1:Nsim) {
-         index1=which(p.adjust(m1.pvalue[,j2],method = "BH")<rr)
-            sensitivity1=c(sensitivity1,length(which(index1<51))/50)
-if (length(index1)!=0){
-                     specificity1=c(specificity1,length(which(index1>50))/length(index1))
-            }else{
-     specificity1=c(specificity1,0)
-}
-            
-             index1=which(p.adjust(m2.pvalue[,j2],method = "BH")<rr)
-             sensitivity2=c(sensitivity2,length(which(index1<51))/50)
-if (length(index1)!=0){
-                     specificity2=c(specificity2,length(which(index1>50))/length(index1))
-            }else{
-     specificity2=c(specificity2,0)
-}           
-
-           
-             index1=which(p.adjust(m3.pvalue[,j2],method = "BH")<rr)
-            sensitivity3=c(sensitivity3, length(which(index1<51))/50)
-if (length(index1)!=0){
-                     specificity3=c(specificity3,length(which(index1>50))/length(index1))
-            }else{
-     specificity3=c(specificity3,0)
-}
-
-
-
-             index1=which(p.adjust(m4.pvalue[,j2],method = "BH")<rr)
-            sensitivity4=c(sensitivity4,length(which(index1<51))/50)
-             if (length(index1)!=0){
-                     specificity4=c(specificity4,length(which(index1>50))/length(index1))
-            }else{
-     specificity4=c(specificity4,0)
-}
-
-            
-               index1=which(p.adjust(m5.pvalue[,j2],method = "BH")<rr)
-             sensitivity5=c(sensitivity5, length(which(index1<51))/50)
-               if (length(index1)!=0){
-                     specificity5=c(specificity5,length(which(index1>50))/length(index1))
-            }else{
-     specificity5=c(specificity5,0)
-}
-            
-             index1=which(p.adjust(m6.pvalue[,j2],method = "BH")<rr)
-                 sensitivity6=c(sensitivity6,length(which(index1<51))/50)
-      if (length(index1)!=0){
-                     specificity6=c(specificity6,length(which(index1>50))/length(index1))
-            }else{
-     specificity6=c(specificity6,0)
-}
-
-          }
-
-     
+      m.pvalue[[1]][i2,] <- simuresother[["m1.pvalue"]]
+      m.pvalue[[2]][i2,] <- simuresother[["m2.pvalue"]]
+      m.pvalue[[3]][i2,] <- simuresother[["m3.pvalue"]]
+      m.pvalue[[4]][i2,] <- simuresother[["m4.pvalue"]]
+      m.pvalue[[5]][i2,] <- simuresdiffFix[["m1.pvalue"]]
+      m.pvalue[[6]][i2,] <- simuresdiff[["m1.pvalue"]]
+    }
+    for (j2 in 1:Nsim) {
+      for (k in 1:5) {
+        idx <- k
+        if (k == 1) idx <- 5
+        if (k == 2) idx <- 1
+        if (k == 3) idx <- 2
+        if (k == 4) idx <- 3
+        if (k == 5) idx <- 4
+        index1 <- which(p.adjust(m.pvalue[[idx]][, j2], method = "BH") < rr)
+        sens <- ifelse(length(index1) != 0, length(which(index1 < 51)) / 50, 0)
+        spec <- ifelse(length(index1) != 0, length(which(index1 > 50)) / length(index1), 0)
+        if (k == 1) { sensitivity5 <- c(sensitivity5, sens); specificity5 <- c(specificity5, spec) }
+        if (k == 2) { sensitivity1 <- c(sensitivity1, sens); specificity1 <- c(specificity1, spec) }
+        if (k == 3) { sensitivity2 <- c(sensitivity2, sens); specificity2 <- c(specificity2, spec) }
+        if (k == 4) { sensitivity3 <- c(sensitivity3, sens); specificity3 <- c(specificity3, spec) }
+        if (k == 5) { sensitivity4 <- c(sensitivity4, sens); specificity4 <- c(specificity4, spec) }
+      }
+    }
     mylist1[[n]] <- c(mean(sensitivity5), mean(sensitivity1), mean(sensitivity2), mean(sensitivity3), mean(sensitivity4))
     mylist2[[n]] <- c(mean(specificity5), mean(specificity1), mean(specificity2), mean(specificity3), mean(specificity4))
-    }
+  }
 
-    outdt <- do.call(cbind, mylist1)
-#pdf("brglm5.pdf")   
-    rownames(outdt)=c("DiffDriver", "Linear", "Fisher", "Binomial", "LogisticR")
-    colnames(outdt) <- c(200,400, 600,800,1000,1200)
-    mycol=c("#FF3D2E","#00AFBB","#aa00ff","#0001f6","#fdae61")
- # mycol=c("#00AFBB","#2b8cbe","#aa00ff","#0001f6","#fdae61","#FF3D2E")
-x=1:dim(outdt)[2]   
+  outdt <- do.call(cbind, mylist1)
+  rownames(outdt) <- methods
+  colnames(outdt) <- sample_sizes
+  x <- 1:dim(outdt)[2]
 
-## Save pdf
-# pdf("/dartfs/rc/lab/S/Szhao/qiruiz/diffdriver/paper/5.b.pdf", width = 7.5, height = 5.5)
+  par(mfrow = c(1, 2), mar = c(5, 6, 4, 2))
+  plot(x, ylim = c(0, 0.6), col = "white", ylab = "Power",
+       xlab = "Number of samples", yaxt = "n", xaxt = "n", bty = "n",
+       cex.lab = 1.3, mgp = c(4, 1, 0))
+  title(paste("betaf0 =", i1, ", para = (0, 2, 0, 2)"))
+  axis(2, at = seq(0, 1, 0.1), lab = paste0(seq(0, 100, 10), "%"), las = 2, cex.axis = 1.3)
+  axis(1, at = x, lab = colnames(outdt), cex.axis = 1.3)
+  grid()
+  for (r in 1:5) {
+    points(x, outdt[r, ], col = mycol[r], pch = 19, cex = 1.8)
+    lines(x, outdt[r, ], col = mycol[r], lwd = 1.5)
+  }
 
-# par(mfrow=c(1,2))
-par(mfrow=c(1,2), mar=c(5, 6, 4, 2))
-
-     plot(x,ylim=c(0,0.7), col="white", ylab = "Power", xlab="Number of samples", yaxt="n", xaxt="n", bty="n", cex.lab=1.3, mgp=c(4, 1, 0))
-      # title(paste("f0=",i1,",", "beta_gc=(",i2,",","1.513", ")", "P(E=1) =0.5", "P(positive selection|E=1)=0.8", "P(positive selection|E=1)=0.2", sep=" "))
-     title( paste( "beta_0=",i1,",","para=(0,2,0,2)",  sep=" "))
-    #yticks_val <- pretty(outdt)
-    yticks_val <- seq(0,0.7,0.1)
-    #axis(2, lab=paste0(yticks_val/Nsim * 100, " %"),las=2)
-    axis(2, at=yticks_val, lab=paste0(yticks_val*100, "%"),las=2, cex.axis=1.3)
-    axis(1, at=1:dim(outdt)[2], lab=colnames(outdt), cex.axis=1.3)
-    grid()
-    for (r in 1:5){
-y=outdt[r,]
-#y.sd=sddt[r,]
-      points(x,y,col=mycol[r], pch=19, cex=1.8)
-      lines(x,y,col=mycol[r], lwd=1.5)
- #    arrows(x0=x, y0=y-y.sd, x1=x, y1=y+y.sd, code=3, angle=90, length=0.1,col=mycol[r])
-    }
-    # legend("topleft", legend = c("DiffDriver", "Linear", "Fisher", "Binomial", "LogisticR"), col= mycol[1:5], lwd=1, bty="n", lty=rep(NA,5), pch=rep(19,5), cex=1.0)
-    
-    
-    
-     outdt <- do.call(cbind, mylist2)
-    
-     rownames(outdt)=c("DiffDriver", "Linear", "Fisher", "Binomial", "LogisticR")
-    colnames(outdt) <- c(200,400, 600,800,1000,1200)
-    mycol=c("#FF3D2E","#00AFBB","#aa00ff","#0001f6","#fdae61")
- # mycol=c("#00AFBB","#2b8cbe","#aa00ff","#0001f6","#fdae61","#FF3D2E")
-     plot(1:dim(outdt)[2],ylim=c(0,1), col="white", ylab = "FPR", xlab="Number of samples", yaxt="n", xaxt="n", bty="n", cex.lab=1.3, mgp=c(4, 1, 0))
-      # title(paste("f0=",i1,",", "beta_gc=(",i2,",","1.513", ")", "P(E=1) =0.5", "P(positive selection|E=1)=0.8", "P(positive selection|E=1)=0.2", sep=" "))
-     title( "para=(0,2,0,0), FDR=0.1")
-    #yticks_val <- pretty(outdt)
-    yticks_val <- seq(0,1,0.1)
-    #axis(2, lab=paste0(yticks_val/Nsim * 100, " %"),las=2)
-    axis(2, at=yticks_val, lab=paste0(yticks_val*100, "%"),las=2, cex.axis=1.3)
-    axis(1, at=1:dim(outdt)[2], lab=colnames(outdt), cex.axis=1.3)
-    grid()
-    for (r in 1:5){
-y=outdt[r,]
-#y.sd=sddt[r,]
-      points(x,y,col=mycol[r], pch=19, cex=1.8)
-      lines(x,y,col=mycol[r], lwd=1.5)
-#	arrows(x0=x, y0=y-y.sd, x1=x, y1=y+y.sd, code=3, angle=90, length=0.1,col=mycol[r])
-    }
-    # legend("topleft", legend = c("DiffDriver", "Linear", "Fisher", "Binomial", "LogisticR"), col= mycol[1:5], lwd=1, bty="n", lty=rep(NA,5), pch=rep(19,5))
+  outdt2 <- do.call(cbind, mylist2)
+  rownames(outdt2) <- methods
+  colnames(outdt2) <- sample_sizes
+  plot(x, ylim = c(0, 1), col = "white", ylab = "FPR",
+       xlab = "Number of samples", yaxt = "n", xaxt = "n", bty = "n",
+       cex.lab = 1.3, mgp = c(4, 1, 0))
+  title("para = (0, 2, 0, 0), FDR = 0.1")
+  axis(2, at = seq(0, 1, 0.1), lab = paste0(seq(0, 100, 10), "%"), las = 2, cex.axis = 1.3)
+  axis(1, at = x, lab = colnames(outdt2), cex.axis = 1.3)
+  grid()
+  for (r in 1:5) {
+    points(x, outdt2[r, ], col = mycol[r], pch = 19, cex = 1.8)
+    lines(x, outdt2[r, ], col = mycol[r], lwd = 1.5)
+  }
 }
-
-# dev.off()
-
 ```
-
-
-
-## Results 6: Sensitivity vs Specificity: continuous phenotype with BRCA TSG functional effects
-
-Aim: For 200 genes, using five functional annotatio:ns,    we compare the sensitivity and false discovery rate of different algorithms using binary phenotype based on robust brglm algorithm.  The first 50 genes have differential selection while the left 150 genes do not. The parameter are
-
-`beta_f0=0,1`, `beta_gc=(0,2,0,1)`.
-
-For functional effects,old TSG is  drivermap's TSG parameterfor   
-
-`(functypecode8,       mycons,         sift,    phylop100,           MA, intercept)= (0.45817859, 0.13676461, 0.12436937, 0.08272142, 0.30626015, 0.85127726)`  , while new BRCA's TSG parameter is `((Intercept), functypecode8,        mycons,          sift,     phylop100)=(0.8512773,     0.6136798,     0.3753932,     0.1661389,     0.358036,    0.2229025)` .  The diffdrdiver model use new TSG parameter to simulate and infer while diffdriverFix use new parameter to simulate data and old parameter to select genes, diffdriverFix2 use old parameter to simulate data and infer parameter. 
-
-```{r}
-Nsim=50
-rr=0.1
-mylist1 <- list()
-mylist2 <- list()
-m1.pvalue=matrix(nrow = 200,ncol = Nsim)
-m2.pvalue=matrix(nrow = 200,ncol = Nsim)
-m3.pvalue=matrix(nrow = 200,ncol = Nsim)
-m4.pvalue=matrix(nrow = 200,ncol = Nsim)
-m5.pvalue=matrix(nrow = 200,ncol = Nsim)
-m6.pvalue=matrix(nrow = 200,ncol = Nsim)
-m7.pvalue=matrix(nrow=200,ncol=Nsim)
-m1.fdr=matrix(nrow = 200,ncol = Nsim)
-m2.fdr=matrix(nrow = 200,ncol = Nsim)
-m3.fdr=matrix(nrow = 200,ncol = Nsim)
-m4.fdr=matrix(nrow = 200,ncol = Nsim)
-m5.fdr=matrix(nrow = 200,ncol = Nsim)
-m6.fdr=matrix(nrow = 200,ncol = Nsim)
-m7.fdr=matrix(nrow = 200,ncol = Nsim)
-
-for (i1 in c(0,1)){
-
-    mylist1 <- list()
-    mylist2 <- list()
-    n<-0
-    for(i3 in c(200,400,600, 800,1000,1200,1500,2000)){
-      n <- n+1
-	for (i2 in 1:200){
-load(paste0("/dartfs/rc/lab/S/Szhao/jiezhou/diffdata/gene239/conti/TSG_BRCA/conti/diff/pppower_betaf0=",i1,"_sample",i3,"_",i2,".Rd"))
-load(paste0("/dartfs/rc/lab/S/Szhao/jiezhou/diffdata/gene239/conti/TSG_BRCA/conti/diffFix/pppower_betaf0=",i1,"_sample",i3,"_",i2,".Rd"))
-load(paste0("/dartfs/rc/lab/S/Szhao/jiezhou/diffdata/gene239/conti/TSG_BRCA/conti/other/pppower_betaf0=",i1,"_sample",i3,"_",i2,".Rd"))
-
-
-       ##
-     sensitivity1=c()
-     specificity1=c()
-     sensitivity2=c()
-     specificity2=c()
-     sensitivity3=c()
-     specificity3=c()
-     sensitivity4=c()
-     specificity4=c()
-     sensitivity5=c()
-     specificity5=c()
-     sensitivity6=c()
-     specificity6=c()
-     sensitivity7=c()
-     specificity7=c()
-           
-              m1.pvalue[i2,]=simuresother[["m1.pvalue"]]
-              m2.pvalue[i2,]=simuresother[["m2.pvalue"]]
-              m3.pvalue[i2,]=simuresother[["m3.pvalue"]]
-              m4.pvalue[i2,]=simuresother[["m4.pvalue"]]
-              m5.pvalue[i2,]=simuresdiffFix[["m1.pvalue"]]
-              m6.pvalue[i2,]=simuresdiff[["m1.pvalue"]]
-
-            
-}
-     for (j2 in 1:Nsim) {
-         index1=which(p.adjust(m1.pvalue[,j2],method = "BH")<rr)
-            sensitivity1=c(sensitivity1,length(which(index1<51))/50)
-if (length(index1)!=0){
-                     specificity1=c(specificity1,length(which(index1>50))/length(index1))
-            }else{
-     specificity1=c(specificity1,0)
-}
-            
-             index1=which(p.adjust(m2.pvalue[,j2],method = "BH")<rr)
-             sensitivity2=c(sensitivity2,length(which(index1<51))/50)
-if (length(index1)!=0){
-                     specificity2=c(specificity2,length(which(index1>50))/length(index1))
-            }else{
-     specificity2=c(specificity2,0)
-}           
-
-           
-             index1=which(p.adjust(m3.pvalue[,j2],method = "BH")<rr)
-            sensitivity3=c(sensitivity3, length(which(index1<51))/50)
-if (length(index1)!=0){
-                     specificity3=c(specificity3,length(which(index1>50))/length(index1))
-            }else{
-     specificity3=c(specificity3,0)
-}
-
-
-
-             index1=which(p.adjust(m4.pvalue[,j2],method = "BH")<rr)
-            sensitivity4=c(sensitivity4,length(which(index1<51))/50)
-             if (length(index1)!=0){
-                     specificity4=c(specificity4,length(which(index1>50))/length(index1))
-            }else{
-     specificity4=c(specificity4,0)
-}
-
-            
-               index1=which(p.adjust(m5.pvalue[,j2],method = "BH")<rr)
-             sensitivity5=c(sensitivity5, length(which(index1<51))/50)
-               if (length(index1)!=0){
-                     specificity5=c(specificity5,length(which(index1>50))/length(index1))
-            }else{
-     specificity5=c(specificity5,0)
-}
-            
-             index1=which(p.adjust(m6.pvalue[,j2],method = "BH")<rr)
-                 sensitivity6=c(sensitivity6,length(which(index1<51))/50)
-      if (length(index1)!=0){
-                     specificity6=c(specificity6,length(which(index1>50))/length(index1))
-            }else{
-     specificity6=c(specificity6,0)
-}
-
-          }
-
-     
-      mylist1[[n]] <- c(mean(sensitivity5), mean(sensitivity1), mean(sensitivity2), mean(sensitivity3), mean(sensitivity4))
-      mylist2[[n]] <- c(mean(specificity5), mean(specificity1), mean(specificity2), mean(specificity3), mean(specificity4))
-    }
-
-    outdt <- do.call(cbind, mylist1)
-#pdf("brglm5.pdf")   
-     rownames(outdt)=c("DiffDriver", "Linear", "Fisher", "Binomial", "LogisticR")
-    colnames(outdt) <- c(200,400, 600,800,1000,1200,1500,2000)
-    mycol=c("#FF3D2E","#00AFBB","#aa00ff","#0001f6","#fdae61")
- # mycol=c("#00AFBB","#2b8cbe","#aa00ff","#0001f6","#fdae61","#FF3D2E")
-x=1:dim(outdt)[2]   
-
-# Save PDF
-# pdf(paste0("/dartfs/rc/lab/S/Szhao/qiruiz/diffdriver/paper/6.", i1, ".pdf"), width = 7.5, height = 5.5)
-par(mfrow=c(1,2), mar=c(5, 6, 4, 2))
-
-     plot(x,ylim=c(0,0.6), col="white", ylab = "Power", xlab="Number of samples", yaxt="n", xaxt="n", bty="n", cex.lab=1.3, mgp=c(4, 1, 0))
-      # title(paste("f0=",i1,",", "beta_gc=(",i2,",","1.513", ")", "P(E=1) =0.5", "P(positive selection|E=1)=0.8", "P(positive selection|E=1)=0.2", sep=" "))
-     title( paste( "beta_0=",i1,",","para=(0,2,0,1)",  sep=" "))
-    #yticks_val <- pretty(outdt)
-    yticks_val <- seq(0,0.6,0.1)
-    #axis(2, lab=paste0(yticks_val/Nsim * 100, " %"),las=2)
-    axis(2, at=yticks_val, lab=paste0(yticks_val*100, "%"),las=2, cex.axis=1.3)
-    axis(1, at=1:dim(outdt)[2], lab=colnames(outdt), cex.axis=1.1)
-    grid()
-    for (r in 1:5){
-y=outdt[r,]
-#y.sd=sddt[r,]
-      points(x,y,col=mycol[r], pch=19, cex=1.8)
-      lines(x,y,col=mycol[r], lwd=1.5)
- #    arrows(x0=x, y0=y-y.sd, x1=x, y1=y+y.sd, code=3, angle=90, length=0.1,col=mycol[r])
-    }
-    legend("topleft", legend = c("DiffDriver", "Linear", "Fisher", "Binomial", "LogisticR"), col= mycol[1:5], lwd=1, bty="n", lty=rep(NA,5), pch=rep(19,5))
-    
-    
-    
-     outdt <- do.call(cbind, mylist2)
-    
-     rownames(outdt)=c("DiffDriver", "Linear", "Fisher", "Binomial", "LogisticR")
-    colnames(outdt) <- c(200,400, 600,800,1000,1200,1500,2000)
- # mycol=c("#00AFBB","#2b8cbe","#aa00ff","#0001f6","#fdae61","#FF3D2E")
-     plot(1:dim(outdt)[2],ylim=c(0,1), col="white", ylab = "FPR", xlab="Number of samples", yaxt="n", xaxt="n", bty="n", cex.lab=1.3, mgp=c(4, 1, 0))
-      # title(paste("f0=",i1,",", "beta_gc=(",i2,",","1.513", ")", "P(E=1) =0.5", "P(positive selection|E=1)=0.8", "P(positive selection|E=1)=0.2", sep=" "))
-     title( "para=(0,2,0,0), FDR=0.1")
-    #yticks_val <- pretty(outdt)
-    yticks_val <- seq(0,1,0.1)
-    #axis(2, lab=paste0(yticks_val/Nsim * 100, " %"),las=2)
-    axis(2, at=yticks_val, lab=paste0(yticks_val*100, "%"),las=2, cex.axis=1.3)
-    axis(1, at=1:dim(outdt)[2], lab=colnames(outdt), cex.axis=1.1)
-    grid()
-    for (r in 1:5){
-y=outdt[r,]
-#y.sd=sddt[r,]
-      points(x,y,col=mycol[r], pch=19, cex=1.8)
-      lines(x,y,col=mycol[r], lwd=1.5)
-#	arrows(x0=x, y0=y-y.sd, x1=x, y1=y+y.sd, code=3, angle=90, length=0.1,col=mycol[r])
-    }
-    
-    # dev.off()
-}
-
-
-```
-
