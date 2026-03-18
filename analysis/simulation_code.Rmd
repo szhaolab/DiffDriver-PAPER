@@ -23,6 +23,11 @@ model. The simulation pipeline has three steps:
    p-value (`run_one_iteration`).
 3. **Repeat** — Run multiple iterations to estimate power (`run_simulation`).
 
+**Note:** The code below demonstrates the simulation pipeline for a single gene.
+The Figure 3 results in the paper are summarized from running simulations and
+DiffDriver on 200 genes. See [Simulation Power Results](Simulation-Power.html)
+for the full aggregated results.
+
 ### Source files
 
 | File | Description |
