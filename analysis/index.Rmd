@@ -13,12 +13,15 @@ DiffDriver is a model-based approach to identifying Differential Positive
 Selection across cancer patients. Our software is available at
 https://github.com/szhaolab/diffdriver.
 
+## Background Mutation Model Evaluation
+
+- [BMR Prediction](BMR.html) — Mutation prediction: signature vs regular methods
+
 ## Simulation
 
 - [Simulation Code](simulation_code.html) — Code and documentation for the simulation pipeline
 - [Simulation Power](Simulation-Power.html) — Sensitivity and FDR comparison across algorithms (binary phenotype, 200 genes)
 - [Simulation BMR](Simulation-BMR.html) — Power comparison when BMR relates to phenotype (with hotspots)
-- [BMR Prediction](BMR.html) — Mutation prediction: signature vs regular methods
 
 ## Real Data
 
