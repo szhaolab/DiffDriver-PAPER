@@ -5,6 +5,10 @@ navbar:
   left:
   - text: Home
     href: index.html
+  right:
+  - icon: fa-github
+    text: Source
+    href: https://github.com/szhaolab/DiffDriver-PAPER
 output:
   workflowr::wflow_html:
     toc: yes
