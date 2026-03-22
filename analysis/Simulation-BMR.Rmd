@@ -1,5 +1,5 @@
 ---
-title: 'Power comparison when bmr relates to phenotype: with two hotspots'
+title: "Simulation: Confounding Between Phenotype and Mutational Signatures"
 author: "Jie Zhou, Siming Zhao"
 date: "`r Sys.Date()`"
 output: 
@@ -15,14 +15,32 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Description
+## Overview
 
+This simulation demonstrates that when the phenotype is correlated with
+mutational signatures — but **not** with selection — benchmark methods produce
+false positives while DiffDriver correctly controls the false positive rate.
 
-Six signatures are generated from LUAD mutation data, using fasttopics model. The third signature is selected to generate the binary phenotype which has the maximum correlation with the third signature. The 63th nttype turns out to reach the maixmum of the third signture([signature plots](https://szhaolab.github.io/diff_driver_analysis/docs/sig10.html)). We then mannully place two hotspots within the the 63th annotation files. We demonstrate that even though phenotype have zero correlation with selection, all the benchmark methods have high type II error, i.e, clains pheotype correlates with selection. In contrast,  diffdriver algorithm  has low type II error.     
+### Simulation setup
 
-Version: f567d9622076b1b00e03100aa5672dd3f4696134
+- **Background mutation rate**: Estimated from LUAD mutation data (527 samples,
+  bootstrapped up to 1,500 samples).
+- **Mutational signatures**: Six signatures extracted from LUAD using
+  [fastTopics](https://stephenslab.github.io/fastTopics/). Signature 3 is
+  selected as the confounding signature.
+- **Phenotype**: Simulated to correlate with signature 3 ($R^2 = 0.78$), but
+  with **zero correlation** with selection.
+- **Mutations**: Simulated for a single gene using oncogene mutation rates
+  (background + selection), with two hotspots placed at nucleotide type 63
+  (the type with the highest loading in signature 3).
 
-updated description- 20250617 based on Slack. The simulation was for a single gene, we used background mutation rate from LUAD. LUAD contains 527 samples. We bootstrap to get to 1500 samples. We then simulate mutations using mutation rate ( background + selection) of oncogenes, with two hotspots with nttype 63. The phenotypeis simulated to correlated with mutational signature 3 with $R^2 = 0.78$.  
+### Key result
+
+Because the phenotype correlates with a mutational signature that affects
+overall mutation rates, benchmark methods (Linear regression, Fisher's exact
+test, Binomial test, Logistic regression) incorrectly detect differential
+selection. DiffDriver, which accounts for signature-based background mutation
+rates, maintains a low false positive rate.  
 
 
 
@@ -35,9 +53,9 @@ for (i1 in c(1)){
     n<-0
     for(i3 in c(200,400,600,800,1000,1200,1500)){
       n <- n+1
-      load(paste0("data/tsgsimple_LUAD_fixed_63/diff/pppower_betaf0=",i1, "_sample",i3,"_",i4,"_",rho,".Rd"))
-         load(paste0("data/tsgsimple_LUAD_fixed_63/diffFix/pppower_betaf0=",i1,"_sample",i3,"_",i4,"_", rho,".Rd"))
-          load(paste0("data/tsgsimple_LUAD_fixed_63/other/pppower_betaf0=",i1,"_sample",i3,"_",i4,"_",rho,".Rd"))
+      load(paste0("/Volumes/Szhao/jiezhou/diffdata/randombmrsingle/tsgsimple_LUAD_fixed_63/diff/pppower_betaf0=",i1, "_sample",i3,"_",i4,"_",rho,".Rd"))
+         load(paste0("/Volumes/Szhao/jiezhou/diffdata/randombmrsingle/tsgsimple_LUAD_fixed_63/diffFix/pppower_betaf0=",i1,"_sample",i3,"_",i4,"_", rho,".Rd"))
+          load(paste0("/Volumes/Szhao/jiezhou/diffdata/randombmrsingle/tsgsimple_LUAD_fixed_63/other/pppower_betaf0=",i1,"_sample",i3,"_",i4,"_",rho,".Rd"))
  
       m5.pvalue <- simuresdiff[["m1.pvalue"]]
        m6.pvalue <- simuresdiffFix[["m1.pvalue"]]

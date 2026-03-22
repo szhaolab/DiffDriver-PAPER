@@ -11,11 +11,11 @@
 
 <meta name="author" content="Jie Zhou, Siming Zhao" />
 
-<meta name="date" content="2026-02-12" />
+<meta name="date" content="2026-03-20" />
 
-<title>Power comparison when bmr relates to phenotype: with two hotspots</title>
+<title>Simulation: Confounding Between Phenotype and Mutational Signatures</title>
 
-<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.30/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
@@ -431,30 +431,18 @@ div.tocify {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">DiffDriver-PAPER</a>
+      <a class="navbar-brand" href="index.html">DiffDriver</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
   <a href="index.html">Home</a>
 </li>
-<li>
-  <a href="simulation.html">Simulation</a>
-</li>
-<li>
-  <a href="real-data.html">Real Data</a>
-</li>
-<li>
-  <a href="download.html">Download</a>
-</li>
-<li>
-  <a href="license.html">License</a>
-</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/szhaolab/DiffDriver-PAPER/">
-    <span class="fab fa-github"></span>
+  <a href="https://github.com/szhaolab/DiffDriver-PAPER">
+    <span class="fa fa-github"></span>
      
     Source
   </a>
@@ -476,10 +464,10 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Power comparison when bmr relates to
-phenotype: with two hotspots</h1>
+<h1 class="title toc-ignore">Simulation: Confounding Between Phenotype
+and Mutational Signatures</h1>
 <h4 class="author">Jie Zhou, Siming Zhao</h4>
-<h4 class="date">2026-02-12</h4>
+<h4 class="date">2026-03-20</h4>
 
 </div>
 
@@ -487,7 +475,7 @@ phenotype: with two hotspots</h1>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-ok text-success"
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -498,8 +486,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-</a>
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -508,13 +496,13 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2026-02-12
+<strong>Last updated:</strong> 2026-03-20
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 0
+aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>DiffDriver-PAPER/</code> <span
@@ -537,18 +525,21 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate"
+<div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git
-repository, you know the exact version of the code that produced these
-results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
 </div>
 </div>
 </div>
@@ -639,15 +630,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree473d1d97e04bdc3281458d9f6d114f68718c2c0atargetblank473d1d9a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtreed5708bd508f75f90c2f156a5c67ee1059eecc56ctargetblankd5708bda">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/473d1d97e04bdc3281458d9f6d114f68718c2c0a" target="_blank">473d1d9</a>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/d5708bd508f75f90c2f156a5c67ee1059eecc56c" target="_blank">d5708bd</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree473d1d97e04bdc3281458d9f6d114f68718c2c0atargetblank473d1d9a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtreed5708bd508f75f90c2f156a5c67ee1059eecc56ctargetblankd5708bda"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -657,7 +648,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/473d1d97e04bdc3281458d9f6d114f68718c2c0a" target="_blank">473d1d9</a>.
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/d5708bd508f75f90c2f156a5c67ee1059eecc56c" target="_blank">d5708bd</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -671,30 +662,14 @@ depends on. Below is the status of the Git repository when the results
 were generated:
 </p>
 <pre><code>
-Ignored files:
-    Ignored:    .Rhistory
-    Ignored:    .Rproj.user/
-
 Untracked files:
-    Untracked:  LICENSE
-    Untracked:  code/simulate.R
-    Untracked:  data/realdata/
-    Untracked:  data/tsgsimple_LUAD_fixed_63/
-    Untracked:  output/Clinical.csv
-    Untracked:  output/all_diffdriver_genes.txt
-    Untracked:  output/barplot-GO-bio-age.pdf
-    Untracked:  output/barplot-GO-bio-age.png
-    Untracked:  output/barplot-GO-bio-ins.pdf
-    Untracked:  output/barplot-GO-bio-ins.png
-    Untracked:  output/barplot-GO-bio-tmb.pdf
-    Untracked:  output/barplot-GO-bio-tmb.png
-    Untracked:  output/barplot-KEGG-ins.pdf
-    Untracked:  output/barplot-KEGG-tmb.pdf
+    Untracked:  analysis/material
 
 Unstaged changes:
-    Modified:   DiffDriver-PAPER.Rproj
-    Modified:   analysis/_site.yml
-    Deleted:    analysis/simulation_code.Rmd
+    Modified:   analysis/BMR.Rmd
+    Modified:   analysis/Clinical.Rmd
+    Modified:   analysis/Immune_Subtypes.Rmd
+    Modified:   analysis/Simulation-BMR.Rmd
 
 </code></pre>
 <p>
@@ -739,6 +714,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/szhaolab/DiffDriver-PAPER/0fd83c1089606d787731556114b0f561119104de/docs/Simulation-BMR.html" target="_blank">0fd83c1</a>
+</td>
+<td>
+Qirui Zhang
+</td>
+<td>
+2026-02-12
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -849,26 +841,38 @@ Initial version of DiffDriver project
 </div>
 </div>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">echo =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
-<div id="description" class="section level2">
-<h2>Description</h2>
-<p>Six signatures are generated from LUAD mutation data, using
-fasttopics model. The third signature is selected to generate the binary
-phenotype which has the maximum correlation with the third signature.
-The 63th nttype turns out to reach the maixmum of the third signture(<a
-href="https://szhaolab.github.io/diff_driver_analysis/docs/sig10.html">signature
-plots</a>). We then mannully place two hotspots within the the 63th
-annotation files. We demonstrate that even though phenotype have zero
-correlation with selection, all the benchmark methods have high type II
-error, i.e, clains pheotype correlates with selection. In contrast,
-diffdriver algorithm has low type II error.</p>
-<p>Version: f567d9622076b1b00e03100aa5672dd3f4696134</p>
-<p>updated description- 20250617 based on Slack. The simulation was for
-a single gene, we used background mutation rate from LUAD. LUAD contains
-527 samples. We bootstrap to get to 1500 samples. We then simulate
-mutations using mutation rate ( background + selection) of oncogenes,
-with two hotspots with nttype 63. The phenotypeis simulated to
-correlated with mutational signature 3 with <span
-class="math inline">\(R^2 = 0.78\)</span>.</p>
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p>This simulation demonstrates that when the phenotype is correlated
+with mutational signatures — but <strong>not</strong> with selection —
+benchmark methods produce false positives while DiffDriver correctly
+controls the false positive rate.</p>
+<div id="simulation-setup" class="section level3">
+<h3>Simulation setup</h3>
+<ul>
+<li><strong>Background mutation rate</strong>: Estimated from LUAD
+mutation data (527 samples, bootstrapped up to 1,500 samples).</li>
+<li><strong>Mutational signatures</strong>: Six signatures extracted
+from LUAD using <a
+href="https://stephenslab.github.io/fastTopics/">fastTopics</a>.
+Signature 3 is selected as the confounding signature.</li>
+<li><strong>Phenotype</strong>: Simulated to correlate with signature 3
+(<span class="math inline">\(R^2 = 0.78\)</span>), but with <strong>zero
+correlation</strong> with selection.</li>
+<li><strong>Mutations</strong>: Simulated for a single gene using
+oncogene mutation rates (background + selection), with two hotspots
+placed at nucleotide type 63 (the type with the highest loading in
+signature 3).</li>
+</ul>
+</div>
+<div id="key-result" class="section level3">
+<h3>Key result</h3>
+<p>Because the phenotype correlates with a mutational signature that
+affects overall mutation rates, benchmark methods (Linear regression,
+Fisher’s exact test, Binomial test, Logistic regression) incorrectly
+detect differential selection. DiffDriver, which accounts for
+signature-based background mutation rates, maintains a low false
+positive rate.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>Nsim<span class="ot">=</span><span class="dv">100</span></span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>mylist <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="cf">for</span> (i1 <span class="cf">in</span> <span class="fu">c</span>(<span class="dv">1</span>)){</span>
@@ -877,9 +881,9 @@ class="math inline">\(R^2 = 0.78\)</span>.</p>
 <span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>    n<span class="ot">&lt;-</span><span class="dv">0</span></span>
 <span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>    <span class="cf">for</span>(i3 <span class="cf">in</span> <span class="fu">c</span>(<span class="dv">200</span>,<span class="dv">400</span>,<span class="dv">600</span>,<span class="dv">800</span>,<span class="dv">1000</span>,<span class="dv">1200</span>,<span class="dv">1500</span>)){</span>
 <span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>      n <span class="ot">&lt;-</span> n<span class="sc">+</span><span class="dv">1</span></span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>      <span class="fu">load</span>(<span class="fu">paste0</span>(<span class="st">&quot;data/tsgsimple_LUAD_fixed_63/diff/pppower_betaf0=&quot;</span>,i1, <span class="st">&quot;_sample&quot;</span>,i3,<span class="st">&quot;_&quot;</span>,i4,<span class="st">&quot;_&quot;</span>,rho,<span class="st">&quot;.Rd&quot;</span>))</span>
-<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>         <span class="fu">load</span>(<span class="fu">paste0</span>(<span class="st">&quot;data/tsgsimple_LUAD_fixed_63/diffFix/pppower_betaf0=&quot;</span>,i1,<span class="st">&quot;_sample&quot;</span>,i3,<span class="st">&quot;_&quot;</span>,i4,<span class="st">&quot;_&quot;</span>, rho,<span class="st">&quot;.Rd&quot;</span>))</span>
-<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>          <span class="fu">load</span>(<span class="fu">paste0</span>(<span class="st">&quot;data/tsgsimple_LUAD_fixed_63/other/pppower_betaf0=&quot;</span>,i1,<span class="st">&quot;_sample&quot;</span>,i3,<span class="st">&quot;_&quot;</span>,i4,<span class="st">&quot;_&quot;</span>,rho,<span class="st">&quot;.Rd&quot;</span>))</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>      <span class="fu">load</span>(<span class="fu">paste0</span>(<span class="st">&quot;/Volumes/Szhao/jiezhou/diffdata/randombmrsingle/tsgsimple_LUAD_fixed_63/diff/pppower_betaf0=&quot;</span>,i1, <span class="st">&quot;_sample&quot;</span>,i3,<span class="st">&quot;_&quot;</span>,i4,<span class="st">&quot;_&quot;</span>,rho,<span class="st">&quot;.Rd&quot;</span>))</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>         <span class="fu">load</span>(<span class="fu">paste0</span>(<span class="st">&quot;/Volumes/Szhao/jiezhou/diffdata/randombmrsingle/tsgsimple_LUAD_fixed_63/diffFix/pppower_betaf0=&quot;</span>,i1,<span class="st">&quot;_sample&quot;</span>,i3,<span class="st">&quot;_&quot;</span>,i4,<span class="st">&quot;_&quot;</span>, rho,<span class="st">&quot;.Rd&quot;</span>))</span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>          <span class="fu">load</span>(<span class="fu">paste0</span>(<span class="st">&quot;/Volumes/Szhao/jiezhou/diffdata/randombmrsingle/tsgsimple_LUAD_fixed_63/other/pppower_betaf0=&quot;</span>,i1,<span class="st">&quot;_sample&quot;</span>,i3,<span class="st">&quot;_&quot;</span>,i4,<span class="st">&quot;_&quot;</span>,rho,<span class="st">&quot;.Rd&quot;</span>))</span>
 <span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a> </span>
 <span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>      m5.pvalue <span class="ot">&lt;-</span> simuresdiff[[<span class="st">&quot;m1.pvalue&quot;</span>]]</span>
 <span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>       m6.pvalue <span class="ot">&lt;-</span> simuresdiffFix[[<span class="st">&quot;m1.pvalue&quot;</span>]]</span>
@@ -912,7 +916,7 @@ class="math inline">\(R^2 = 0.78\)</span>.</p>
 <span id="cb2-41"><a href="#cb2-41" tabindex="-1"></a>  }</span>
 <span id="cb2-42"><a href="#cb2-42" tabindex="-1"></a>}</span>
 <span id="cb2-43"><a href="#cb2-43" tabindex="-1"></a>  }</span></code></pre></div>
-<p><img src="figure/Simulation-BMR.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/Simulation-BMR.Rmd/unnamed-chunk-2-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-1">
 Past versions of unnamed-chunk-2-1.png
@@ -959,23 +963,19 @@ Session information
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
-<pre><code>R version 4.4.2 (2024-10-31)
-Platform: x86_64-conda-linux-gnu
-Running under: Ubuntu 24.04.1 LTS
+<pre><code>R version 4.3.2 (2023-10-31)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Sonoma 14.6.1
 
 Matrix products: default
-BLAS/LAPACK: /dartfs-hpc/rc/home/p/f0070pp/.conda/envs/diffdriver/lib/libopenblasp-r0.3.29.so;  LAPACK version 3.12.0
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
 
 locale:
- [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
- [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
- [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
- [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
- [9] LC_ADDRESS=C               LC_TELEPHONE=C            
-[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 
-time zone: Etc/UTC
-tzcode source: system (glibc)
+time zone: America/New_York
+tzcode source: internal
 
 attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
@@ -984,17 +984,18 @@ other attached packages:
 [1] workflowr_1.7.1
 
 loaded via a namespace (and not attached):
- [1] vctrs_0.6.5       httr_1.4.7        cli_3.6.5         knitr_1.50       
- [5] rlang_1.1.6       xfun_0.52         stringi_1.8.7     processx_3.8.6   
- [9] promises_1.3.3    jsonlite_2.0.0    glue_1.8.0        rprojroot_2.0.4  
-[13] git2r_0.36.2      htmltools_0.5.8.1 httpuv_1.6.16     ps_1.9.1         
-[17] sass_0.4.10       rmarkdown_2.29    jquerylib_0.1.4   tibble_3.2.1     
-[21] evaluate_1.0.3    fastmap_1.2.0     yaml_2.3.10       lifecycle_1.0.4  
-[25] whisker_0.4.1     stringr_1.5.1     compiler_4.4.2    fs_1.6.6         
-[29] pkgconfig_2.0.3   Rcpp_1.0.14       rstudioapi_0.17.1 later_1.4.2      
-[33] digest_0.6.37     R6_2.6.1          pillar_1.10.2     callr_3.7.6      
-[37] magrittr_2.0.3    bslib_0.9.0       tools_4.4.2       cachem_1.1.0     
-[41] getPass_0.2-4    </code></pre>
+ [1] vctrs_0.7.1       httr_1.4.8        cli_3.6.5         knitr_1.51       
+ [5] rlang_1.1.7       xfun_0.56         stringi_1.8.7     otel_0.2.0       
+ [9] processx_3.8.5    promises_1.5.0    jsonlite_2.0.0    glue_1.8.0       
+[13] rprojroot_2.0.4   git2r_0.36.2      htmltools_0.5.9   httpuv_1.6.15    
+[17] ps_1.8.1          sass_0.4.10       rmarkdown_2.30    jquerylib_0.1.4  
+[21] tibble_3.3.1      evaluate_1.0.5    fastmap_1.2.0     yaml_2.3.12      
+[25] lifecycle_1.0.5   whisker_0.4.1     stringr_1.6.0     compiler_4.3.2   
+[29] fs_1.6.7          pkgconfig_2.0.3   Rcpp_1.1.1        rstudioapi_0.17.1
+[33] later_1.4.8       digest_0.6.39     R6_2.6.1          pillar_1.11.1    
+[37] callr_3.7.6       magrittr_2.0.4    bslib_0.10.0      tools_4.3.2      
+[41] cachem_1.1.0      getPass_0.2-4    </code></pre>
+</div>
 </div>
 </div>
 </div>

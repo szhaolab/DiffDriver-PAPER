@@ -46,7 +46,7 @@ kable(failure_data, format = "html", col.names = c("Phenotype and Tumor Type", "
 ```
 
 # Extracting and Summarizing Analysis Results
-This code segment scans through analysis output directories, identifies relevant result files (*_resdd.Rd), extracts corresponding tumor types, immune phenotypes, and analysis modes(sig/reg).
+This code segment scans through analysis output directories, identifies relevant result files (*_resdd.Rd), extracts corresponding tumor types and immune phenotypes. Only results from the signature model are included.
 ```{r}
 get_files <- function(outputdir, tumors = NULL, phenotypes = NULL) {
   files <- list.files(
@@ -93,8 +93,9 @@ get_files <- function(outputdir, tumors = NULL, phenotypes = NULL) {
 }
 
 filedf <- get_files(
-  outputdir = "/dartfs/rc/lab/S/Szhao/qiruiz/diffdriver/temp/output/new_plot/immunesubtypes"
+  outputdir = "/Volumes/Szhao/qiruiz/diffdriver/temp/output/new_plot/immunesubtypes"
 )
+filedf <- filedf[filedf$mode == "sig", ]
 ```
 
 # Summary Table of Significant Differential Genes
@@ -166,9 +167,8 @@ diff_table <-  get_diff_table(filedf, include_nonsig = FALSE)
 
 ```{r}
 library(DT)
-diff_table_sig <- subset(diff_table, mode == "sig")
 datatable(
-  diff_table_sig,
+  diff_table,
   extensions = 'Buttons',
   options = list(
     dom        = 'Bfrtip', 

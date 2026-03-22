@@ -1,5 +1,5 @@
 ---
-title: "Mutation Prediction: Signature VS Regular"
+title: "Background Mutation Model Evaluation"
 author: "Jie Zhou, Siming Zhao"
 date: "`r Sys.Date()`"
 output: 
@@ -29,39 +29,42 @@ colors=c("#E04C5C","#7DAF4C","#23AECE", "#FB894B", "#E7DA36",  "#187A51",
 
 
 
-## Description
+## Overview
 
-The regular and signature models are compared through the prediction of mutation number in chromosome `seq(1,22,2)` based on the bmr computed from chromosome `seq(2,22,2)`.   
+We evaluate two background mutation rate (BMR) models by their ability to
+predict mutation counts on held-out chromosomes. BMR is estimated from
+even-numbered chromosomes (`seq(2, 22, 2)`) and used to predict mutation counts
+on odd-numbered chromosomes (`seq(1, 22, 2)`).
 
-For regular model, the formula for bmr is
- `regmtx=matrix(colSums(ymatrix)/numberNttype,ncol=1)`
-`  weight=matrix(rowSums(ymatrix)/sum(ymatrix),ncol=1)`
- ` regmtx1=weight%*%t(regmtx)`
- 
- 
-For signature model, the formula for bmr is 
-` fit =fastTopics::fit_topic_model(yymatrix, k = k)`
-`  lltemp = fit$L`
- ` fftemp = fit$F`
- ` ff = matrix(min(fftemp)/2, nrow = totalnttype, ncol = k )`
- ` ff[as.numeric(rownames(fftemp)), ] <- fftemp`
- ` ll = matrix(rep(colMeans(lltemp), nsample), nrow = nsample, byrow =T)`
-  `rownames(ll) <- id`
- ` ll[rownames(lltemp),] <- lltemp`
- ` colnames(ll)=paste("weight",1:k, sep = "")`
-  `colnames(ff)=paste("factor",1:k,sep="")`
- ` ff=cbind(sigmapping[,c("context","alt_allele")],ff)`
-  `sigmtx=ll%*%t(ff[,-c(1,2)]) # rows are samples, column is nttypecode`
+### Regular model
 
+The regular model estimates BMR as a product of per-sample mutation rates and
+per-nucleotide-type mutation rates:
 
-## Regular vs Signature: new annotation + expanded reg 9 to reg 96
+$$\hat{Y}_{s,t} = \left(\frac{\sum_t Y_{s,t}}{\sum_{s,t} Y_{s,t}}\right) \cdot \left(\frac{\sum_s Y_{s,t}}{N_t}\right)$$
+
+where $Y_{s,t}$ is the mutation count for sample $s$ and nucleotide type $t$,
+and $N_t$ is the number of nucleotides of type $t$.
+
+### Signature model
+
+The signature model uses non-negative matrix factorization
+([fastTopics](https://stephenslab.github.io/fastTopics/)) to decompose the
+mutation count matrix into sample loadings ($L$) and signature factors ($F$):
+
+$$\hat{Y} = L \cdot F^\top$$
+
+This captures sample-specific mutational processes (e.g., APOBEC, UV damage)
+that the regular model cannot represent.
+
+## Predicted vs Observed Mutation Counts
 
 ```{r}
-load("data/realdata/ntcode_conversion.Rd")
+load("/Volumes/Szhao/jiezhou/diffdata/realdata/ntcode_conversion.Rd")
 name=ntcode_conversion$name
 key=paste0(substr(name,1,3),",",substr(name,6,6))
 ntcode_conversion[,1]=key
-code=read.table(file = "/dartfs/rc/lab/S/Szhao/qiruiz/DiffDriver-PAPER/data/realdata/coding_data_03212024.txt", header=T)
+code=read.table(file = "/Volumes/Szhao/jiezhou/diffdata/realdata/coding_data_03212024.txt", header=T)
 for (i in 1:nrow(ntcode_conversion)) {
   index=which(code$Key==ntcode_conversion$name[i])
   ntcode_conversion$code[i]=code$Value[index]
@@ -72,11 +75,11 @@ rownames(bridge)=c()
 
 
 ```{r, fig.height=2, fig.width=6}
-load("data/realdata/resultsRegular9.Rd")
+load("/Volumes/Szhao/jiezhou/diffdata/realdata/resultsRegular9.Rd")
 results9=results[-16]
-load("data/realdata/resultsRegular96.Rd")
+load("/Volumes/Szhao/jiezhou/diffdata/realdata/resultsRegular96.Rd")
 results96=results
-load("data/realdata/resultsSignature_newanno.Rd")
+load("/Volumes/Szhao/jiezhou/diffdata/realdata/resultsSignature_newanno.Rd")
 results1=results
 
 
