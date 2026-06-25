@@ -1,9 +1,10 @@
 #' Run a single simulation iteration: simulate mutations, then test
-run_one_iteration <- function(binary, sganno, sgmatrix, bmrpars, betaf0, Nsample, beta_gc, para, rho, tau, hot, hmm) {
+run_one_iteration <- function(binary, sganno, sgmatrix, bmrpars, betaf0, Nsample,
+                              beta_gc, beta_gcFix = beta_gc, para, hot, hmm) {
   simdata <- simulate_selection(
     binary = binary, sganno = sganno, sgmatrix = sgmatrix,
     bmrpars = bmrpars, betaf0 = betaf0, Nsample = Nsample,
-    beta_gc = beta_gc, para = para, rho = rho, tau = tau,
+    beta_gc = beta_gc, beta_gcFix = beta_gcFix, para = para,
     hot = hot, hmm = hmm
   )
   mut <- do.call(rbind, simdata$mutlist)
@@ -26,7 +27,9 @@ run_one_iteration <- function(binary, sganno, sgmatrix, bmrpars, betaf0, Nsample
 }
 
 #' Run simulation over multiple iterations
-run_simulation <- function(binary, Niter, sganno, sgmatrix, Nsample, para, rho, tau = 1, bmrpars, betaf0, beta_gc, hot = 0, hmm) {
+run_simulation <- function(binary, Niter, sganno, sgmatrix, Nsample, para,
+                           bmrpars, betaf0, beta_gc, beta_gcFix = beta_gc,
+                           hot = 0, hmm) {
   pvalues <- rep(NA, Niter)
   nummuts <- rep(0, Niter)
 
@@ -35,7 +38,7 @@ run_simulation <- function(binary, Niter, sganno, sgmatrix, Nsample, para, rho, 
     res <- run_one_iteration(
       binary = binary, sganno = sganno, sgmatrix = sgmatrix,
       bmrpars = bmrpars, betaf0 = betaf0, Nsample = Nsample,
-      beta_gc = beta_gc, para = para, rho = rho, tau = tau,
+      beta_gc = beta_gc, beta_gcFix = beta_gcFix, para = para,
       hot = hot, hmm = hmm
     )
     pvalues[iter] <- res$pvalue

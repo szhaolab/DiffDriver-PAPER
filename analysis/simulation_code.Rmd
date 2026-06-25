@@ -32,7 +32,7 @@ for the full aggregated results.
 
 | File | Description |
 |------|-------------|
-| `code/simulate_functions.R` | `hotspotseq()` — generates hotspot indicator sequence via HMM; `simulate_selection()` — simulates phenotypes, selection, and mutations for one gene |
+| `code/simulate_functions.R` | `hotspotseq()` — generates hotspot indicator sequence via HMM; `simulate_selection()` — simulates phenotypes, selection, and mutations for one gene (background rate is constant across samples) |
 | `code/run_simulation.R`     | `run_one_iteration()` — single iteration: simulate then test; `run_simulation()` — loop over iterations |
 
 ## Setup
@@ -72,20 +72,17 @@ load("data/hmm.rda")        # loads hmm
 | Parameter | Value | Description |
 |-----------|-------|-------------|
 | `betaf0`  | 1     | Baseline functional effect size (log-scale fold change) |
-| `number_sample` | 120 | Total number of samples (split equally into case/control) |
-| `rho`     | 0.4   | Correlation between phenotype and BMR fold change |
+| `number_sample` | 1200 | Total number of samples (split equally into case/control) |
 | `gene_index` | 1  | Index into ri200/fanno200 for the target gene |
 | `ifbinary` | TRUE | Use binary (case/control) phenotype |
 | `Niter`   | 1     | Number of simulation iterations |
 | `para`    | (0.5, 0.5) | Binary: c(selection prob for cases, selection prob for controls). Continuous: c(mean, sd, intercept, slope) where intercept and slope are logistic regression coefficients determining selection probability as a function of phenotype |
-| `tau`     | 1     | BMR fold-change scaling factor |
 | `hot`     | 0     | Hotspot flag (0 = no hotspot effect) |
 
 ```{r parameters}
 betaf0 <- 1
 number_sample <- 1200
-rho <- 0
-gene_index <- 1 # pick a gene from the 239 genes to run. 
+gene_index <- 1 # pick a gene from the 239 genes to run.
 ifbinary <- TRUE
 Niter <- 1
 para <- c(0.5, 0.5)
@@ -104,8 +101,6 @@ simuresdiff <- run_simulation(
   betaf0   = betaf0,
   beta_gc  = beta_gc,
   para     = para,
-  rho      = rho,
-  tau      = 1,
   hot      = 0,
   hmm      = hmm
 )

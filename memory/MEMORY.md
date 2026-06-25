@@ -1,0 +1,1 @@
+- [coselens-benchmark](coselens-benchmark.md) — benchmarking coselens vs DiffDriver: true-BMR injection into dndscv + shared-cohort requirement
