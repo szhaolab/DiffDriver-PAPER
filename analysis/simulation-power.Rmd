@@ -108,8 +108,6 @@ simuresdiff <- run_simulation(
 )
 ```
 
-## Results
-
 ```{r results}
 cat("P-values:", simuresdiff$pvalues, "\n")
 cat("Number of mutations:", simuresdiff$nummuts, "\n")
