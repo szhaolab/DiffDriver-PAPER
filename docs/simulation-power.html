@@ -1,0 +1,1864 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Jie Zhou, Siming Zhao" />
+
+<meta name="date" content="2026-07-03" />
+
+<title>Simulation: Pipeline and Power Results</title>
+
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/font-awesome-6.5.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #204a87; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #204a87; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+
+.sourceCode .row {
+  width: 100%;
+}
+.sourceCode {
+  overflow-x: auto;
+}
+.code-folding-btn {
+  margin-right: -30px;
+}
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">DiffDriver</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/szhaolab/DiffDriver-PAPER">
+    <span class="fa fa-github"></span>
+     
+    Source
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Simulation: Pipeline and Power Results</h1>
+<h4 class="author">Jie Zhou, Siming Zhao</h4>
+<h4 class="date">2026-07-03</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2026-07-03
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 1
+</p>
+<p>
+<strong>Knit directory:</strong> <code>DiffDriver-PAPER/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.1). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguncommittedchanges"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The R Markdown file has staged changes. To know which version of the
+R Markdown file created these results, you’ll want to first commit it to
+the Git repo. If you’re still working on the analysis, you can ignore
+this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20260206code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20260206)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20260206code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20260206)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtreea98dfa047bc81326539a28f45165a9f2b081389dtargetblanka98dfa0a">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/a98dfa047bc81326539a28f45165a9f2b081389d" target="_blank">a98dfa0</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtreea98dfa047bc81326539a28f45165a9f2b081389dtargetblanka98dfa0a"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/a98dfa047bc81326539a28f45165a9f2b081389d" target="_blank">a98dfa0</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .DS_Store
+    Ignored:    .claude/
+    Ignored:    analysis/.Rhistory
+    Ignored:    analysis/index.html
+    Ignored:    data/.DS_Store
+
+Untracked files:
+    Untracked:  code/consolidate_results.R
+    Untracked:  code/simulate_all_genes.R
+    Untracked:  code/simulate_functions_2.R
+    Untracked:  data/beta_og.Rd
+    Untracked:  data/parmASHmean.rda
+
+Unstaged changes:
+    Modified:   analysis/index.Rmd
+    Modified:   analysis/simulation-power.Rmd
+    Deleted:    analysis/simulation_code.Rmd
+    Modified:   code/simulate_functions.R
+    Modified:   data/beta_tsg.Rd
+
+Staged changes:
+    Renamed1:   analysis/Simulation-Power.Rmd
+    Renamed2:   analysis/simulation-power.Rmd
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/simulation-power.Rmd</code>) and
+HTML (<code>docs/Simulation-Power.html</code>) files. If you’ve
+configured a remote Git repository (see <code>?wflow_git_remote</code>),
+click on the hyperlinks in the table below to view the files as they
+were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/szhaolab/DiffDriver-PAPER/aaf93d041ee9a6507977c440ffade511965d2656/docs/Simulation-Power.html" target="_blank">aaf93d0</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-03-18
+</td>
+<td>
+Clean up Simulation-Power and remove unused pages
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/szhaolab/DiffDriver-PAPER/0fd83c1089606d787731556114b0f561119104de/docs/Simulation-Power.html" target="_blank">0fd83c1</a>
+</td>
+<td>
+Qirui Zhang
+</td>
+<td>
+2026-02-12
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/szhaolab/DiffDriver-PAPER/e24c6e47e942b61fd9ddfbdf7d4fc2227da1a41a/docs/Simulation-Power.html" target="_blank">e24c6e4</a>
+</td>
+<td>
+Qirui Zhang
+</td>
+<td>
+2026-02-12
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/szhaolab/DiffDriver-PAPER/9a0bb7790dba734c5cc9cac40877f04eb38069c4/docs/Simulation-Power.html" target="_blank">9a0bb77</a>
+</td>
+<td>
+Qirui Zhang
+</td>
+<td>
+2026-02-12
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/szhaolab/DiffDriver-PAPER/24651e6932aa64a38d1a5446c965228717a837ca/docs/Simulation-Power.html" target="_blank">24651e6</a>
+</td>
+<td>
+Qirui Zhang
+</td>
+<td>
+2026-02-12
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/szhaolab/DiffDriver-PAPER/df72d559f8650560dfdd4fb9daa5ca6a97036d54/docs/Simulation-Power.html" target="_blank">df72d55</a>
+</td>
+<td>
+Qirui Zhang
+</td>
+<td>
+2026-02-07
+</td>
+<td>
+Build site.
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p>This document runs a simulation study to evaluate the power of the
+DiffDriver model. The simulation pipeline has three steps:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Simulate phenotype and mutations</strong> — Given a gene’s
+positional annotation and functional features, generate binary
+(case/control) phenotypes and somatic mutations under a selection model
+(<code>simulate_selection</code>).</li>
+<li><strong>Test for differential driver signal</strong> — Apply
+<code>ddmodel_binary</code> (or <code>ddmodel</code> for continuous
+phenotypes) to the simulated data to obtain a p-value
+(<code>run_one_iteration</code>).</li>
+<li><strong>Repeat</strong> — Run multiple iterations to estimate power
+(<code>run_simulation</code>).</li>
+</ol>
+<p><strong>Note:</strong> The <a
+href="#run-simulation-with-a-single-gene">Run simulation with a single
+gene</a> section below demonstrates the pipeline for one gene. The <a
+href="#run-simulation-on-200-genes">Run simulation on 200 genes</a>
+section then reports the full aggregated comparison, reproducing Figure
+3 in the paper.</p>
+<div id="source-files" class="section level3">
+<h3>Source files</h3>
+<table>
+<colgroup>
+<col width="31%" />
+<col width="68%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>File</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>code/simulate_functions.R</code></td>
+<td><code>hotspotseq()</code> — generates hotspot indicator sequence via
+HMM; <code>simulate_selection()</code> — simulates phenotypes,
+selection, and mutations for one gene (background rate is constant
+across samples); <code>power_comparediffiFix()</code> /
+<code>power_compareotheri()</code> — run
+<code>simulate_selection()</code> over <code>Niter</code> iterations and
+apply DiffDriver / the benchmark tests</td>
+</tr>
+<tr class="even">
+<td><code>code/run_simulation.R</code></td>
+<td><code>run_one_iteration()</code> — single iteration: simulate then
+test; <code>run_simulation()</code> — loop over iterations</td>
+</tr>
+<tr class="odd">
+<td><code>code/simulate_all_genes.R</code></td>
+<td>master script: loops <code>power_compare*()</code> over all 200
+genes for a given setting (see <a href="#data-generation">Data
+generation</a>)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="setup" class="section level2">
+<h2>Setup</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;diffdriver&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;data.table&quot;</span>)</span></code></pre></div>
+<pre><code>Warning: package &#39;data.table&#39; was built under R version 4.3.3</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;code/simulate_functions.R&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;code/run_simulation.R&quot;</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span></code></pre></div>
+<div id="load-data" class="section level3">
+<h3>Load data</h3>
+<ul>
+<li><strong>ri200</strong> — list of 239 genes; each element is a list
+of 9 annotation data.frames (one per nucleotide type), containing
+positional and mutation type information.</li>
+<li><strong>fanno200</strong> — matching list of functional annotation
+matrices (features used in the selection model: intercept,
+functypecode8, conservation scores, etc.).</li>
+<li><strong>beta_gc</strong> — TSG functional effect coefficients (from
+<code>TSGpars</code>): intercept, functypecode8, mycons, sift,
+phylop100, MA.</li>
+<li><strong>BMR</strong> — background mutation rates, one per nucleotide
+type (9 values).</li>
+<li><strong>hmm</strong> — HMM parameters for hotspot detection:
+transition probabilities and logistic regression coefficients (10
+values).</li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;data/ri200.Rd&quot;</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;data/fanno200.Rd&quot;</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;data/beta_tsg.Rd&quot;</span>)   <span class="co"># loads beta_gc</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;data/BMR.rda&quot;</span>)        <span class="co"># loads BMR</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;data/hmm.rda&quot;</span>)        <span class="co"># loads hmm</span></span></code></pre></div>
+</div>
+</div>
+<div id="simulation-parameters" class="section level2">
+<h2>Simulation parameters</h2>
+<table>
+<colgroup>
+<col width="35%" />
+<col width="22%" />
+<col width="41%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parameter</th>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>betaf0</code></td>
+<td>1</td>
+<td>Baseline functional effect size (log-scale fold change)</td>
+</tr>
+<tr class="even">
+<td><code>number_sample</code></td>
+<td>1200</td>
+<td>Total number of samples (split equally into case/control)</td>
+</tr>
+<tr class="odd">
+<td><code>gene_index</code></td>
+<td>1</td>
+<td>Index into ri200/fanno200 for the target gene</td>
+</tr>
+<tr class="even">
+<td><code>ifbinary</code></td>
+<td>TRUE</td>
+<td>Use binary (case/control) phenotype</td>
+</tr>
+<tr class="odd">
+<td><code>Niter</code></td>
+<td>1</td>
+<td>Number of simulation iterations</td>
+</tr>
+<tr class="even">
+<td><code>para</code></td>
+<td>(0.5, 0.5)</td>
+<td>Binary: c(selection prob for cases, selection prob for controls).
+Continuous: c(mean, sd, intercept, slope) where intercept and slope are
+logistic regression coefficients determining selection probability as a
+function of phenotype</td>
+</tr>
+<tr class="odd">
+<td><code>hot</code></td>
+<td>0</td>
+<td>Hotspot flag (0 = no hotspot effect)</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>betaf0 <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>number_sample <span class="ot">&lt;-</span> <span class="dv">1200</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>gene_index <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="co"># pick a gene from the 239 genes to run.</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>ifbinary <span class="ot">&lt;-</span> <span class="cn">TRUE</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>Niter <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>para <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>)</span></code></pre></div>
+</div>
+<div id="run-simulation-with-a-single-gene" class="section level2">
+<h2>Run simulation with a single gene</h2>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>simuresdiff <span class="ot">&lt;-</span> <span class="fu">run_simulation</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  <span class="at">binary   =</span> ifbinary,</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="at">Niter    =</span> Niter,</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  <span class="at">sganno   =</span> ri200[[gene_index]],</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>  <span class="at">sgmatrix =</span> fanno200[[gene_index]],</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>  <span class="at">bmrpars  =</span> <span class="fu">log</span>(BMR),</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>  <span class="at">Nsample  =</span> number_sample,</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>  <span class="at">betaf0   =</span> betaf0,</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>  <span class="at">beta_gc  =</span> beta_gc,</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>  <span class="at">para     =</span> para,</span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>  <span class="at">hot      =</span> <span class="dv">0</span>,</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>  <span class="at">hmm      =</span> hmm</span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>[1] 1</code></pre>
+</div>
+<div id="results" class="section level2">
+<h2>Results</h2>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;P-values:&quot;</span>, simuresdiff<span class="sc">$</span>pvalues, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
+<pre><code>P-values: 0.8847664 </code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Number of mutations:&quot;</span>, simuresdiff<span class="sc">$</span>nummuts, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
+<pre><code>Number of mutations: 9 </code></pre>
+<hr />
+</div>
+<div id="run-simulation-on-200-genes" class="section level2">
+<h2>Run simulation on 200 genes</h2>
+<p>For 200 genes with five functional annotations, we compare the power
+(sensitivity) and false positive rate (FPR) of DiffDriver against
+benchmark methods: Linear regression, Fisher’s exact test, Binomial
+test, and Logistic Regression.</p>
+<p>The first 50 genes have differential selection while the remaining
+150 do not. FDR is controlled at 0.1 using the BH procedure.</p>
+<div id="simulation-parameters-1" class="section level3">
+<h3>Simulation parameters</h3>
+<p>These simulations use the same pipeline described in the <a
+href="#overview">simulation pipeline</a> above. The key parameters
+are:</p>
+<table>
+<colgroup>
+<col width="45%" />
+<col width="54%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>betaf0</code></td>
+<td>Baseline functional effect size: 0 or 1</td>
+</tr>
+<tr class="even">
+<td><code>para</code></td>
+<td>Binary: selection probabilities c(prob_case, prob_control).
+Continuous: c(mean, sd, intercept, slope)</td>
+</tr>
+<tr class="odd">
+<td><code>beta_gc</code></td>
+<td>Simulation functional effect coefficients — the true effect sizes
+used to generate mutations (from <code>data/beta_tsg.Rd</code> or
+<code>data/beta_og.Rd</code>)</td>
+</tr>
+<tr class="even">
+<td><code>Nsample</code></td>
+<td>Varies: 200, 400, 600, 800, 1000, 1200, 1500</td>
+</tr>
+<tr class="odd">
+<td><code>Niter</code></td>
+<td>100 (binary) or 50 (continuous) per gene</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="functional-effect-coefficients" class="section level3">
+<h3>Functional effect coefficients</h3>
+<p>Two distinct coefficient sets are involved and should not be
+confused.</p>
+<p><strong>Simulation coefficients</strong> (<code>beta_gc</code>) — the
+<em>true</em> functional effect sizes used to generate the mutations,
+loaded from <code>data/beta_tsg.Rd</code> /
+<code>data/beta_og.Rd</code>:</p>
+<ul>
+<li><strong>TSG</strong>:
+<code>(Intercept)=0.851, functypecode8=0.614, mycons=0.375, sift=0.166, phylop100=0.358, MA=0.223</code></li>
+<li><strong>OG</strong>:
+<code>(Intercept)=0.450, functypecode8=0.049, mycons=0.806, sift=-0.078, phylop100=0.664, MA=0.089</code></li>
+</ul>
+<p><strong>DiffDriver built-in parameters</strong> — the fixed
+coefficients DiffDriver uses when it is <em>run</em> (the
+<code>diffFix</code> method’s <code>beta_gcFix</code>). These are a
+property of the fitted model, not of the simulation:</p>
+<ul>
+<li><strong>TSG</strong>:
+<code>(Intercept)=0.851, functypecode8=0.458, mycons=0.137, sift=0.124, phylop100=0.083, MA=0.306</code></li>
+<li><strong>OG</strong>:
+<code>(Intercept)=0.450, functypecode8=-0.186, mycons=0.316, sift=0.020, phylop100=0.256, MA=0.140</code></li>
+</ul>
+</div>
+<div id="data-generation" class="section level3">
+<h3>Data generation</h3>
+<p>All result files below were produced by the master script
+<code>code/simulate_all_genes.R</code>, which loops over all 200 genes
+for a given setting (consolidating the original per-gene scripts). It is
+run once per <strong>setting</strong> and <strong>method</strong>:</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="ex">Rscript</span> code/simulate_all_genes.R <span class="op">&lt;</span>SETTING<span class="op">&gt;</span> <span class="op">&lt;</span>METHOD<span class="op">&gt;</span></span></code></pre></div>
+<p><code>METHOD</code> is <code>diffFix</code> (DiffDriver) or
+<code>other</code> (the benchmark methods: Linear, Fisher, Binomial,
+Logistic); each folder stores the two methods’ <code>.Rd</code> outputs
+in its <code>diffFix/</code> and <code>other/</code> subdirectories.
+<code>SETTING</code> selects the gene set, phenotype, and selection
+probability. The exact command for each folder is shown with its results
+below.</p>
+<p>The master script sources <code>code/simulate_functions.R</code>, so
+the mutations are generated by the same
+<code>simulate_selection()</code> function documented in the <a
+href="#overview">pipeline</a> above (the
+<code>power_comparediffiFix</code> / <code>power_compareotheri</code>
+drivers there call it and apply DiffDriver / the benchmark tests); the
+diffdriver package supplies the underlying model and test functions.</p>
+<hr />
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">echo =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>METHODS      <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;DiffDriver&quot;</span>, <span class="st">&quot;Linear&quot;</span>, <span class="st">&quot;Fisher&quot;</span>, <span class="st">&quot;Binomial&quot;</span>, <span class="st">&quot;LogisticR&quot;</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>MYCOL        <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;#FF3D2E&quot;</span>, <span class="st">&quot;#00AFBB&quot;</span>, <span class="st">&quot;#aa00ff&quot;</span>, <span class="st">&quot;#0001f6&quot;</span>, <span class="st">&quot;#fdae61&quot;</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>FDR          <span class="ot">&lt;-</span> <span class="fl">0.1</span></span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a>BINARY_SIZES <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">200</span>, <span class="dv">400</span>, <span class="dv">600</span>, <span class="dv">800</span>, <span class="dv">1000</span>, <span class="dv">1200</span>, <span class="dv">1500</span>)</span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>CONTI_SIZES  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">200</span>, <span class="dv">400</span>, <span class="dv">600</span>, <span class="dv">800</span>, <span class="dv">1000</span>, <span class="dv">1200</span>)</span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a><span class="co"># Directory holding the consolidated result files (one pppower_all_&lt;SETTING&gt;_&lt;METHOD&gt;.Rd</span></span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a><span class="co"># per setting/method, produced by code/consolidate_results.R).</span></span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a>CONSOL_DIR   <span class="ot">&lt;-</span> <span class="st">&quot;/private/tmp/claude-501/-Users-siming-Dartmouth-College-Dropbox-Siming-Zhao-Project-diffDriver-DiffDriver-PAPER/46eb8cab-f9ce-420f-8359-609ff7701606/scratchpad/consolidated&quot;</span></span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a></span>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a><span class="co">#&#39; Compute power and FPR from p-value matrices across simulation iterations.</span></span>
+<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a><span class="co">#&#39; @param m.pvalue List of matrices (one per method), each n_genes x Nsim.</span></span>
+<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a><span class="co">#&#39; @param Nsim Number of simulation iterations.</span></span>
+<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a><span class="co">#&#39; @param n_true Number of true positive genes (first n_true genes).</span></span>
+<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a>compute_metrics <span class="ot">&lt;-</span> <span class="cf">function</span>(m.pvalue, Nsim, <span class="at">n_true =</span> <span class="dv">50</span>) {</span>
+<span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a>  n_methods <span class="ot">&lt;-</span> <span class="fu">length</span>(m.pvalue)</span>
+<span id="cb13-19"><a href="#cb13-19" tabindex="-1"></a>  power <span class="ot">&lt;-</span> fpr <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n_methods)</span>
+<span id="cb13-20"><a href="#cb13-20" tabindex="-1"></a>  <span class="cf">for</span> (k <span class="cf">in</span> <span class="fu">seq_len</span>(n_methods)) {</span>
+<span id="cb13-21"><a href="#cb13-21" tabindex="-1"></a>    sens <span class="ot">&lt;-</span> fpr_vals <span class="ot">&lt;-</span> <span class="fu">numeric</span>(Nsim)</span>
+<span id="cb13-22"><a href="#cb13-22" tabindex="-1"></a>    <span class="cf">for</span> (j <span class="cf">in</span> <span class="fu">seq_len</span>(Nsim)) {</span>
+<span id="cb13-23"><a href="#cb13-23" tabindex="-1"></a>      hits <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">p.adjust</span>(m.pvalue[[k]][, j], <span class="at">method =</span> <span class="st">&quot;BH&quot;</span>) <span class="sc">&lt;</span> FDR)</span>
+<span id="cb13-24"><a href="#cb13-24" tabindex="-1"></a>      <span class="cf">if</span> (<span class="fu">length</span>(hits) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb13-25"><a href="#cb13-25" tabindex="-1"></a>        sens[j]     <span class="ot">&lt;-</span> <span class="fu">sum</span>(hits <span class="sc">&lt;=</span> n_true) <span class="sc">/</span> n_true</span>
+<span id="cb13-26"><a href="#cb13-26" tabindex="-1"></a>        fpr_vals[j] <span class="ot">&lt;-</span> <span class="fu">sum</span>(hits <span class="sc">&gt;</span> n_true) <span class="sc">/</span> <span class="fu">length</span>(hits)</span>
+<span id="cb13-27"><a href="#cb13-27" tabindex="-1"></a>      }</span>
+<span id="cb13-28"><a href="#cb13-28" tabindex="-1"></a>    }</span>
+<span id="cb13-29"><a href="#cb13-29" tabindex="-1"></a>    power[k] <span class="ot">&lt;-</span> <span class="fu">mean</span>(sens)</span>
+<span id="cb13-30"><a href="#cb13-30" tabindex="-1"></a>    fpr[k]   <span class="ot">&lt;-</span> <span class="fu">mean</span>(fpr_vals)</span>
+<span id="cb13-31"><a href="#cb13-31" tabindex="-1"></a>  }</span>
+<span id="cb13-32"><a href="#cb13-32" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">power =</span> power, <span class="at">fpr =</span> fpr)</span>
+<span id="cb13-33"><a href="#cb13-33" tabindex="-1"></a>}</span>
+<span id="cb13-34"><a href="#cb13-34" tabindex="-1"></a></span>
+<span id="cb13-35"><a href="#cb13-35" tabindex="-1"></a><span class="co">#&#39; Load consolidated simulation results and compute power/FPR per sample size.</span></span>
+<span id="cb13-36"><a href="#cb13-36" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb13-37"><a href="#cb13-37" tabindex="-1"></a><span class="co">#&#39; Each setting has two consolidated files under CONSOL_DIR,</span></span>
+<span id="cb13-38"><a href="#cb13-38" tabindex="-1"></a><span class="co">#&#39; pppower_all_&lt;setting&gt;_diffFix.Rd and _other.Rd, each holding a list</span></span>
+<span id="cb13-39"><a href="#cb13-39" tabindex="-1"></a><span class="co">#&#39; `simures_all` keyed by the per-gene filename stem. The p-values are:</span></span>
+<span id="cb13-40"><a href="#cb13-40" tabindex="-1"></a><span class="co">#&#39;   DiffDriver                       = diffFix result$m1.pvalue</span></span>
+<span id="cb13-41"><a href="#cb13-41" tabindex="-1"></a><span class="co">#&#39;   Linear/Fisher/Binomial/LogisticR = other   result$m1--m4.pvalue</span></span>
+<span id="cb13-42"><a href="#cb13-42" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb13-43"><a href="#cb13-43" tabindex="-1"></a><span class="co">#&#39; @param setting Setting name (e.g. &quot;TSG_binary_0.8&quot;) selecting the two files.</span></span>
+<span id="cb13-44"><a href="#cb13-44" tabindex="-1"></a><span class="co">#&#39; @param file_fn Function(Nsample, gene_index) returning the per-gene .Rd name;</span></span>
+<span id="cb13-45"><a href="#cb13-45" tabindex="-1"></a><span class="co">#&#39;   its stem (without .Rd) is the key into simures_all.</span></span>
+<span id="cb13-46"><a href="#cb13-46" tabindex="-1"></a><span class="co">#&#39; @param sample_sizes Vector of sample sizes to evaluate.</span></span>
+<span id="cb13-47"><a href="#cb13-47" tabindex="-1"></a><span class="co">#&#39; @param Nsim Max number of iterations to use. If NULL, uses all available.</span></span>
+<span id="cb13-48"><a href="#cb13-48" tabindex="-1"></a><span class="co">#&#39; @param n_genes Number of genes (default 200).</span></span>
+<span id="cb13-49"><a href="#cb13-49" tabindex="-1"></a>load_and_compute <span class="ot">&lt;-</span> <span class="cf">function</span>(setting, file_fn, sample_sizes,</span>
+<span id="cb13-50"><a href="#cb13-50" tabindex="-1"></a>                             <span class="at">Nsim =</span> <span class="cn">NULL</span>, <span class="at">n_genes =</span> <span class="dv">200</span>) {</span>
+<span id="cb13-51"><a href="#cb13-51" tabindex="-1"></a>  n_methods <span class="ot">&lt;-</span> <span class="fu">length</span>(METHODS)</span>
+<span id="cb13-52"><a href="#cb13-52" tabindex="-1"></a>  ed <span class="ot">&lt;-</span> <span class="fu">new.env</span>(); <span class="fu">load</span>(<span class="fu">file.path</span>(CONSOL_DIR, <span class="fu">sprintf</span>(<span class="st">&quot;pppower_all_%s_diffFix.Rd&quot;</span>, setting)), <span class="at">envir =</span> ed)</span>
+<span id="cb13-53"><a href="#cb13-53" tabindex="-1"></a>  eo <span class="ot">&lt;-</span> <span class="fu">new.env</span>(); <span class="fu">load</span>(<span class="fu">file.path</span>(CONSOL_DIR, <span class="fu">sprintf</span>(<span class="st">&quot;pppower_all_%s_other.Rd&quot;</span>,   setting)), <span class="at">envir =</span> eo)</span>
+<span id="cb13-54"><a href="#cb13-54" tabindex="-1"></a>  diff_all  <span class="ot">&lt;-</span> ed<span class="sc">$</span>simures_all</span>
+<span id="cb13-55"><a href="#cb13-55" tabindex="-1"></a>  other_all <span class="ot">&lt;-</span> eo<span class="sc">$</span>simures_all</span>
+<span id="cb13-56"><a href="#cb13-56" tabindex="-1"></a></span>
+<span id="cb13-57"><a href="#cb13-57" tabindex="-1"></a>  power_mat <span class="ot">&lt;-</span> fpr_mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(</span>
+<span id="cb13-58"><a href="#cb13-58" tabindex="-1"></a>    <span class="at">nrow =</span> n_methods, <span class="at">ncol =</span> <span class="fu">length</span>(sample_sizes),</span>
+<span id="cb13-59"><a href="#cb13-59" tabindex="-1"></a>    <span class="at">dimnames =</span> <span class="fu">list</span>(METHODS, sample_sizes)</span>
+<span id="cb13-60"><a href="#cb13-60" tabindex="-1"></a>  )</span>
+<span id="cb13-61"><a href="#cb13-61" tabindex="-1"></a>  <span class="cf">for</span> (s <span class="cf">in</span> <span class="fu">seq_along</span>(sample_sizes)) {</span>
+<span id="cb13-62"><a href="#cb13-62" tabindex="-1"></a>    N <span class="ot">&lt;-</span> sample_sizes[s]</span>
+<span id="cb13-63"><a href="#cb13-63" tabindex="-1"></a>    m.pvalue <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb13-64"><a href="#cb13-64" tabindex="-1"></a>    n_iter   <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb13-65"><a href="#cb13-65" tabindex="-1"></a>    <span class="cf">for</span> (g <span class="cf">in</span> <span class="fu">seq_len</span>(n_genes)) {</span>
+<span id="cb13-66"><a href="#cb13-66" tabindex="-1"></a>      key   <span class="ot">&lt;-</span> <span class="fu">sub</span>(<span class="st">&quot;</span><span class="sc">\\</span><span class="st">.Rd$&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="fu">file_fn</span>(N, g))</span>
+<span id="cb13-67"><a href="#cb13-67" tabindex="-1"></a>      sdiff <span class="ot">&lt;-</span> diff_all[[key]]</span>
+<span id="cb13-68"><a href="#cb13-68" tabindex="-1"></a>      soth  <span class="ot">&lt;-</span> other_all[[key]]</span>
+<span id="cb13-69"><a href="#cb13-69" tabindex="-1"></a>      <span class="cf">if</span> (<span class="fu">is.null</span>(n_iter)) {</span>
+<span id="cb13-70"><a href="#cb13-70" tabindex="-1"></a>        n_avail <span class="ot">&lt;-</span> <span class="fu">length</span>(sdiff[[<span class="st">&quot;m1.pvalue&quot;</span>]])</span>
+<span id="cb13-71"><a href="#cb13-71" tabindex="-1"></a>        n_iter  <span class="ot">&lt;-</span> <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(Nsim)) <span class="fu">min</span>(Nsim, n_avail) <span class="cf">else</span> n_avail</span>
+<span id="cb13-72"><a href="#cb13-72" tabindex="-1"></a>        m.pvalue <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="fu">seq_len</span>(n_methods), <span class="cf">function</span>(x)</span>
+<span id="cb13-73"><a href="#cb13-73" tabindex="-1"></a>          <span class="fu">matrix</span>(<span class="at">nrow =</span> n_genes, <span class="at">ncol =</span> n_iter))</span>
+<span id="cb13-74"><a href="#cb13-74" tabindex="-1"></a>      }</span>
+<span id="cb13-75"><a href="#cb13-75" tabindex="-1"></a>      idx <span class="ot">&lt;-</span> <span class="fu">seq_len</span>(n_iter)</span>
+<span id="cb13-76"><a href="#cb13-76" tabindex="-1"></a>      m.pvalue[[<span class="dv">1</span>]][g, ] <span class="ot">&lt;-</span> sdiff[[<span class="st">&quot;m1.pvalue&quot;</span>]][idx]</span>
+<span id="cb13-77"><a href="#cb13-77" tabindex="-1"></a>      m.pvalue[[<span class="dv">2</span>]][g, ] <span class="ot">&lt;-</span> soth[[<span class="st">&quot;m1.pvalue&quot;</span>]][idx]</span>
+<span id="cb13-78"><a href="#cb13-78" tabindex="-1"></a>      m.pvalue[[<span class="dv">3</span>]][g, ] <span class="ot">&lt;-</span> soth[[<span class="st">&quot;m2.pvalue&quot;</span>]][idx]</span>
+<span id="cb13-79"><a href="#cb13-79" tabindex="-1"></a>      m.pvalue[[<span class="dv">4</span>]][g, ] <span class="ot">&lt;-</span> soth[[<span class="st">&quot;m3.pvalue&quot;</span>]][idx]</span>
+<span id="cb13-80"><a href="#cb13-80" tabindex="-1"></a>      m.pvalue[[<span class="dv">5</span>]][g, ] <span class="ot">&lt;-</span> soth[[<span class="st">&quot;m4.pvalue&quot;</span>]][idx]</span>
+<span id="cb13-81"><a href="#cb13-81" tabindex="-1"></a>    }</span>
+<span id="cb13-82"><a href="#cb13-82" tabindex="-1"></a>    metrics <span class="ot">&lt;-</span> <span class="fu">compute_metrics</span>(m.pvalue, n_iter)</span>
+<span id="cb13-83"><a href="#cb13-83" tabindex="-1"></a>    power_mat[, s] <span class="ot">&lt;-</span> metrics<span class="sc">$</span>power</span>
+<span id="cb13-84"><a href="#cb13-84" tabindex="-1"></a>    fpr_mat[, s]   <span class="ot">&lt;-</span> metrics<span class="sc">$</span>fpr</span>
+<span id="cb13-85"><a href="#cb13-85" tabindex="-1"></a>  }</span>
+<span id="cb13-86"><a href="#cb13-86" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">power =</span> power_mat, <span class="at">fpr =</span> fpr_mat)</span>
+<span id="cb13-87"><a href="#cb13-87" tabindex="-1"></a>}</span>
+<span id="cb13-88"><a href="#cb13-88" tabindex="-1"></a></span>
+<span id="cb13-89"><a href="#cb13-89" tabindex="-1"></a><span class="co">#&#39; Plot power and FPR side by side.</span></span>
+<span id="cb13-90"><a href="#cb13-90" tabindex="-1"></a><span class="co">#&#39; @param res Output from load_and_compute (list with power and fpr matrices).</span></span>
+<span id="cb13-91"><a href="#cb13-91" tabindex="-1"></a><span class="co">#&#39; @param power_title Title for the power panel.</span></span>
+<span id="cb13-92"><a href="#cb13-92" tabindex="-1"></a><span class="co">#&#39; @param fpr_title Title for the FPR panel.</span></span>
+<span id="cb13-93"><a href="#cb13-93" tabindex="-1"></a><span class="co">#&#39; @param power_ylim Y-axis upper limit for the power panel.</span></span>
+<span id="cb13-94"><a href="#cb13-94" tabindex="-1"></a><span class="co">#&#39; @param show_legend Whether to show the method legend on the power panel.</span></span>
+<span id="cb13-95"><a href="#cb13-95" tabindex="-1"></a>plot_power_fpr <span class="ot">&lt;-</span> <span class="cf">function</span>(res, power_title, fpr_title,</span>
+<span id="cb13-96"><a href="#cb13-96" tabindex="-1"></a>                           <span class="at">power_ylim =</span> <span class="fl">0.4</span>, <span class="at">show_legend =</span> <span class="cn">TRUE</span>) {</span>
+<span id="cb13-97"><a href="#cb13-97" tabindex="-1"></a>  x     <span class="ot">&lt;-</span> <span class="fu">seq_len</span>(<span class="fu">ncol</span>(res<span class="sc">$</span>power))</span>
+<span id="cb13-98"><a href="#cb13-98" tabindex="-1"></a>  sizes <span class="ot">&lt;-</span> <span class="fu">colnames</span>(res<span class="sc">$</span>power)</span>
+<span id="cb13-99"><a href="#cb13-99" tabindex="-1"></a>  <span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">4</span>, <span class="dv">2</span>))</span>
+<span id="cb13-100"><a href="#cb13-100" tabindex="-1"></a></span>
+<span id="cb13-101"><a href="#cb13-101" tabindex="-1"></a>  <span class="co"># Power panel</span></span>
+<span id="cb13-102"><a href="#cb13-102" tabindex="-1"></a>  <span class="fu">plot</span>(x, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, power_ylim), <span class="at">col =</span> <span class="st">&quot;white&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Power&quot;</span>,</span>
+<span id="cb13-103"><a href="#cb13-103" tabindex="-1"></a>       <span class="at">xlab =</span> <span class="st">&quot;Number of samples&quot;</span>, <span class="at">yaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">xaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>,</span>
+<span id="cb13-104"><a href="#cb13-104" tabindex="-1"></a>       <span class="at">cex.lab =</span> <span class="fl">1.3</span>, <span class="at">mgp =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">0</span>))</span>
+<span id="cb13-105"><a href="#cb13-105" tabindex="-1"></a>  <span class="fu">title</span>(power_title)</span>
+<span id="cb13-106"><a href="#cb13-106" tabindex="-1"></a>  yticks <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, power_ylim, <span class="fl">0.1</span>)</span>
+<span id="cb13-107"><a href="#cb13-107" tabindex="-1"></a>  <span class="fu">axis</span>(<span class="dv">2</span>, <span class="at">at =</span> yticks, <span class="at">lab =</span> <span class="fu">paste0</span>(yticks <span class="sc">*</span> <span class="dv">100</span>, <span class="st">&quot;%&quot;</span>), <span class="at">las =</span> <span class="dv">2</span>, <span class="at">cex.axis =</span> <span class="fl">1.3</span>)</span>
+<span id="cb13-108"><a href="#cb13-108" tabindex="-1"></a>  <span class="fu">axis</span>(<span class="dv">1</span>, <span class="at">at =</span> x, <span class="at">lab =</span> sizes, <span class="at">cex.axis =</span> <span class="fl">1.3</span>)</span>
+<span id="cb13-109"><a href="#cb13-109" tabindex="-1"></a>  <span class="fu">grid</span>()</span>
+<span id="cb13-110"><a href="#cb13-110" tabindex="-1"></a>  <span class="cf">for</span> (r <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(res<span class="sc">$</span>power))) {</span>
+<span id="cb13-111"><a href="#cb13-111" tabindex="-1"></a>    <span class="fu">points</span>(x, res<span class="sc">$</span>power[r, ], <span class="at">col =</span> MYCOL[r], <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">cex =</span> <span class="fl">1.8</span>)</span>
+<span id="cb13-112"><a href="#cb13-112" tabindex="-1"></a>    <span class="fu">lines</span>(x, res<span class="sc">$</span>power[r, ], <span class="at">col =</span> MYCOL[r], <span class="at">lwd =</span> <span class="fl">1.5</span>)</span>
+<span id="cb13-113"><a href="#cb13-113" tabindex="-1"></a>  }</span>
+<span id="cb13-114"><a href="#cb13-114" tabindex="-1"></a>  <span class="cf">if</span> (show_legend) {</span>
+<span id="cb13-115"><a href="#cb13-115" tabindex="-1"></a>    <span class="fu">legend</span>(<span class="st">&quot;topleft&quot;</span>, <span class="at">legend =</span> METHODS, <span class="at">col =</span> MYCOL[<span class="fu">seq_along</span>(METHODS)],</span>
+<span id="cb13-116"><a href="#cb13-116" tabindex="-1"></a>           <span class="at">lwd =</span> <span class="dv">1</span>, <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>, <span class="at">lty =</span> <span class="cn">NA</span>, <span class="at">pch =</span> <span class="dv">19</span>)</span>
+<span id="cb13-117"><a href="#cb13-117" tabindex="-1"></a>  }</span>
+<span id="cb13-118"><a href="#cb13-118" tabindex="-1"></a></span>
+<span id="cb13-119"><a href="#cb13-119" tabindex="-1"></a>  <span class="co"># FPR panel</span></span>
+<span id="cb13-120"><a href="#cb13-120" tabindex="-1"></a>  <span class="fu">plot</span>(x, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">col =</span> <span class="st">&quot;white&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;FPR&quot;</span>,</span>
+<span id="cb13-121"><a href="#cb13-121" tabindex="-1"></a>       <span class="at">xlab =</span> <span class="st">&quot;Number of samples&quot;</span>, <span class="at">yaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">xaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>,</span>
+<span id="cb13-122"><a href="#cb13-122" tabindex="-1"></a>       <span class="at">cex.lab =</span> <span class="fl">1.3</span>, <span class="at">mgp =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">0</span>))</span>
+<span id="cb13-123"><a href="#cb13-123" tabindex="-1"></a>  <span class="fu">title</span>(fpr_title)</span>
+<span id="cb13-124"><a href="#cb13-124" tabindex="-1"></a>  <span class="fu">axis</span>(<span class="dv">2</span>, <span class="at">at =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.1</span>), <span class="at">lab =</span> <span class="fu">paste0</span>(<span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">100</span>, <span class="dv">10</span>), <span class="st">&quot;%&quot;</span>),</span>
+<span id="cb13-125"><a href="#cb13-125" tabindex="-1"></a>       <span class="at">las =</span> <span class="dv">2</span>, <span class="at">cex.axis =</span> <span class="fl">1.3</span>)</span>
+<span id="cb13-126"><a href="#cb13-126" tabindex="-1"></a>  <span class="fu">axis</span>(<span class="dv">1</span>, <span class="at">at =</span> x, <span class="at">lab =</span> sizes, <span class="at">cex.axis =</span> <span class="fl">1.3</span>)</span>
+<span id="cb13-127"><a href="#cb13-127" tabindex="-1"></a>  <span class="fu">grid</span>()</span>
+<span id="cb13-128"><a href="#cb13-128" tabindex="-1"></a>  <span class="cf">for</span> (r <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(res<span class="sc">$</span>fpr))) {</span>
+<span id="cb13-129"><a href="#cb13-129" tabindex="-1"></a>    <span class="fu">points</span>(x, res<span class="sc">$</span>fpr[r, ], <span class="at">col =</span> MYCOL[r], <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">cex =</span> <span class="fl">1.8</span>)</span>
+<span id="cb13-130"><a href="#cb13-130" tabindex="-1"></a>    <span class="fu">lines</span>(x, res<span class="sc">$</span>fpr[r, ], <span class="at">col =</span> MYCOL[r], <span class="at">lwd =</span> <span class="fl">1.5</span>)</span>
+<span id="cb13-131"><a href="#cb13-131" tabindex="-1"></a>  }</span>
+<span id="cb13-132"><a href="#cb13-132" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+</div>
+<div id="reproducing-figure-3-in-paper" class="section level2">
+<h2>Reproducing Figure 3 in paper</h2>
+<p>The panels below reproduce Figure 3: power (sensitivity) and false
+positive rate (FPR) versus sample size for DiffDriver against the
+benchmark methods, with one setting per subsection.</p>
+<div id="tsg-binary-phenotype" class="section level3">
+<h3>TSG, Binary Phenotype</h3>
+<div id="para-c0.8-0.2" class="section level4">
+<h4>para = c(0.8, 0.2)</h4>
+<p><strong>Generated by:</strong></p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="ex">Rscript</span> code/simulate_all_genes.R TSG_binary_0.8 diffFix</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="ex">Rscript</span> code/simulate_all_genes.R TSG_binary_0.8 other</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">load_and_compute</span>(</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>  <span class="at">setting      =</span> <span class="st">&quot;TSG_binary_0.8&quot;</span>,</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>  <span class="at">file_fn      =</span> <span class="cf">function</span>(N, g) <span class="fu">paste0</span>(<span class="st">&quot;pppower_betaf0=0_sample&quot;</span>, N, <span class="st">&quot;_&quot;</span>, g, <span class="st">&quot;.Rd&quot;</span>),</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>  <span class="at">sample_sizes =</span> BINARY_SIZES</span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a>)</span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a><span class="fu">plot_power_fpr</span>(res,</span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a>  <span class="at">power_title =</span> <span class="st">&quot;para = (0.8, 0.2)&quot;</span>,</span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a>  <span class="at">fpr_title   =</span> <span class="st">&quot;para = (0.5, 0.5), FDR = 0.1&quot;</span></span>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a>)</span></code></pre></div>
+<p><img src="figure/simulation-power.Rmd/tsg-binary-08-1.png" alt="" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-tsg-binary-08-1">
+Past versions of tsg-binary-08-1.png
+</button>
+</p>
+<div id="fig-tsg-binary-08-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/aaf93d041ee9a6507977c440ffade511965d2656/docs/figure/Simulation-Power.Rmd/tsg-binary-08-1.png" target="_blank">aaf93d0</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-03-18
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="para-c0.9-0.1" class="section level4">
+<h4>para = c(0.9, 0.1)</h4>
+<p><strong>Generated by:</strong></p>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="ex">Rscript</span> code/simulate_all_genes.R TSG_binary_0.9 diffFix</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="ex">Rscript</span> code/simulate_all_genes.R TSG_binary_0.9 other</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">load_and_compute</span>(</span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>  <span class="at">setting      =</span> <span class="st">&quot;TSG_binary_0.9&quot;</span>,</span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a>  <span class="at">file_fn      =</span> <span class="cf">function</span>(N, g) <span class="fu">paste0</span>(<span class="st">&quot;pppower_betaf0=0_sample&quot;</span>, N, <span class="st">&quot;_&quot;</span>, g, <span class="st">&quot;.Rd&quot;</span>),</span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a>  <span class="at">sample_sizes =</span> BINARY_SIZES</span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a>)</span>
+<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a><span class="fu">plot_power_fpr</span>(res,</span>
+<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a>  <span class="at">power_title  =</span> <span class="st">&quot;para = (0.9, 0.1)&quot;</span>,</span>
+<span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a>  <span class="at">fpr_title    =</span> <span class="st">&quot;para = (0.5, 0.5), FDR = 0.1&quot;</span>,</span>
+<span id="cb17-9"><a href="#cb17-9" tabindex="-1"></a>  <span class="at">show_legend  =</span> <span class="cn">FALSE</span></span>
+<span id="cb17-10"><a href="#cb17-10" tabindex="-1"></a>)</span></code></pre></div>
+<p><img src="figure/simulation-power.Rmd/tsg-binary-09-1.png" alt="" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-tsg-binary-09-1">
+Past versions of tsg-binary-09-1.png
+</button>
+</p>
+<div id="fig-tsg-binary-09-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/aaf93d041ee9a6507977c440ffade511965d2656/docs/figure/Simulation-Power.Rmd/tsg-binary-09-1.png" target="_blank">aaf93d0</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-03-18
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<hr />
+</div>
+</div>
+<div id="tsg-continuous-phenotype" class="section level3">
+<h3>TSG, Continuous Phenotype</h3>
+<p>Continuous phenotype with <code>para = c(0, 2, 0, 1)</code>:
+phenotype ~ N(0, 2), selection probability determined by logistic
+regression with intercept = 0 and slope = 1.</p>
+<p><strong>Generated by</strong> (one run produces both betaf0 = 0 and
+betaf0 = 1):</p>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="ex">Rscript</span> code/simulate_all_genes.R TSG_conti diffFix</span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a><span class="ex">Rscript</span> code/simulate_all_genes.R TSG_conti other</span></code></pre></div>
+<div id="betaf0-0" class="section level4">
+<h4>betaf0 = 0</h4>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">load_and_compute</span>(</span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>  <span class="at">setting      =</span> <span class="st">&quot;TSG_conti&quot;</span>,</span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a>  <span class="at">file_fn      =</span> <span class="cf">function</span>(N, g) <span class="fu">paste0</span>(<span class="st">&quot;pppower_betaf0=0_sample&quot;</span>, N, <span class="st">&quot;_&quot;</span>, g, <span class="st">&quot;.Rd&quot;</span>),</span>
+<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a>  <span class="at">sample_sizes =</span> CONTI_SIZES</span>
+<span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a>)</span>
+<span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a><span class="fu">plot_power_fpr</span>(res,</span>
+<span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a>  <span class="at">power_title =</span> <span class="st">&quot;betaf0 = 0, para = (0, 2, 0, 1)&quot;</span>,</span>
+<span id="cb19-8"><a href="#cb19-8" tabindex="-1"></a>  <span class="at">fpr_title   =</span> <span class="st">&quot;para = (0, 2, 0, 0), FDR = 0.1&quot;</span>,</span>
+<span id="cb19-9"><a href="#cb19-9" tabindex="-1"></a>  <span class="at">power_ylim  =</span> <span class="fl">0.6</span></span>
+<span id="cb19-10"><a href="#cb19-10" tabindex="-1"></a>)</span></code></pre></div>
+<p><img src="figure/simulation-power.Rmd/tsg-conti-f0-1.png" alt="" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-tsg-conti-f0-1">
+Past versions of tsg-conti-f0-1.png
+</button>
+</p>
+<div id="fig-tsg-conti-f0-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/aaf93d041ee9a6507977c440ffade511965d2656/docs/figure/Simulation-Power.Rmd/tsg-conti-f0-1.png" target="_blank">aaf93d0</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-03-18
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="betaf0-1" class="section level4">
+<h4>betaf0 = 1</h4>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">load_and_compute</span>(</span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>  <span class="at">setting      =</span> <span class="st">&quot;TSG_conti&quot;</span>,</span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>  <span class="at">file_fn      =</span> <span class="cf">function</span>(N, g) <span class="fu">paste0</span>(<span class="st">&quot;pppower_betaf0=1_sample&quot;</span>, N, <span class="st">&quot;_&quot;</span>, g, <span class="st">&quot;.Rd&quot;</span>),</span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a>  <span class="at">sample_sizes =</span> CONTI_SIZES</span>
+<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a>)</span>
+<span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a><span class="fu">plot_power_fpr</span>(res,</span>
+<span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a>  <span class="at">power_title  =</span> <span class="st">&quot;betaf0 = 1, para = (0, 2, 0, 2)&quot;</span>,</span>
+<span id="cb20-8"><a href="#cb20-8" tabindex="-1"></a>  <span class="at">fpr_title    =</span> <span class="st">&quot;para = (0, 2, 0, 0), FDR = 0.1&quot;</span>,</span>
+<span id="cb20-9"><a href="#cb20-9" tabindex="-1"></a>  <span class="at">power_ylim   =</span> <span class="fl">0.6</span>,</span>
+<span id="cb20-10"><a href="#cb20-10" tabindex="-1"></a>  <span class="at">show_legend  =</span> <span class="cn">FALSE</span></span>
+<span id="cb20-11"><a href="#cb20-11" tabindex="-1"></a>)</span></code></pre></div>
+<p><img src="figure/simulation-power.Rmd/tsg-conti-f1-1.png" alt="" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-tsg-conti-f1-1">
+Past versions of tsg-conti-f1-1.png
+</button>
+</p>
+<div id="fig-tsg-conti-f1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/aaf93d041ee9a6507977c440ffade511965d2656/docs/figure/Simulation-Power.Rmd/tsg-conti-f1-1.png" target="_blank">aaf93d0</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-03-18
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<hr />
+</div>
+</div>
+<div id="og-binary-phenotype" class="section level3">
+<h3>OG, Binary Phenotype</h3>
+<div id="para-c0.8-0.2-1" class="section level4">
+<h4>para = c(0.8, 0.2)</h4>
+<p><strong>Generated by:</strong></p>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="ex">Rscript</span> code/simulate_all_genes.R OG_binary_0.8 diffFix</span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a><span class="ex">Rscript</span> code/simulate_all_genes.R OG_binary_0.8 other</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">load_and_compute</span>(</span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>  <span class="at">setting      =</span> <span class="st">&quot;OG_binary_0.8&quot;</span>,</span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a>  <span class="at">file_fn      =</span> <span class="cf">function</span>(N, g) <span class="fu">paste0</span>(<span class="st">&quot;pppower_betaf0=0_sample&quot;</span>, N, <span class="st">&quot;_0.8_&quot;</span>, g, <span class="st">&quot;.Rd&quot;</span>),</span>
+<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a>  <span class="at">sample_sizes =</span> BINARY_SIZES</span>
+<span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a>)</span>
+<span id="cb22-6"><a href="#cb22-6" tabindex="-1"></a><span class="fu">plot_power_fpr</span>(res,</span>
+<span id="cb22-7"><a href="#cb22-7" tabindex="-1"></a>  <span class="at">power_title =</span> <span class="st">&quot;para = (0.8, 0.2)&quot;</span>,</span>
+<span id="cb22-8"><a href="#cb22-8" tabindex="-1"></a>  <span class="at">fpr_title   =</span> <span class="st">&quot;para = (0.5, 0.5), FDR = 0.1&quot;</span>,</span>
+<span id="cb22-9"><a href="#cb22-9" tabindex="-1"></a>  <span class="at">power_ylim  =</span> <span class="fl">0.5</span></span>
+<span id="cb22-10"><a href="#cb22-10" tabindex="-1"></a>)</span></code></pre></div>
+<p><img src="figure/simulation-power.Rmd/og-binary-08-1.png" alt="" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-og-binary-08-1">
+Past versions of og-binary-08-1.png
+</button>
+</p>
+<div id="fig-og-binary-08-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/aaf93d041ee9a6507977c440ffade511965d2656/docs/figure/Simulation-Power.Rmd/og-binary-08-1.png" target="_blank">aaf93d0</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-03-18
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="para-c0.9-0.1-1" class="section level4">
+<h4>para = c(0.9, 0.1)</h4>
+<p><strong>Generated by:</strong></p>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="ex">Rscript</span> code/simulate_all_genes.R OG_binary_0.9 diffFix</span>
+<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a><span class="ex">Rscript</span> code/simulate_all_genes.R OG_binary_0.9 other</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">load_and_compute</span>(</span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a>  <span class="at">setting      =</span> <span class="st">&quot;OG_binary_0.9&quot;</span>,</span>
+<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a>  <span class="at">file_fn      =</span> <span class="cf">function</span>(N, g) <span class="fu">paste0</span>(<span class="st">&quot;pppower_betaf0=0_sample&quot;</span>, N, <span class="st">&quot;_0.9_&quot;</span>, g, <span class="st">&quot;.Rd&quot;</span>),</span>
+<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a>  <span class="at">sample_sizes =</span> BINARY_SIZES</span>
+<span id="cb24-5"><a href="#cb24-5" tabindex="-1"></a>)</span>
+<span id="cb24-6"><a href="#cb24-6" tabindex="-1"></a><span class="fu">plot_power_fpr</span>(res,</span>
+<span id="cb24-7"><a href="#cb24-7" tabindex="-1"></a>  <span class="at">power_title  =</span> <span class="st">&quot;para = (0.9, 0.1)&quot;</span>,</span>
+<span id="cb24-8"><a href="#cb24-8" tabindex="-1"></a>  <span class="at">fpr_title    =</span> <span class="st">&quot;para = (0.5, 0.5), FDR = 0.1&quot;</span>,</span>
+<span id="cb24-9"><a href="#cb24-9" tabindex="-1"></a>  <span class="at">power_ylim   =</span> <span class="fl">0.5</span>,</span>
+<span id="cb24-10"><a href="#cb24-10" tabindex="-1"></a>  <span class="at">show_legend  =</span> <span class="cn">FALSE</span></span>
+<span id="cb24-11"><a href="#cb24-11" tabindex="-1"></a>)</span></code></pre></div>
+<p><img src="figure/simulation-power.Rmd/og-binary-09-1.png" alt="" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-og-binary-09-1">
+Past versions of og-binary-09-1.png
+</button>
+</p>
+<div id="fig-og-binary-09-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/aaf93d041ee9a6507977c440ffade511965d2656/docs/figure/Simulation-Power.Rmd/og-binary-09-1.png" target="_blank">aaf93d0</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-03-18
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<hr />
+</div>
+</div>
+<div id="og-continuous-phenotype" class="section level3">
+<h3>OG, Continuous Phenotype</h3>
+<p>Continuous phenotype with <code>para = c(0, 2, 0, 1)</code>:
+phenotype ~ N(0, 2), selection probability determined by logistic
+regression with intercept = 0 and slope = 1.</p>
+<p><strong>Generated by</strong> (one run produces both betaf0 = 0 and
+betaf0 = 1):</p>
+<div class="sourceCode" id="cb25"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="ex">Rscript</span> code/simulate_all_genes.R OG_conti diffFix</span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a><span class="ex">Rscript</span> code/simulate_all_genes.R OG_conti other</span></code></pre></div>
+<div id="betaf0-0-1" class="section level4">
+<h4>betaf0 = 0</h4>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">load_and_compute</span>(</span>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a>  <span class="at">setting      =</span> <span class="st">&quot;OG_conti&quot;</span>,</span>
+<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a>  <span class="at">file_fn      =</span> <span class="cf">function</span>(N, g) <span class="fu">paste0</span>(<span class="st">&quot;pppower_betaf0=0_sample&quot;</span>, N, <span class="st">&quot;_&quot;</span>, g, <span class="st">&quot;.Rd&quot;</span>),</span>
+<span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a>  <span class="at">sample_sizes =</span> CONTI_SIZES</span>
+<span id="cb26-5"><a href="#cb26-5" tabindex="-1"></a>)</span>
+<span id="cb26-6"><a href="#cb26-6" tabindex="-1"></a><span class="fu">plot_power_fpr</span>(res,</span>
+<span id="cb26-7"><a href="#cb26-7" tabindex="-1"></a>  <span class="at">power_title =</span> <span class="st">&quot;betaf0 = 0, para = (0, 2, 0, 1)&quot;</span>,</span>
+<span id="cb26-8"><a href="#cb26-8" tabindex="-1"></a>  <span class="at">fpr_title   =</span> <span class="st">&quot;para = (0, 2, 0, 0), FDR = 0.1&quot;</span>,</span>
+<span id="cb26-9"><a href="#cb26-9" tabindex="-1"></a>  <span class="at">power_ylim  =</span> <span class="fl">0.6</span></span>
+<span id="cb26-10"><a href="#cb26-10" tabindex="-1"></a>)</span></code></pre></div>
+<p><img src="figure/simulation-power.Rmd/og-conti-f0-1.png" alt="" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-og-conti-f0-1">
+Past versions of og-conti-f0-1.png
+</button>
+</p>
+<div id="fig-og-conti-f0-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/aaf93d041ee9a6507977c440ffade511965d2656/docs/figure/Simulation-Power.Rmd/og-conti-f0-1.png" target="_blank">aaf93d0</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-03-18
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="betaf0-1-1" class="section level4">
+<h4>betaf0 = 1</h4>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">load_and_compute</span>(</span>
+<span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a>  <span class="at">setting      =</span> <span class="st">&quot;OG_conti&quot;</span>,</span>
+<span id="cb27-3"><a href="#cb27-3" tabindex="-1"></a>  <span class="at">file_fn      =</span> <span class="cf">function</span>(N, g) <span class="fu">paste0</span>(<span class="st">&quot;pppower_betaf0=1_sample&quot;</span>, N, <span class="st">&quot;_&quot;</span>, g, <span class="st">&quot;.Rd&quot;</span>),</span>
+<span id="cb27-4"><a href="#cb27-4" tabindex="-1"></a>  <span class="at">sample_sizes =</span> CONTI_SIZES</span>
+<span id="cb27-5"><a href="#cb27-5" tabindex="-1"></a>)</span>
+<span id="cb27-6"><a href="#cb27-6" tabindex="-1"></a><span class="fu">plot_power_fpr</span>(res,</span>
+<span id="cb27-7"><a href="#cb27-7" tabindex="-1"></a>  <span class="at">power_title  =</span> <span class="st">&quot;betaf0 = 1, para = (0, 2, 0, 2)&quot;</span>,</span>
+<span id="cb27-8"><a href="#cb27-8" tabindex="-1"></a>  <span class="at">fpr_title    =</span> <span class="st">&quot;para = (0, 2, 0, 0), FDR = 0.1&quot;</span>,</span>
+<span id="cb27-9"><a href="#cb27-9" tabindex="-1"></a>  <span class="at">power_ylim   =</span> <span class="fl">0.6</span>,</span>
+<span id="cb27-10"><a href="#cb27-10" tabindex="-1"></a>  <span class="at">show_legend  =</span> <span class="cn">FALSE</span></span>
+<span id="cb27-11"><a href="#cb27-11" tabindex="-1"></a>)</span></code></pre></div>
+<p><img src="figure/simulation-power.Rmd/og-conti-f1-1.png" alt="" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-og-conti-f1-1">
+Past versions of og-conti-f1-1.png
+</button>
+</p>
+<div id="fig-og-conti-f1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/aaf93d041ee9a6507977c440ffade511965d2656/docs/figure/Simulation-Power.Rmd/og-conti-f1-1.png" target="_blank">aaf93d0</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-03-18
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<pre><code>R version 4.3.2 (2023-10-31)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Sonoma 14.6.1
+
+Matrix products: default
+BLAS:   /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: America/New_York
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] data.table_1.17.8 diffdriver_0.1.8  workflowr_1.7.1  
+
+loaded via a namespace (and not attached):
+ [1] Matrix_1.6-1.1    jsonlite_2.0.0    compiler_4.3.2    promises_1.5.0   
+ [5] Rcpp_1.1.0        stringr_1.6.0     git2r_0.36.2      callr_3.7.6      
+ [9] later_1.4.8       jquerylib_0.1.4   yaml_2.3.12       fastmap_1.2.0    
+[13] lattice_0.21-9    R6_2.6.1          knitr_1.51        tibble_3.3.1     
+[17] rprojroot_2.0.4   bslib_0.10.0      pillar_1.11.1     rlang_1.1.6      
+[21] cachem_1.1.0      stringi_1.8.7     httpuv_1.6.15     xfun_0.52        
+[25] getPass_0.2-4     fs_1.6.6          sass_0.4.10       otel_0.2.0       
+[29] cli_3.6.5         magrittr_2.0.3    ps_1.8.1          grid_4.3.2       
+[33] digest_0.6.39     processx_3.8.5    rstudioapi_0.17.1 lifecycle_1.0.5  
+[37] vctrs_0.6.5       evaluate_1.0.5    glue_1.8.0        whisker_0.4.1    
+[41] rmarkdown_2.29    httr_1.4.8        tools_4.3.2       pkgconfig_2.0.3  
+[45] htmltools_0.5.9  </code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

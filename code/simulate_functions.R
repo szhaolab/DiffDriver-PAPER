@@ -120,3 +120,83 @@ simulate_selection <- function(binary=F, sganno, sgmatrix, bmrpars, betaf0=2, Ns
                   "nsample"=c(Nsample.ps,Nsample.neu))
   return(simdata)
 }
+
+# -----------------------------------------------------------------------------
+# Power-comparison drivers (independent case), ported from the diffdriver repo's
+# scripts/simulate_functions.R but calling simulate_selection() (above) instead
+# of simulate_1funcvi(). Each runs Niter simulations for one gene/setting and
+# returns per-iteration p-values. They depend on the diffdriver package for the
+# model/test functions: ddmodel(), ddmodel_binary_simple(), mlr(), genefisher(),
+# genebinom(), genelr() -- load it (library(diffdriver) or devtools::load_all)
+# before calling these.
+# -----------------------------------------------------------------------------
+
+#' DiffDriver power (fixed effect sizes). Uses the diffFeFix effect vector and
+#' ddmodel / ddmodel_binary_simple. Saved by callers as `simuresdiffFix`.
+power_comparediffiFix <- function(binary, Niter, sganno, sgmatrix, Nsample, para,
+                                  bmrpars, betaf0, beta_gc, beta_gcFix, hot = 0, hmm) {
+  m1.pvalue <- rep(1, Niter)
+  a <- c(); b <- c(); d <- c(); f <- c()
+  for (iter in 1:Niter) {
+    print(iter)
+    simdata <- simulate_selection(binary = binary, sganno = sganno, sgmatrix = sgmatrix,
+      bmrpars = bmrpars, betaf0 = betaf0, Nsample = Nsample, beta_gc = beta_gc,
+      beta_gcFix = beta_gcFix, para = para, hot = hot, hmm = hmm)
+    mut <- do.call(rbind, simdata$mutlist)
+    bmrmtx <- do.call(rbind, simdata$bmrmtxlist)
+    ssgdata <- do.call(rbind, simdata$annodata)
+    indexmtx <- cbind(bmrmtx[, 1], ssgdata)
+    label <- factor(interaction(indexmtx))
+    e <- simdata$pheno
+    ef <- simdata$efsize
+    fe <- ef$diffFeFix
+    mr <- bmrmtx
+    if (sum(mut) == 0) { next }
+    if (binary == F) {
+      res.m1 <- ddmodel(mut, e, mr, fe, label)
+    } else {
+      res.m1 <- ddmodel_binary_simple(mut, e, mr, fe)
+    }
+    m1.pvalue[iter] <- res.m1$pvalue
+    parameters <- c(ef$beta_gc, ef$avbetaf1, ef$avbetaf2, ef$betaf1f2, ef$avbetaf1f2)
+    a <- rbind(a, parameters)
+    null <- c(res.m1$res.null$beta0, res.m1$res.null$alpha, res.m1$res.null$loglikelihood)
+    alt  <- c(res.m1$res.alt$beta0,  res.m1$res.alt$alpha,  res.m1$res.alt$loglikelihood)
+    d <- rbind(d, null)
+    f <- rbind(f, alt)
+    b <- c(b, sum(mut))
+  }
+  list(parameters = a, null = d, alt = f, m1.pvalue = m1.pvalue, "#mut" = b)
+}
+
+#' Benchmark-methods power: linear regression (mlr), Fisher, binomial, and
+#' logistic tests. Saved by callers as `simuresother`.
+power_compareotheri <- function(binary, Niter, sganno, sgmatrix, Nsample, para,
+                                bmrpars, betaf0, beta_gc, hot = 0, hmm) {
+  m1.pvalue <- m2.pvalue <- m3.pvalue <- m4.pvalue <- rep(1, Niter)
+  a <- c(); b <- c()
+  for (iter in 1:Niter) {
+    print(iter)
+    simdata <- simulate_selection(binary = binary, sganno = sganno, sgmatrix = sgmatrix,
+      bmrpars = bmrpars, betaf0 = betaf0, Nsample = Nsample, beta_gc = beta_gc,
+      para = para, hot = hot, hmm = hmm)
+    mut <- do.call(rbind, simdata$mutlist)
+    e <- simdata$pheno
+    e_bisect <- ifelse(e > mean(e), 1, 0)
+    ef <- simdata$efsize
+    if (sum(mut) == 0) { next }
+    res.m1 <- mlr(mut, e)
+    res.m2 <- genefisher(mut, e_bisect)
+    res.m3 <- genebinom(mut, e_bisect)
+    res.m4 <- genelr(mut, e_bisect)
+    m1.pvalue[iter] <- res.m1$pvalue
+    m2.pvalue[iter] <- res.m2$pvalue
+    m3.pvalue[iter] <- res.m3$pvalue
+    m4.pvalue[iter] <- res.m4$pvalue
+    parameters <- c(ef$beta_gc, ef$avbetaf1, ef$avbetaf2, ef$betaf1f2, ef$avbetaf1f2)
+    a <- rbind(a, parameters)
+    b <- c(b, sum(mut))
+  }
+  list(parameters = a, m1.pvalue = m1.pvalue, m2.pvalue = m2.pvalue,
+       m3.pvalue = m3.pvalue, m4.pvalue = m4.pvalue, "#mut" = b)
+}

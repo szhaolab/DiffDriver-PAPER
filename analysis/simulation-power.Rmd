@@ -1,0 +1,508 @@
+---
+title: "Simulation: Pipeline and Power Results"
+author: "Jie Zhou, Siming Zhao"
+date: "`r Sys.Date()`"
+output:
+  workflowr::wflow_html:
+    theme: flatly
+    highlight: tango
+    toc: true
+    toc_float: true
+    code_folding: show
+---
+
+## Overview
+
+This document runs a simulation study to evaluate the power of the DiffDriver
+model. The simulation pipeline has three steps:
+
+1. **Simulate phenotype and mutations** — Given a gene's positional annotation
+   and functional features, generate binary (case/control) phenotypes and
+   somatic mutations under a selection model (`simulate_selection`).
+2. **Test for differential driver signal** — Apply `ddmodel_binary` (or
+   `ddmodel` for continuous phenotypes) to the simulated data to obtain a
+   p-value (`run_one_iteration`).
+3. **Repeat** — Run multiple iterations to estimate power (`run_simulation`).
+
+**Note:** The [Run simulation with a single gene](#run-simulation-with-a-single-gene)
+section below demonstrates the pipeline for one gene. The
+[Run simulation on 200 genes](#run-simulation-on-200-genes) section then reports the
+full aggregated comparison, reproducing Figure 3 in the paper.
+
+### Source files
+
+| File | Description |
+|------|-------------|
+| `code/simulate_functions.R` | `hotspotseq()` — generates hotspot indicator sequence via HMM; `simulate_selection()` — simulates phenotypes, selection, and mutations for one gene (background rate is constant across samples); `power_comparediffiFix()` / `power_compareotheri()` — run `simulate_selection()` over `Niter` iterations and apply DiffDriver / the benchmark tests |
+| `code/run_simulation.R`     | `run_one_iteration()` — single iteration: simulate then test; `run_simulation()` — loop over iterations |
+| `code/simulate_all_genes.R` | master script: loops `power_compare*()` over all 200 genes for a given setting (see [Data generation](#data-generation)) |
+
+## Setup
+
+```{r setup, message=FALSE}
+library("diffdriver")
+library("data.table")
+source("code/simulate_functions.R")
+source("code/run_simulation.R")
+set.seed(1)
+```
+
+### Load data
+
+- **ri200** — list of 239 genes; each element is a list of 9 annotation
+  data.frames (one per nucleotide type), containing positional and mutation
+  type information.
+- **fanno200** — matching list of functional annotation matrices (features
+  used in the selection model: intercept, functypecode8, conservation scores,
+  etc.).
+- **beta_gc** — TSG functional effect coefficients (from `TSGpars`):
+  intercept, functypecode8, mycons, sift, phylop100, MA.
+- **BMR** — background mutation rates, one per nucleotide type (9 values).
+- **hmm** — HMM parameters for hotspot detection: transition probabilities
+  and logistic regression coefficients (10 values).
+
+```{r load-data}
+load("data/ri200.Rd")
+load("data/fanno200.Rd")
+load("data/beta_tsg.Rd")   # loads beta_gc
+load("data/BMR.rda")        # loads BMR
+load("data/hmm.rda")        # loads hmm
+```
+
+## Simulation parameters
+
+| Parameter | Value | Description |
+|-----------|-------|-------------|
+| `betaf0`  | 1     | Baseline functional effect size (log-scale fold change) |
+| `number_sample` | 1200 | Total number of samples (split equally into case/control) |
+| `gene_index` | 1  | Index into ri200/fanno200 for the target gene |
+| `ifbinary` | TRUE | Use binary (case/control) phenotype |
+| `Niter`   | 1     | Number of simulation iterations |
+| `para`    | (0.5, 0.5) | Binary: c(selection prob for cases, selection prob for controls). Continuous: c(mean, sd, intercept, slope) where intercept and slope are logistic regression coefficients determining selection probability as a function of phenotype |
+| `hot`     | 0     | Hotspot flag (0 = no hotspot effect) |
+
+```{r parameters}
+betaf0 <- 1
+number_sample <- 1200
+gene_index <- 1 # pick a gene from the 239 genes to run.
+ifbinary <- TRUE
+Niter <- 1
+para <- c(0.5, 0.5)
+```
+
+## Run simulation with a single gene
+
+```{r run-simulation}
+simuresdiff <- run_simulation(
+  binary   = ifbinary,
+  Niter    = Niter,
+  sganno   = ri200[[gene_index]],
+  sgmatrix = fanno200[[gene_index]],
+  bmrpars  = log(BMR),
+  Nsample  = number_sample,
+  betaf0   = betaf0,
+  beta_gc  = beta_gc,
+  para     = para,
+  hot      = 0,
+  hmm      = hmm
+)
+```
+
+## Results
+
+```{r results}
+cat("P-values:", simuresdiff$pvalues, "\n")
+cat("Number of mutations:", simuresdiff$nummuts, "\n")
+```
+
+---
+
+
+## Run simulation on 200 genes
+
+For 200 genes with five functional annotations, we compare the power (sensitivity)
+and false positive rate (FPR) of DiffDriver against benchmark methods: Linear
+regression, Fisher's exact test, Binomial test, and Logistic Regression.
+
+The first 50 genes have differential selection while the remaining 150 do not.
+FDR is controlled at 0.1 using the BH procedure.
+
+### Simulation parameters
+
+These simulations use the same pipeline described in
+the [simulation pipeline](#overview) above. The key parameters are:
+
+| Parameter | Description |
+|-----------|-------------|
+| `betaf0`  | Baseline functional effect size: 0 or 1 |
+| `para`    | Binary: selection probabilities c(prob_case, prob_control). Continuous: c(mean, sd, intercept, slope) |
+| `beta_gc` | Simulation functional effect coefficients — the true effect sizes used to generate mutations (from `data/beta_tsg.Rd` or `data/beta_og.Rd`) |
+| `Nsample` | Varies: 200, 400, 600, 800, 1000, 1200, 1500 |
+| `Niter`   | 100 (binary) or 50 (continuous) per gene |
+
+### Functional effect coefficients
+
+Two distinct coefficient sets are involved and should not be confused.
+
+**Simulation coefficients** (`beta_gc`) — the *true* functional effect sizes used
+to generate the mutations, loaded from `data/beta_tsg.Rd` / `data/beta_og.Rd`:
+
+- **TSG**: `(Intercept)=0.851, functypecode8=0.614, mycons=0.375, sift=0.166, phylop100=0.358, MA=0.223`
+- **OG**:  `(Intercept)=0.450, functypecode8=0.049, mycons=0.806, sift=-0.078, phylop100=0.664, MA=0.089`
+
+**DiffDriver built-in parameters** — the fixed coefficients DiffDriver uses when it
+is *run* (the `diffFix` method's `beta_gcFix`). These are a property of the fitted
+model, not of the simulation:
+
+- **TSG**: `(Intercept)=0.851, functypecode8=0.458, mycons=0.137, sift=0.124, phylop100=0.083, MA=0.306`
+- **OG**:  `(Intercept)=0.450, functypecode8=-0.186, mycons=0.316, sift=0.020, phylop100=0.256, MA=0.140`
+
+### Data generation
+
+All result files below were produced by the master script
+`code/simulate_all_genes.R`, which loops over all 200 genes for a given setting
+(consolidating the original per-gene scripts). It is run once per **setting** and
+**method**:
+
+```bash
+Rscript code/simulate_all_genes.R <SETTING> <METHOD>
+```
+
+`METHOD` is `diffFix` (DiffDriver) or `other` (the benchmark methods: Linear,
+Fisher, Binomial, Logistic); each folder stores the two methods' `.Rd` outputs in
+its `diffFix/` and `other/` subdirectories. `SETTING` selects the gene set,
+phenotype, and selection probability. The exact command for each folder is shown
+with its results below.
+
+The master script sources `code/simulate_functions.R`, so the mutations are
+generated by the same `simulate_selection()` function documented in the
+[pipeline](#overview) above (the `power_comparediffiFix` / `power_compareotheri`
+drivers there call it and apply DiffDriver / the benchmark tests); the diffdriver
+package supplies the underlying model and test functions.
+
+---
+
+```{r setup-power, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+METHODS      <- c("DiffDriver", "Linear", "Fisher", "Binomial", "LogisticR")
+MYCOL        <- c("#FF3D2E", "#00AFBB", "#aa00ff", "#0001f6", "#fdae61")
+FDR          <- 0.1
+BINARY_SIZES <- c(200, 400, 600, 800, 1000, 1200, 1500)
+CONTI_SIZES  <- c(200, 400, 600, 800, 1000, 1200)
+
+# Directory holding the consolidated result files (one pppower_all_<SETTING>_<METHOD>.Rd
+# per setting/method, produced by code/consolidate_results.R).
+CONSOL_DIR   <- "/Volumes/Szhao/jiezhou/diffdata/consolidated"
+
+#' Compute power and FPR from p-value matrices across simulation iterations.
+#' @param m.pvalue List of matrices (one per method), each n_genes x Nsim.
+#' @param Nsim Number of simulation iterations.
+#' @param n_true Number of true positive genes (first n_true genes).
+compute_metrics <- function(m.pvalue, Nsim, n_true = 50) {
+  n_methods <- length(m.pvalue)
+  power <- fpr <- numeric(n_methods)
+  for (k in seq_len(n_methods)) {
+    sens <- fpr_vals <- numeric(Nsim)
+    for (j in seq_len(Nsim)) {
+      hits <- which(p.adjust(m.pvalue[[k]][, j], method = "BH") < FDR)
+      if (length(hits) > 0) {
+        sens[j]     <- sum(hits <= n_true) / n_true
+        fpr_vals[j] <- sum(hits > n_true) / length(hits)
+      }
+    }
+    power[k] <- mean(sens)
+    fpr[k]   <- mean(fpr_vals)
+  }
+  list(power = power, fpr = fpr)
+}
+
+#' Load consolidated simulation results and compute power/FPR per sample size.
+#'
+#' Each setting has two consolidated files under CONSOL_DIR,
+#' pppower_all_<setting>_diffFix.Rd and _other.Rd, each holding a list
+#' `simures_all` keyed by the per-gene filename stem. The p-values are:
+#'   DiffDriver                       = diffFix result$m1.pvalue
+#'   Linear/Fisher/Binomial/LogisticR = other   result$m1--m4.pvalue
+#'
+#' @param setting Setting name (e.g. "TSG_binary_0.8") selecting the two files.
+#' @param file_fn Function(Nsample, gene_index) returning the per-gene .Rd name;
+#'   its stem (without .Rd) is the key into simures_all.
+#' @param sample_sizes Vector of sample sizes to evaluate.
+#' @param Nsim Max number of iterations to use. If NULL, uses all available.
+#' @param n_genes Number of genes (default 200).
+load_and_compute <- function(setting, file_fn, sample_sizes,
+                             Nsim = NULL, n_genes = 200) {
+  n_methods <- length(METHODS)
+  ed <- new.env(); load(file.path(CONSOL_DIR, sprintf("pppower_all_%s_diffFix.Rd", setting)), envir = ed)
+  eo <- new.env(); load(file.path(CONSOL_DIR, sprintf("pppower_all_%s_other.Rd",   setting)), envir = eo)
+  diff_all  <- ed$simures_all
+  other_all <- eo$simures_all
+
+  power_mat <- fpr_mat <- matrix(
+    nrow = n_methods, ncol = length(sample_sizes),
+    dimnames = list(METHODS, sample_sizes)
+  )
+  for (s in seq_along(sample_sizes)) {
+    N <- sample_sizes[s]
+    m.pvalue <- NULL
+    n_iter   <- NULL
+    for (g in seq_len(n_genes)) {
+      key   <- sub("\\.Rd$", "", file_fn(N, g))
+      sdiff <- diff_all[[key]]
+      soth  <- other_all[[key]]
+      if (is.null(n_iter)) {
+        n_avail <- length(sdiff[["m1.pvalue"]])
+        n_iter  <- if (!is.null(Nsim)) min(Nsim, n_avail) else n_avail
+        m.pvalue <- lapply(seq_len(n_methods), function(x)
+          matrix(nrow = n_genes, ncol = n_iter))
+      }
+      idx <- seq_len(n_iter)
+      m.pvalue[[1]][g, ] <- sdiff[["m1.pvalue"]][idx]
+      m.pvalue[[2]][g, ] <- soth[["m1.pvalue"]][idx]
+      m.pvalue[[3]][g, ] <- soth[["m2.pvalue"]][idx]
+      m.pvalue[[4]][g, ] <- soth[["m3.pvalue"]][idx]
+      m.pvalue[[5]][g, ] <- soth[["m4.pvalue"]][idx]
+    }
+    metrics <- compute_metrics(m.pvalue, n_iter)
+    power_mat[, s] <- metrics$power
+    fpr_mat[, s]   <- metrics$fpr
+  }
+  list(power = power_mat, fpr = fpr_mat)
+}
+
+#' Plot power and FPR side by side.
+#' @param res Output from load_and_compute (list with power and fpr matrices).
+#' @param power_title Title for the power panel.
+#' @param fpr_title Title for the FPR panel.
+#' @param power_ylim Y-axis upper limit for the power panel.
+#' @param show_legend Whether to show the method legend on the power panel.
+plot_power_fpr <- function(res, power_title, fpr_title,
+                           power_ylim = 0.4, show_legend = TRUE) {
+  x     <- seq_len(ncol(res$power))
+  sizes <- colnames(res$power)
+  par(mfrow = c(1, 2), mar = c(5, 6, 4, 2))
+
+  # Power panel
+  plot(x, ylim = c(0, power_ylim), col = "white", ylab = "Power",
+       xlab = "Number of samples", yaxt = "n", xaxt = "n", bty = "n",
+       cex.lab = 1.3, mgp = c(4, 1, 0))
+  title(power_title)
+  yticks <- seq(0, power_ylim, 0.1)
+  axis(2, at = yticks, lab = paste0(yticks * 100, "%"), las = 2, cex.axis = 1.3)
+  axis(1, at = x, lab = sizes, cex.axis = 1.3)
+  grid()
+  for (r in seq_len(nrow(res$power))) {
+    points(x, res$power[r, ], col = MYCOL[r], pch = 19, cex = 1.8)
+    lines(x, res$power[r, ], col = MYCOL[r], lwd = 1.5)
+  }
+  if (show_legend) {
+    legend("topleft", legend = METHODS, col = MYCOL[seq_along(METHODS)],
+           lwd = 1, bty = "n", lty = NA, pch = 19)
+  }
+
+  # FPR panel
+  plot(x, ylim = c(0, 1), col = "white", ylab = "FPR",
+       xlab = "Number of samples", yaxt = "n", xaxt = "n", bty = "n",
+       cex.lab = 1.3, mgp = c(4, 1, 0))
+  title(fpr_title)
+  axis(2, at = seq(0, 1, 0.1), lab = paste0(seq(0, 100, 10), "%"),
+       las = 2, cex.axis = 1.3)
+  axis(1, at = x, lab = sizes, cex.axis = 1.3)
+  grid()
+  for (r in seq_len(nrow(res$fpr))) {
+    points(x, res$fpr[r, ], col = MYCOL[r], pch = 19, cex = 1.8)
+    lines(x, res$fpr[r, ], col = MYCOL[r], lwd = 1.5)
+  }
+}
+```
+
+## Reproducing Figure 3 in paper
+
+The panels below reproduce Figure 3: power (sensitivity) and false positive rate
+(FPR) versus sample size for DiffDriver against the benchmark methods, with one
+setting per subsection.
+
+### TSG, Binary Phenotype
+
+#### para = c(0.8, 0.2)
+
+**Generated by:**
+
+```bash
+Rscript code/simulate_all_genes.R TSG_binary_0.8 diffFix
+Rscript code/simulate_all_genes.R TSG_binary_0.8 other
+```
+
+```{r tsg-binary-08, fig.width=12, fig.height=5}
+res <- load_and_compute(
+  setting      = "TSG_binary_0.8",
+  file_fn      = function(N, g) paste0("pppower_betaf0=0_sample", N, "_", g, ".Rd"),
+  sample_sizes = BINARY_SIZES
+)
+plot_power_fpr(res,
+  power_title = "para = (0.8, 0.2)",
+  fpr_title   = "para = (0.5, 0.5), FDR = 0.1"
+)
+```
+
+#### para = c(0.9, 0.1)
+
+**Generated by:**
+
+```bash
+Rscript code/simulate_all_genes.R TSG_binary_0.9 diffFix
+Rscript code/simulate_all_genes.R TSG_binary_0.9 other
+```
+
+```{r tsg-binary-09, fig.width=12, fig.height=5}
+res <- load_and_compute(
+  setting      = "TSG_binary_0.9",
+  file_fn      = function(N, g) paste0("pppower_betaf0=0_sample", N, "_", g, ".Rd"),
+  sample_sizes = BINARY_SIZES
+)
+plot_power_fpr(res,
+  power_title  = "para = (0.9, 0.1)",
+  fpr_title    = "para = (0.5, 0.5), FDR = 0.1",
+  show_legend  = FALSE
+)
+```
+
+---
+
+### TSG, Continuous Phenotype
+
+Continuous phenotype with `para = c(0, 2, 0, 1)`: phenotype ~ N(0, 2), selection
+probability determined by logistic regression with intercept = 0 and slope = 1.
+
+**Generated by** (one run produces both betaf0 = 0 and betaf0 = 1):
+
+```bash
+Rscript code/simulate_all_genes.R TSG_conti diffFix
+Rscript code/simulate_all_genes.R TSG_conti other
+```
+
+#### betaf0 = 0
+
+```{r tsg-conti-f0, fig.width=12, fig.height=5}
+res <- load_and_compute(
+  setting      = "TSG_conti",
+  file_fn      = function(N, g) paste0("pppower_betaf0=0_sample", N, "_", g, ".Rd"),
+  sample_sizes = CONTI_SIZES
+)
+plot_power_fpr(res,
+  power_title = "betaf0 = 0, para = (0, 2, 0, 1)",
+  fpr_title   = "para = (0, 2, 0, 0), FDR = 0.1",
+  power_ylim  = 0.6
+)
+```
+
+#### betaf0 = 1
+
+```{r tsg-conti-f1, fig.width=12, fig.height=5}
+res <- load_and_compute(
+  setting      = "TSG_conti",
+  file_fn      = function(N, g) paste0("pppower_betaf0=1_sample", N, "_", g, ".Rd"),
+  sample_sizes = CONTI_SIZES
+)
+plot_power_fpr(res,
+  power_title  = "betaf0 = 1, para = (0, 2, 0, 2)",
+  fpr_title    = "para = (0, 2, 0, 0), FDR = 0.1",
+  power_ylim   = 0.6,
+  show_legend  = FALSE
+)
+```
+
+---
+
+### OG, Binary Phenotype
+
+#### para = c(0.8, 0.2)
+
+**Generated by:**
+
+```bash
+Rscript code/simulate_all_genes.R OG_binary_0.8 diffFix
+Rscript code/simulate_all_genes.R OG_binary_0.8 other
+```
+
+```{r og-binary-08, fig.width=12, fig.height=5}
+res <- load_and_compute(
+  setting      = "OG_binary_0.8",
+  file_fn      = function(N, g) paste0("pppower_betaf0=0_sample", N, "_0.8_", g, ".Rd"),
+  sample_sizes = BINARY_SIZES
+)
+plot_power_fpr(res,
+  power_title = "para = (0.8, 0.2)",
+  fpr_title   = "para = (0.5, 0.5), FDR = 0.1",
+  power_ylim  = 0.5
+)
+```
+
+#### para = c(0.9, 0.1)
+
+**Generated by:**
+
+```bash
+Rscript code/simulate_all_genes.R OG_binary_0.9 diffFix
+Rscript code/simulate_all_genes.R OG_binary_0.9 other
+```
+
+```{r og-binary-09, fig.width=12, fig.height=5}
+res <- load_and_compute(
+  setting      = "OG_binary_0.9",
+  file_fn      = function(N, g) paste0("pppower_betaf0=0_sample", N, "_0.9_", g, ".Rd"),
+  sample_sizes = BINARY_SIZES
+)
+plot_power_fpr(res,
+  power_title  = "para = (0.9, 0.1)",
+  fpr_title    = "para = (0.5, 0.5), FDR = 0.1",
+  power_ylim   = 0.5,
+  show_legend  = FALSE
+)
+```
+
+---
+
+### OG, Continuous Phenotype
+
+Continuous phenotype with `para = c(0, 2, 0, 1)`: phenotype ~ N(0, 2), selection
+probability determined by logistic regression with intercept = 0 and slope = 1.
+
+**Generated by** (one run produces both betaf0 = 0 and betaf0 = 1):
+
+```bash
+Rscript code/simulate_all_genes.R OG_conti diffFix
+Rscript code/simulate_all_genes.R OG_conti other
+```
+
+#### betaf0 = 0
+
+```{r og-conti-f0, fig.width=12, fig.height=5}
+res <- load_and_compute(
+  setting      = "OG_conti",
+  file_fn      = function(N, g) paste0("pppower_betaf0=0_sample", N, "_", g, ".Rd"),
+  sample_sizes = CONTI_SIZES
+)
+plot_power_fpr(res,
+  power_title = "betaf0 = 0, para = (0, 2, 0, 1)",
+  fpr_title   = "para = (0, 2, 0, 0), FDR = 0.1",
+  power_ylim  = 0.6
+)
+```
+
+#### betaf0 = 1
+
+```{r og-conti-f1, fig.width=12, fig.height=5}
+res <- load_and_compute(
+  setting      = "OG_conti",
+  file_fn      = function(N, g) paste0("pppower_betaf0=1_sample", N, "_", g, ".Rd"),
+  sample_sizes = CONTI_SIZES
+)
+plot_power_fpr(res,
+  power_title  = "betaf0 = 1, para = (0, 2, 0, 2)",
+  fpr_title    = "para = (0, 2, 0, 0), FDR = 0.1",
+  power_ylim   = 0.6,
+  show_legend  = FALSE
+)
+```

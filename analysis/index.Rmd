@@ -19,8 +19,7 @@ https://github.com/szhaolab/diffdriver.
 
 ## Simulation
 
-- [Simulation Code](simulation_code.html) — Code and documentation for the simulation pipeline
-- [Simulation Power](Simulation-Power.html) — Sensitivity and FDR comparison across algorithms (binary phenotype, 200 genes)
+- [Simulation: Pipeline and Power Results](simulation-power.html) — How to run the simulation pipeline, followed by the sensitivity and FDR comparison across algorithms (binary phenotype, 200 genes)
 - [Simulation BMR](Simulation-BMR.html) — Power comparison when BMR relates to phenotype (with hotspots)
 
 ## Real Data
