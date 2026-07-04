@@ -191,9 +191,17 @@ FDR          <- 0.1
 BINARY_SIZES <- c(200, 400, 600, 800, 1000, 1200, 1500)
 CONTI_SIZES  <- c(200, 400, 600, 800, 1000, 1200)
 
-# Directory holding the consolidated result files (one pppower_all_<SETTING>_<METHOD>.Rd
-# per setting/method, produced by code/consolidate_results.R).
-CONSOL_DIR   <- "/Volumes/Szhao/jiezhou/diffdata/consolidated"
+# Each setting's consolidated results (pppower_all_<SETTING>_<METHOD>.Rd, produced by
+# code/consolidate_results.R) live in that setting's original folder under DD.
+DD <- "/Volumes/Szhao/jiezhou/diffdata"
+SETTING_DIR <- c(
+  TSG_binary_0.8 = file.path(DD, "gene239/conti/TSG_BRCA"),
+  TSG_binary_0.9 = file.path(DD, "gene239/conti/TSG_BRCA/TSG0.9/TSG_gene"),
+  TSG_conti      = file.path(DD, "gene239/conti/TSG_BRCA/conti/conti2"),
+  OG_binary_0.8  = file.path(DD, "binaryEM/OG_gene"),
+  OG_binary_0.9  = file.path(DD, "binaryEM/OG_gene"),
+  OG_conti       = file.path(DD, "gene239/conti/OCG/OG_gene")
+)
 
 #' Compute power and FPR from p-value matrices across simulation iterations.
 #' @param m.pvalue List of matrices (one per method), each n_genes x Nsim.
@@ -219,7 +227,7 @@ compute_metrics <- function(m.pvalue, Nsim, n_true = 50) {
 
 #' Load consolidated simulation results and compute power/FPR per sample size.
 #'
-#' Each setting has two consolidated files under CONSOL_DIR,
+#' Each setting has two consolidated files in its folder (SETTING_DIR[[setting]]),
 #' pppower_all_<setting>_diffFix.Rd and _other.Rd, each holding a list
 #' `simures_all` keyed by the per-gene filename stem. The p-values are:
 #'   DiffDriver                       = diffFix result$m1.pvalue
@@ -234,8 +242,9 @@ compute_metrics <- function(m.pvalue, Nsim, n_true = 50) {
 load_and_compute <- function(setting, file_fn, sample_sizes,
                              Nsim = NULL, n_genes = 200) {
   n_methods <- length(METHODS)
-  ed <- new.env(); load(file.path(CONSOL_DIR, sprintf("pppower_all_%s_diffFix.Rd", setting)), envir = ed)
-  eo <- new.env(); load(file.path(CONSOL_DIR, sprintf("pppower_all_%s_other.Rd",   setting)), envir = eo)
+  base <- SETTING_DIR[[setting]]
+  ed <- new.env(); load(file.path(base, sprintf("pppower_all_%s_diffFix.Rd", setting)), envir = ed)
+  eo <- new.env(); load(file.path(base, sprintf("pppower_all_%s_other.Rd",   setting)), envir = eo)
   diff_all  <- ed$simures_all
   other_all <- eo$simures_all
 
