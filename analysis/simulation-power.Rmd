@@ -184,9 +184,9 @@ package supplies the underlying model and test functions.
 knitr::opts_chunk$set(echo = TRUE)
 
 METHODS      <- c("DiffDriver", "Linear", "Fisher", "Binomial", "LogisticR")
-# 6th colour is used for coselens, which is added only for settings that have a
-# pppower_all_<SETTING>_coselens.Rd file (see load_and_compute).
-MYCOL        <- c("#FF3D2E", "#00AFBB", "#aa00ff", "#0001f6", "#fdae61", "#1a9850")
+# Colours 6+ are for the extra methods (coselens, Mann-Whitney), added only for
+# settings that have the corresponding pppower_all_<SETTING>_<method>.Rd (load_and_compute).
+MYCOL        <- c("#FF3D2E", "#00AFBB", "#aa00ff", "#0001f6", "#fdae61", "#1a9850", "#a65628")
 FDR          <- 0.1
 BINARY_SIZES <- c(200, 400, 600, 800, 1000, 1200, 1500)
 CONTI_SIZES  <- c(200, 400, 600, 800, 1000, 1200)
@@ -247,12 +247,16 @@ load_and_compute <- function(setting, file_fn, sample_sizes,
   diff_all  <- ed$simures_all
   other_all <- eo$simures_all
 
-  # coselens is included only where a consolidated coselens file exists for the setting
-  # (each gene key holds a $coselens.pvalue vector, same format as the other methods).
-  cos_file <- file.path(base, sprintf("pppower_all_%s_coselens.Rd", setting))
-  has_cos  <- file.exists(cos_file)
-  if (has_cos) { ec <- new.env(); load(cos_file, envir = ec); cos_all <- ec$simures_all }
-  methods   <- if (has_cos) c(METHODS, "coselens") else METHODS
+  # Extra methods (coselens, Mann-Whitney) are added only where a consolidated file
+  # exists for the setting; each gene key holds a <field> p-value vector like the others.
+  EXTRA     <- list(coselens = "coselens.pvalue", MannWhitney = "mannwhitney.pvalue")
+  EXTRA_SFX <- c(coselens = "coselens", MannWhitney = "mannwhitney")
+  extra_all <- list()
+  for (nm in names(EXTRA)) {
+    f <- file.path(base, sprintf("pppower_all_%s_%s.Rd", setting, EXTRA_SFX[[nm]]))
+    if (file.exists(f)) { ee <- new.env(); load(f, envir = ee); extra_all[[nm]] <- ee$simures_all }
+  }
+  methods   <- c(METHODS, names(extra_all))
   n_methods <- length(methods)
 
   power_mat <- fpr_mat <- matrix(
@@ -279,7 +283,10 @@ load_and_compute <- function(setting, file_fn, sample_sizes,
       m.pvalue[[3]][g, ] <- soth[["m2.pvalue"]][idx]
       m.pvalue[[4]][g, ] <- soth[["m3.pvalue"]][idx]
       m.pvalue[[5]][g, ] <- soth[["m4.pvalue"]][idx]
-      if (has_cos) m.pvalue[[6]][g, ] <- cos_all[[key]][["coselens.pvalue"]][idx]
+      for (ei in seq_along(extra_all)) {
+        nm <- names(extra_all)[ei]
+        m.pvalue[[length(METHODS) + ei]][g, ] <- extra_all[[nm]][[key]][[EXTRA[[nm]]]][idx]
+      }
     }
     metrics <- compute_metrics(m.pvalue, n_iter)
     power_mat[, s] <- metrics$power
