@@ -187,6 +187,8 @@ METHODS      <- c("DiffDriver", "Linear", "Fisher", "Binomial", "LogisticR")
 # Colours 6+ are for the extra methods (coselens, Mann-Whitney), added only for
 # settings that have the corresponding pppower_all_<SETTING>_<method>.Rd (load_and_compute).
 MYCOL        <- c("#FF3D2E", "#00AFBB", "#aa00ff", "#0001f6", "#fdae61", "#1a9850", "#a65628")
+# Distinct marker per method (same order as MYCOL) so overlapping points stay distinguishable.
+PCH          <- c(19, 17, 15, 18, 8, 4, 3)
 FDR          <- 0.1
 BINARY_SIZES <- c(200, 400, 600, 800, 1000, 1200, 1500)
 CONTI_SIZES  <- c(200, 400, 600, 800, 1000, 1200)
@@ -317,13 +319,13 @@ plot_power_fpr <- function(res, power_title, fpr_title,
   axis(1, at = x, lab = sizes, cex.axis = 1.3)
   grid()
   for (r in seq_len(nrow(res$power))) {
-    points(x, res$power[r, ], col = MYCOL[r], pch = 19, cex = 1.8)
+    points(x, res$power[r, ], col = MYCOL[r], pch = PCH[r], cex = 1.8)
     lines(x, res$power[r, ], col = MYCOL[r], lwd = 1.5)
   }
   if (show_legend) {
     mm <- rownames(res$power)
     legend("topleft", legend = mm, col = MYCOL[seq_along(mm)],
-           lwd = 1, bty = "n", lty = NA, pch = 19)
+           lwd = 1, bty = "n", lty = NA, pch = PCH[seq_along(mm)])
   }
 
   # FPR panel
@@ -336,7 +338,7 @@ plot_power_fpr <- function(res, power_title, fpr_title,
   axis(1, at = x, lab = sizes, cex.axis = 1.3)
   grid()
   for (r in seq_len(nrow(res$fpr))) {
-    points(x, res$fpr[r, ], col = MYCOL[r], pch = 19, cex = 1.8)
+    points(x, res$fpr[r, ], col = MYCOL[r], pch = PCH[r], cex = 1.8)
     lines(x, res$fpr[r, ], col = MYCOL[r], lwd = 1.5)
   }
 }
