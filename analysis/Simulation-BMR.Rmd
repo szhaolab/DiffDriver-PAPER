@@ -24,67 +24,119 @@ false positives while DiffDriver correctly controls the false positive rate.
 ### Simulation setup
 
 - **Background mutation rate**: Estimated from LUAD mutation data (527 samples,
-  bootstrapped up to 1,500 samples).
+  bootstrapped up to 1,500 samples). The per-sample background rate is driven by
+  the real per-sample signature loadings (`ll$LUAD`), which are a composition
+  (constant column sums), so a summed-loading covariate cannot adjust the
+  confounding away.
 - **Mutational signatures**: Six signatures extracted from LUAD using
-  [fastTopics](https://stephenslab.github.io/fastTopics/). Signature 3 is
-  selected as the confounding signature.
+  [fastTopics](https://stephenslab.github.io/fastTopics/). Signature 3 — a
+  T>G–dominated (smoking-like) signature whose highest-loading context is
+  `C[T>G]G` (nucleotide type 34) — is selected as the confounding signature.
 - **Phenotype**: Simulated to correlate with signature 3 ($R^2 = 0.78$), but
-  with **zero correlation** with selection.
-- **Mutations**: Simulated for a single gene using oncogene mutation rates
-  (background + selection), with two hotspots placed at nucleotide type 63
-  (the type with the highest loading in signature 3).
+  with **zero correlation** with selection (`para = c(0.5, 0.5)`).
+- **Mutations**: Simulated for a single gene (ERBB3) using oncogene mutation
+  rates (background + selection), with two hotspots placed at nucleotide type 34
+  (the context with the highest loading in signature 3), so that the
+  hotspot-dominated mutations track the phenotype.
 
 ### Key result
 
 Because the phenotype correlates with a mutational signature that affects
 overall mutation rates, benchmark methods (Linear regression, Fisher's exact
-test, Binomial test, Logistic regression) incorrectly detect differential
-selection. DiffDriver, which accounts for signature-based background mutation
-rates, maintains a low false positive rate.  
+test, Binomial test, Logistic regression, and the Mann-Whitney rank-sum test)
+incorrectly detect differential selection. DiffDriver, which accounts for
+signature-based background mutation rates, maintains a low false positive rate.
+
+## Rerunning the simulation
+
+The simulation functions live in [`code/simulate_functions.R`](https://github.com/szhaolab/diffdriver-paper/blob/main/code/simulate_functions.R)
+under the "CONFOUNDING scenario" section (`build_confounded_bmr`,
+`simulate_confounding`, `run_confounding_benchmarks`,
+`run_confounding_diffdriver`, `run_confounding_diffdriver_fixed`). The benchmark
+methods are all in `run_confounding_benchmarks`
+(Linear/Fisher/Binomial/LogisticR + Mann-Whitney); DiffDriver is run by
+`run_confounding_diffdriver_fixed`.
+
+The inputs are bundled in `data/bmr_sim_inputs.rda` (`beta_gc`, `beta_gcFix`,
+`signature`, `ll`, `sganno`, `sgmatrix`), together with `data/hmm.rda`,
+`data/codeSignature.rda`, and `data/hotspot1sig.rda` (hotspots at nttype 34).
+A single sample size is reproduced with:
+
+```{r eval=FALSE}
+library(diffdriver); library(data.table); library(Matrix)
+source("code/simulate_functions.R")
+load("data/bmr_sim_inputs.rda"); load("data/hmm.rda")
+load("data/codeSignature.rda");  load("data/hotspot1sig.rda")
+
+set.seed(1)
+res_other <- run_confounding_benchmarks(
+  binary = TRUE, Niter = 100,
+  sganno = bmr_sim$sganno, sgmatrix = bmr_sim$sgmatrix,
+  Nsample = 1500, para = c(0.5, 0.5),      # no differential selection
+  rho = sqrt(0.78),                        # phenotype ~ signature 3, R^2 = 0.78
+  signatures = bmr_sim$signature, loadings = bmr_sim$ll,
+  beta_gc = bmr_sim$beta_gc, hot = 1, hmm = hmm,
+  sc = 359000)                             # background-rate scale (~188 mutations)
+
+# false-positive rate per method (p < 0.01), no true signal so all are FPs
+sapply(res_other[c("m1.pvalue","m2.pvalue","m3.pvalue","m4.pvalue",
+                    "mannwhitney.pvalue")], function(p) mean(p < 0.01))
+```
+
+The full benchmark loops this over `Nsample = 200 … 1500`; the Mann-Whitney
+p-values used below were produced this way and saved to
+`data/pppower_mannwhitney_bmr.Rd`. Because the original
+`scripts/simulate_functions.R` (and the exact HMM coefficients) were lost, the
+rerun is *close* to — but not bit-identical to — the archived runs; the Linear
+and Fisher/Binomial/LogisticR curves plotted below are read from the original
+archived results.
 
 
 
 ```{r}
 Nsim=100
+SIZES <- c(200,400,600,800,1000,1200,1500)
+
+# Mann-Whitney FPs from the rerun (code/simulate_functions.R::run_confounding_benchmarks)
+load("data/pppower_mannwhitney_bmr.Rd")   # object `mw`, keyed by sample size
+
 mylist <- list()
 for (i1 in c(1)){
    for (rho in c(0)) {
     for (i4 in c(0.5)) {
     n<-0
-    for(i3 in c(200,400,600,800,1000,1200,1500)){
+    for(i3 in SIZES){
       n <- n+1
-      load(paste0("/Volumes/Szhao/jiezhou/diffdata/randombmrsingle/tsgsimple_LUAD_fixed_63/diff/pppower_betaf0=",i1, "_sample",i3,"_",i4,"_",rho,".Rd"))
-         load(paste0("/Volumes/Szhao/jiezhou/diffdata/randombmrsingle/tsgsimple_LUAD_fixed_63/diffFix/pppower_betaf0=",i1,"_sample",i3,"_",i4,"_", rho,".Rd"))
-          load(paste0("/Volumes/Szhao/jiezhou/diffdata/randombmrsingle/tsgsimple_LUAD_fixed_63/other/pppower_betaf0=",i1,"_sample",i3,"_",i4,"_",rho,".Rd"))
- 
+      load(paste0("data/bmr_archive/diff/pppower_betaf0=",i1, "_sample",i3,"_",i4,"_",rho,".Rd"))
+         load(paste0("data/bmr_archive/diffFix/pppower_betaf0=",i1,"_sample",i3,"_",i4,"_", rho,".Rd"))
+          load(paste0("data/bmr_archive/other/pppower_betaf0=",i1,"_sample",i3,"_",i4,"_",rho,".Rd"))
+
       m5.pvalue <- simuresdiff[["m1.pvalue"]]
        m6.pvalue <- simuresdiffFix[["m1.pvalue"]]
       m1.pvalue <- simuresother[["m1.pvalue"]]
       m2.pvalue <- simuresother[["m2.pvalue"]]
       m3.pvalue <- simuresother[["m3.pvalue"]]
       m4.pvalue <- simuresother[["m4.pvalue"]]
-    #  mutNumber1[m,n]=mean(simuresbase$`#mut`)/i3*100
-     mylist[[n]] <- c(length(m1.pvalue[m1.pvalue <0.01]),length(m2.pvalue[m2.pvalue <0.01]),length(m3.pvalue[m3.pvalue <0.01]), length(m4.pvalue[m4.pvalue <0.01]),length(m5.pvalue[m5.pvalue <0.01]),length(m6.pvalue[m6.pvalue <0.01]))/Nsim
+      m7.pvalue <- mw[[as.character(i3)]][["mannwhitney.pvalue"]]   # Mann-Whitney
+     mylist[[n]] <- c(length(m1.pvalue[m1.pvalue <0.01]),length(m2.pvalue[m2.pvalue <0.01]),length(m3.pvalue[m3.pvalue <0.01]), length(m4.pvalue[m4.pvalue <0.01]),length(m7.pvalue[m7.pvalue <0.01]),length(m5.pvalue[m5.pvalue <0.01]),length(m6.pvalue[m6.pvalue <0.01]))/Nsim
     }
     outdt <- do.call(cbind, mylist)
-    rownames(outdt)=c("Linear","Fisher","Binomial","LogisticR","diffDriver","avdiffDriver")
-    colnames(outdt) <- c(200,400,600,800,1000,1200,1500)
-    mycol=c("#00AFBB","#2b8cbe","#aa00ff","#0001f6","#fdae61","#FF3D2E","#FFFF00", "#2b2930")
- # mycol=c("#00AFBB","#2b8cbe","#aa00ff","#0001f6","#fdae61","#FF3D2E")
-     plot(1:dim(outdt)[2],ylim=c(0,1), col="white", ylab = "Power", xlab="Number of samples", yaxt="n", xaxt="n")
-      # title(paste("f0=",i1,",", "beta_gc=(",i2,",","1.513", ")", "P(E=1) =0.5", "P(positive selection|E=1)=0.8", "P(positive selection|E=1)=0.2", sep=" "))
+    rownames(outdt)=c("Linear","Fisher","Binomial","LogisticR","MannWhitney","diffDriver","avdiffDriver")
+    colnames(outdt) <- SIZES
+    # colors: Linear, Fisher, Binomial, LogisticR, MannWhitney, diff, diffFix
+    mycol=c("#00AFBB","#2b8cbe","#aa00ff","#0001f6","#1a9850","#FF3D2E","#f781bf")
+    mypch=c(19,19,19,19,3,17,17)
+     plot(1:dim(outdt)[2],ylim=c(0,1), col="white", ylab = "False positive rate (p < 0.01)", xlab="Number of samples", yaxt="n", xaxt="n")
      title( paste( "SC(scale efficient)=",i1,",","para=(",i4,1-i4,")", ",", sep=" "))
-    #yticks_val <- pretty(outdt)
     yticks_val <- seq(0,1,0.1)
-    #axis(2, lab=paste0(yticks_val/Nsim * 100, " %"),las=2)
     axis(2, at=yticks_val, lab=paste0(yticks_val),las=2)
     axis(1, at=1:dim(outdt)[2], lab=colnames(outdt))
     grid()
-    for (r in 1:6){
-      points(outdt[r,],col=mycol[r+1], pch=19, cex=1.3)
-      lines(outdt[r,],col=mycol[r+1])
+    for (r in 1:7){
+      points(outdt[r,],col=mycol[r], pch=mypch[r], cex=1.3)
+      lines(outdt[r,],col=mycol[r])
     }
-    legend("topleft", legend = c("Linear","Fisher","Binomial","LogisticR","diff","diffFix"), col= mycol[2:7], lwd=1, bty="n", lty=rep(NA,6), pch=rep(19,6))
+    legend("topleft", legend = c("Linear","Fisher","Binomial","LogisticR","MannWhitney","diff","diffFix"), col= mycol, lwd=1, bty="n", lty=rep(NA,7), pch=mypch)
   }
 }
   }

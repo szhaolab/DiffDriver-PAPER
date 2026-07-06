@@ -41,7 +41,7 @@ CODE_DIR       <- NULL   # folder holding simulate_functions.R (this repo's code
 # Presets (one per result folder). Override via command-line args if given.
 SETTING <- "TSG_binary_0.8"   # TSG_binary_0.8 | TSG_binary_0.9 | TSG_conti |
                               # OG_binary_0.8  | OG_binary_0.9  | OG_conti
-METHOD  <- "diffFix"          # "diffFix" (power_comparediffiFix) or "other" (power_compareotheri)
+METHOD  <- "diffFix"          # "diffFix" (run_selection_diffdriver) or "other" (run_selection_benchmarks)
 
 # Which sample sizes / betaf0 values to run (defaults match the paper's grids;
 # NULL -> filled in from the setting's phenotype below).
@@ -154,13 +154,13 @@ for (betaf0 in BETAF0_VALUES) {
 
       set.seed(10)
       simures <- if (METHOD == "diffFix") {
-        power_comparediffiFix(
+        run_selection_diffdriver(
           binary = (phenotype == "binary"), Niter = Nite,
           sganno = ri200[[gene]], sgmatrix = fanno200[[gene]], bmrpars = log(BMR),
           Nsample = Nsample, betaf0 = betaf0, beta_gc = beta_gc, beta_gcFix = beta_gcFix,
           para = para, hot = hot, hmm = hmm)
       } else {
-        power_compareotheri(
+        run_selection_benchmarks(
           binary = (phenotype == "binary"), Niter = Nite,
           sganno = ri200[[gene]], sgmatrix = fanno200[[gene]], bmrpars = log(BMR),
           Nsample = Nsample, betaf0 = betaf0, beta_gc = beta_gc,
