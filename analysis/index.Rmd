@@ -19,8 +19,29 @@ https://github.com/szhaolab/diffdriver.
 
 ## Simulation
 
-- [Simulation: Pipeline and Power Results](simulation-power.html) — How to run the simulation pipeline, followed by the sensitivity and FDR comparison across algorithms (binary phenotype, 200 genes)
-- [Simulation BMR](Simulation-BMR.html) — Power comparison when BMR relates to phenotype (with hotspots)
+Two complementary scenarios evaluate DiffDriver against benchmark methods
+(linear regression, Fisher's exact test, binomial test, logistic regression,
+[coselens](https://github.com/ggonzalezlopez/coselens), and the Mann-Whitney
+rank-sum test).
+
+### Power — phenotype drives selection
+
+- [Simulation: Pipeline and Power Results](simulation-power.html) — Documents the
+  simulation pipeline (mutations generated under a selection model where the
+  phenotype is correlated with positive selection), then compares sensitivity
+  (power) and the false discovery rate across all methods. Binary phenotype,
+  200 genes (50 signal / 150 null), swept over selection strength and sample
+  size.
+
+### False positives — phenotype confounded with a mutational signature
+
+- [Simulation: Phenotype–Signature Confounding](Simulation-BMR.html) — The
+  phenotype is correlated with a mutational signature (LUAD signature 3,
+  $R^2 = 0.78$) but has **zero** correlation with selection, so any detection is
+  a false positive. Because the confounding signature inflates the background
+  mutation rate, the count-based benchmarks (including Mann-Whitney) increasingly
+  false-positive with sample size, while DiffDriver controls the false positive
+  rate. Single gene (ERBB3) with hotspots placed at the signature's peak context.
 
 ## Real Data
 
