@@ -630,15 +630,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree252d21c84592a13171ede021a5213824fec3156dtargetblank252d21ca">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtreec81ddf34170e4554aefe6f546d39bdb19b1170cbtargetblankc81ddf3a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/252d21c84592a13171ede021a5213824fec3156d" target="_blank">252d21c</a>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/c81ddf34170e4554aefe6f546d39bdb19b1170cb" target="_blank">c81ddf3</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree252d21c84592a13171ede021a5213824fec3156dtargetblank252d21ca"
+id="strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtreec81ddf34170e4554aefe6f546d39bdb19b1170cbtargetblankc81ddf3a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -648,7 +648,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/252d21c84592a13171ede021a5213824fec3156d" target="_blank">252d21c</a>.
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/c81ddf34170e4554aefe6f546d39bdb19b1170cb" target="_blank">c81ddf3</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -669,13 +669,11 @@ Ignored files:
     Ignored:    data/.DS_Store
 
 Untracked files:
-    Untracked:  data/pppower_coselens_bmr.Rd
     Untracked:  data/sgannosig.Rd
     Untracked:  data/sgmatrixsig.Rd
 
 Unstaged changes:
     Modified:   analysis/Simulation-BMR.Rmd
-    Modified:   analysis/index.Rmd
 
 </code></pre>
 <p>
@@ -720,6 +718,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/c81ddf34170e4554aefe6f546d39bdb19b1170cb/analysis/Simulation-BMR.Rmd" target="_blank">c81ddf3</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-07-11
+</td>
+<td>
+Add coselens (true per-group BMR) to the confounding-sim benchmark
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/szhaolab/DiffDriver-PAPER/c81ddf34170e4554aefe6f546d39bdb19b1170cb/docs/Simulation-BMR.html" target="_blank">c81ddf3</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-07-11
+</td>
+<td>
+Add coselens (true per-group BMR) to the confounding-sim benchmark
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1064,40 +1096,75 @@ across all 100 iterations and 7 sample sizes). Its p-values are saved to
 <span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a>    <span class="cf">for</span>(i3 <span class="cf">in</span> SIZES){</span>
 <span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a>      n <span class="ot">&lt;-</span> n<span class="sc">+</span><span class="dv">1</span></span>
 <span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a>      <span class="fu">load</span>(<span class="fu">paste0</span>(<span class="st">&quot;data/bmr_archive/diff/pppower_betaf0=&quot;</span>,i1, <span class="st">&quot;_sample&quot;</span>,i3,<span class="st">&quot;_&quot;</span>,i4,<span class="st">&quot;_&quot;</span>,rho,<span class="st">&quot;.Rd&quot;</span>))</span>
-<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a>         <span class="fu">load</span>(<span class="fu">paste0</span>(<span class="st">&quot;data/bmr_archive/diffFix/pppower_betaf0=&quot;</span>,i1,<span class="st">&quot;_sample&quot;</span>,i3,<span class="st">&quot;_&quot;</span>,i4,<span class="st">&quot;_&quot;</span>, rho,<span class="st">&quot;.Rd&quot;</span>))</span>
-<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a>          <span class="fu">load</span>(<span class="fu">paste0</span>(<span class="st">&quot;data/bmr_archive/other/pppower_betaf0=&quot;</span>,i1,<span class="st">&quot;_sample&quot;</span>,i3,<span class="st">&quot;_&quot;</span>,i4,<span class="st">&quot;_&quot;</span>,rho,<span class="st">&quot;.Rd&quot;</span>))</span>
-<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a></span>
-<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a>      m5.pvalue <span class="ot">&lt;-</span> simuresdiff[[<span class="st">&quot;m1.pvalue&quot;</span>]]</span>
-<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a>       m6.pvalue <span class="ot">&lt;-</span> simuresdiffFix[[<span class="st">&quot;m1.pvalue&quot;</span>]]</span>
-<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a>      m1.pvalue <span class="ot">&lt;-</span> simuresother[[<span class="st">&quot;m1.pvalue&quot;</span>]]</span>
-<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a>      m2.pvalue <span class="ot">&lt;-</span> simuresother[[<span class="st">&quot;m2.pvalue&quot;</span>]]</span>
-<span id="cb4-24"><a href="#cb4-24" tabindex="-1"></a>      m3.pvalue <span class="ot">&lt;-</span> simuresother[[<span class="st">&quot;m3.pvalue&quot;</span>]]</span>
-<span id="cb4-25"><a href="#cb4-25" tabindex="-1"></a>      m4.pvalue <span class="ot">&lt;-</span> simuresother[[<span class="st">&quot;m4.pvalue&quot;</span>]]</span>
-<span id="cb4-26"><a href="#cb4-26" tabindex="-1"></a>      m7.pvalue <span class="ot">&lt;-</span> mw[[<span class="fu">as.character</span>(i3)]][[<span class="st">&quot;mannwhitney.pvalue&quot;</span>]]       <span class="co"># Mann-Whitney</span></span>
-<span id="cb4-27"><a href="#cb4-27" tabindex="-1"></a>      m8.pvalue <span class="ot">&lt;-</span> coselens[[<span class="fu">as.character</span>(i3)]][[<span class="st">&quot;coselens.pvalue&quot;</span>]]    <span class="co"># coselens (true per-group BMR)</span></span>
-<span id="cb4-28"><a href="#cb4-28" tabindex="-1"></a>     mylist[[n]] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">length</span>(m1.pvalue[m1.pvalue <span class="sc">&lt;</span><span class="fl">0.01</span>]),<span class="fu">length</span>(m2.pvalue[m2.pvalue <span class="sc">&lt;</span><span class="fl">0.01</span>]),<span class="fu">length</span>(m3.pvalue[m3.pvalue <span class="sc">&lt;</span><span class="fl">0.01</span>]), <span class="fu">length</span>(m4.pvalue[m4.pvalue <span class="sc">&lt;</span><span class="fl">0.01</span>]),<span class="fu">length</span>(m7.pvalue[m7.pvalue <span class="sc">&lt;</span><span class="fl">0.01</span>]),<span class="fu">length</span>(m8.pvalue[m8.pvalue <span class="sc">&lt;</span><span class="fl">0.01</span>]),<span class="fu">length</span>(m5.pvalue[m5.pvalue <span class="sc">&lt;</span><span class="fl">0.01</span>]),<span class="fu">length</span>(m6.pvalue[m6.pvalue <span class="sc">&lt;</span><span class="fl">0.01</span>]))<span class="sc">/</span>Nsim</span>
-<span id="cb4-29"><a href="#cb4-29" tabindex="-1"></a>    }</span>
-<span id="cb4-30"><a href="#cb4-30" tabindex="-1"></a>    outdt <span class="ot">&lt;-</span> <span class="fu">do.call</span>(cbind, mylist)</span>
-<span id="cb4-31"><a href="#cb4-31" tabindex="-1"></a>    <span class="fu">rownames</span>(outdt)<span class="ot">=</span><span class="fu">c</span>(<span class="st">&quot;Linear&quot;</span>,<span class="st">&quot;Fisher&quot;</span>,<span class="st">&quot;Binomial&quot;</span>,<span class="st">&quot;LogisticR&quot;</span>,<span class="st">&quot;MannWhitney&quot;</span>,<span class="st">&quot;coselens&quot;</span>,<span class="st">&quot;diffDriver&quot;</span>,<span class="st">&quot;avdiffDriver&quot;</span>)</span>
-<span id="cb4-32"><a href="#cb4-32" tabindex="-1"></a>    <span class="fu">colnames</span>(outdt) <span class="ot">&lt;-</span> SIZES</span>
-<span id="cb4-33"><a href="#cb4-33" tabindex="-1"></a>    <span class="co"># colors: Linear, Fisher, Binomial, LogisticR, MannWhitney, coselens, diff, diffFix</span></span>
-<span id="cb4-34"><a href="#cb4-34" tabindex="-1"></a>    mycol<span class="ot">=</span><span class="fu">c</span>(<span class="st">&quot;#00AFBB&quot;</span>,<span class="st">&quot;#2b8cbe&quot;</span>,<span class="st">&quot;#aa00ff&quot;</span>,<span class="st">&quot;#0001f6&quot;</span>,<span class="st">&quot;#1a9850&quot;</span>,<span class="st">&quot;#ff7f00&quot;</span>,<span class="st">&quot;#FF3D2E&quot;</span>,<span class="st">&quot;#f781bf&quot;</span>)</span>
-<span id="cb4-35"><a href="#cb4-35" tabindex="-1"></a>    mypch<span class="ot">=</span><span class="fu">c</span>(<span class="dv">19</span>,<span class="dv">19</span>,<span class="dv">19</span>,<span class="dv">19</span>,<span class="dv">3</span>,<span class="dv">8</span>,<span class="dv">17</span>,<span class="dv">17</span>)</span>
-<span id="cb4-36"><a href="#cb4-36" tabindex="-1"></a>     <span class="fu">plot</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">dim</span>(outdt)[<span class="dv">2</span>],<span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">col=</span><span class="st">&quot;white&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;False positive rate (p &lt; 0.01)&quot;</span>, <span class="at">xlab=</span><span class="st">&quot;Number of samples&quot;</span>, <span class="at">yaxt=</span><span class="st">&quot;n&quot;</span>, <span class="at">xaxt=</span><span class="st">&quot;n&quot;</span>)</span>
-<span id="cb4-37"><a href="#cb4-37" tabindex="-1"></a>     <span class="fu">title</span>( <span class="fu">paste</span>( <span class="st">&quot;SC(scale efficient)=&quot;</span>,i1,<span class="st">&quot;,&quot;</span>,<span class="st">&quot;para=(&quot;</span>,i4,<span class="dv">1</span><span class="sc">-</span>i4,<span class="st">&quot;)&quot;</span>, <span class="st">&quot;,&quot;</span>, <span class="at">sep=</span><span class="st">&quot; &quot;</span>))</span>
-<span id="cb4-38"><a href="#cb4-38" tabindex="-1"></a>    yticks_val <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="fl">0.1</span>)</span>
-<span id="cb4-39"><a href="#cb4-39" tabindex="-1"></a>    <span class="fu">axis</span>(<span class="dv">2</span>, <span class="at">at=</span>yticks_val, <span class="at">lab=</span><span class="fu">paste0</span>(yticks_val),<span class="at">las=</span><span class="dv">2</span>)</span>
-<span id="cb4-40"><a href="#cb4-40" tabindex="-1"></a>    <span class="fu">axis</span>(<span class="dv">1</span>, <span class="at">at=</span><span class="dv">1</span><span class="sc">:</span><span class="fu">dim</span>(outdt)[<span class="dv">2</span>], <span class="at">lab=</span><span class="fu">colnames</span>(outdt))</span>
-<span id="cb4-41"><a href="#cb4-41" tabindex="-1"></a>    <span class="fu">grid</span>()</span>
-<span id="cb4-42"><a href="#cb4-42" tabindex="-1"></a>    <span class="cf">for</span> (r <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>){</span>
-<span id="cb4-43"><a href="#cb4-43" tabindex="-1"></a>      <span class="fu">points</span>(outdt[r,],<span class="at">col=</span>mycol[r], <span class="at">pch=</span>mypch[r], <span class="at">cex=</span><span class="fl">1.3</span>)</span>
-<span id="cb4-44"><a href="#cb4-44" tabindex="-1"></a>      <span class="fu">lines</span>(outdt[r,],<span class="at">col=</span>mycol[r])</span>
-<span id="cb4-45"><a href="#cb4-45" tabindex="-1"></a>    }</span>
-<span id="cb4-46"><a href="#cb4-46" tabindex="-1"></a>    <span class="fu">legend</span>(<span class="st">&quot;topleft&quot;</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">&quot;Linear&quot;</span>,<span class="st">&quot;Fisher&quot;</span>,<span class="st">&quot;Binomial&quot;</span>,<span class="st">&quot;LogisticR&quot;</span>,<span class="st">&quot;MannWhitney&quot;</span>,<span class="st">&quot;coselens&quot;</span>,<span class="st">&quot;diff&quot;</span>,<span class="st">&quot;diffFix&quot;</span>), <span class="at">col=</span> mycol, <span class="at">lwd=</span><span class="dv">1</span>, <span class="at">bty=</span><span class="st">&quot;n&quot;</span>, <span class="at">lty=</span><span class="fu">rep</span>(<span class="cn">NA</span>,<span class="dv">8</span>), <span class="at">pch=</span>mypch)</span>
-<span id="cb4-47"><a href="#cb4-47" tabindex="-1"></a>  }</span>
-<span id="cb4-48"><a href="#cb4-48" tabindex="-1"></a>}</span>
-<span id="cb4-49"><a href="#cb4-49" tabindex="-1"></a>  }</span></code></pre></div>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a>          <span class="fu">load</span>(<span class="fu">paste0</span>(<span class="st">&quot;data/bmr_archive/other/pppower_betaf0=&quot;</span>,i1,<span class="st">&quot;_sample&quot;</span>,i3,<span class="st">&quot;_&quot;</span>,i4,<span class="st">&quot;_&quot;</span>,rho,<span class="st">&quot;.Rd&quot;</span>))</span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a></span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a>      m5.pvalue <span class="ot">&lt;-</span> simuresdiff[[<span class="st">&quot;m1.pvalue&quot;</span>]]</span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a>      m1.pvalue <span class="ot">&lt;-</span> simuresother[[<span class="st">&quot;m1.pvalue&quot;</span>]]</span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a>      m2.pvalue <span class="ot">&lt;-</span> simuresother[[<span class="st">&quot;m2.pvalue&quot;</span>]]</span>
+<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a>      m3.pvalue <span class="ot">&lt;-</span> simuresother[[<span class="st">&quot;m3.pvalue&quot;</span>]]</span>
+<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a>      m4.pvalue <span class="ot">&lt;-</span> simuresother[[<span class="st">&quot;m4.pvalue&quot;</span>]]</span>
+<span id="cb4-24"><a href="#cb4-24" tabindex="-1"></a>      m7.pvalue <span class="ot">&lt;-</span> mw[[<span class="fu">as.character</span>(i3)]][[<span class="st">&quot;mannwhitney.pvalue&quot;</span>]]       <span class="co"># Mann-Whitney</span></span>
+<span id="cb4-25"><a href="#cb4-25" tabindex="-1"></a>      m8.pvalue <span class="ot">&lt;-</span> coselens[[<span class="fu">as.character</span>(i3)]][[<span class="st">&quot;coselens.pvalue&quot;</span>]]    <span class="co"># coselens (true per-group BMR)</span></span>
+<span id="cb4-26"><a href="#cb4-26" tabindex="-1"></a>     mylist[[n]] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">length</span>(m1.pvalue[m1.pvalue <span class="sc">&lt;</span><span class="fl">0.01</span>]),<span class="fu">length</span>(m2.pvalue[m2.pvalue <span class="sc">&lt;</span><span class="fl">0.01</span>]),<span class="fu">length</span>(m3.pvalue[m3.pvalue <span class="sc">&lt;</span><span class="fl">0.01</span>]), <span class="fu">length</span>(m4.pvalue[m4.pvalue <span class="sc">&lt;</span><span class="fl">0.01</span>]),<span class="fu">length</span>(m7.pvalue[m7.pvalue <span class="sc">&lt;</span><span class="fl">0.01</span>]),<span class="fu">length</span>(m8.pvalue[m8.pvalue <span class="sc">&lt;</span><span class="fl">0.01</span>]),<span class="fu">length</span>(m5.pvalue[m5.pvalue <span class="sc">&lt;</span><span class="fl">0.01</span>]))<span class="sc">/</span>Nsim</span>
+<span id="cb4-27"><a href="#cb4-27" tabindex="-1"></a>    }</span>
+<span id="cb4-28"><a href="#cb4-28" tabindex="-1"></a>    outdt <span class="ot">&lt;-</span> <span class="fu">do.call</span>(cbind, mylist)</span>
+<span id="cb4-29"><a href="#cb4-29" tabindex="-1"></a>    <span class="fu">rownames</span>(outdt)<span class="ot">=</span><span class="fu">c</span>(<span class="st">&quot;Linear&quot;</span>,<span class="st">&quot;Fisher&quot;</span>,<span class="st">&quot;Binomial&quot;</span>,<span class="st">&quot;LogisticR&quot;</span>,<span class="st">&quot;MannWhitney&quot;</span>,<span class="st">&quot;coselens&quot;</span>,<span class="st">&quot;diffDriver&quot;</span>)</span>
+<span id="cb4-30"><a href="#cb4-30" tabindex="-1"></a>    <span class="fu">colnames</span>(outdt) <span class="ot">&lt;-</span> SIZES</span>
+<span id="cb4-31"><a href="#cb4-31" tabindex="-1"></a>    <span class="co"># colors: Linear, Fisher, Binomial, LogisticR, MannWhitney, coselens, diff</span></span>
+<span id="cb4-32"><a href="#cb4-32" tabindex="-1"></a>    mycol<span class="ot">=</span><span class="fu">c</span>(<span class="st">&quot;#00AFBB&quot;</span>,<span class="st">&quot;#2b8cbe&quot;</span>,<span class="st">&quot;#aa00ff&quot;</span>,<span class="st">&quot;#0001f6&quot;</span>,<span class="st">&quot;#1a9850&quot;</span>,<span class="st">&quot;#ff7f00&quot;</span>,<span class="st">&quot;#FF3D2E&quot;</span>)</span>
+<span id="cb4-33"><a href="#cb4-33" tabindex="-1"></a>    mypch<span class="ot">=</span><span class="fu">c</span>(<span class="dv">19</span>,<span class="dv">19</span>,<span class="dv">19</span>,<span class="dv">19</span>,<span class="dv">3</span>,<span class="dv">8</span>,<span class="dv">17</span>)</span>
+<span id="cb4-34"><a href="#cb4-34" tabindex="-1"></a>     <span class="fu">plot</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">dim</span>(outdt)[<span class="dv">2</span>],<span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">col=</span><span class="st">&quot;white&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;False positive rate (p &lt; 0.01)&quot;</span>, <span class="at">xlab=</span><span class="st">&quot;Number of samples&quot;</span>, <span class="at">yaxt=</span><span class="st">&quot;n&quot;</span>, <span class="at">xaxt=</span><span class="st">&quot;n&quot;</span>)</span>
+<span id="cb4-35"><a href="#cb4-35" tabindex="-1"></a>     <span class="fu">title</span>( <span class="fu">paste</span>( <span class="st">&quot;SC(scale efficient)=&quot;</span>,i1,<span class="st">&quot;,&quot;</span>,<span class="st">&quot;para=(&quot;</span>,i4,<span class="dv">1</span><span class="sc">-</span>i4,<span class="st">&quot;)&quot;</span>, <span class="st">&quot;,&quot;</span>, <span class="at">sep=</span><span class="st">&quot; &quot;</span>))</span>
+<span id="cb4-36"><a href="#cb4-36" tabindex="-1"></a>    yticks_val <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="fl">0.1</span>)</span>
+<span id="cb4-37"><a href="#cb4-37" tabindex="-1"></a>    <span class="fu">axis</span>(<span class="dv">2</span>, <span class="at">at=</span>yticks_val, <span class="at">lab=</span><span class="fu">paste0</span>(yticks_val),<span class="at">las=</span><span class="dv">2</span>)</span>
+<span id="cb4-38"><a href="#cb4-38" tabindex="-1"></a>    <span class="fu">axis</span>(<span class="dv">1</span>, <span class="at">at=</span><span class="dv">1</span><span class="sc">:</span><span class="fu">dim</span>(outdt)[<span class="dv">2</span>], <span class="at">lab=</span><span class="fu">colnames</span>(outdt))</span>
+<span id="cb4-39"><a href="#cb4-39" tabindex="-1"></a>    <span class="fu">grid</span>()</span>
+<span id="cb4-40"><a href="#cb4-40" tabindex="-1"></a>    <span class="cf">for</span> (r <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>){</span>
+<span id="cb4-41"><a href="#cb4-41" tabindex="-1"></a>      <span class="fu">points</span>(outdt[r,],<span class="at">col=</span>mycol[r], <span class="at">pch=</span>mypch[r], <span class="at">cex=</span><span class="fl">1.3</span>)</span>
+<span id="cb4-42"><a href="#cb4-42" tabindex="-1"></a>      <span class="fu">lines</span>(outdt[r,],<span class="at">col=</span>mycol[r])</span>
+<span id="cb4-43"><a href="#cb4-43" tabindex="-1"></a>    }</span>
+<span id="cb4-44"><a href="#cb4-44" tabindex="-1"></a>    <span class="fu">legend</span>(<span class="st">&quot;topleft&quot;</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">&quot;Linear&quot;</span>,<span class="st">&quot;Fisher&quot;</span>,<span class="st">&quot;Binomial&quot;</span>,<span class="st">&quot;LogisticR&quot;</span>,<span class="st">&quot;MannWhitney&quot;</span>,<span class="st">&quot;coselens&quot;</span>,<span class="st">&quot;diff&quot;</span>), <span class="at">col=</span> mycol, <span class="at">lwd=</span><span class="dv">1</span>, <span class="at">bty=</span><span class="st">&quot;n&quot;</span>, <span class="at">lty=</span><span class="fu">rep</span>(<span class="cn">NA</span>,<span class="dv">7</span>), <span class="at">pch=</span>mypch)</span>
+<span id="cb4-45"><a href="#cb4-45" tabindex="-1"></a>  }</span>
+<span id="cb4-46"><a href="#cb4-46" tabindex="-1"></a>}</span>
+<span id="cb4-47"><a href="#cb4-47" tabindex="-1"></a>  }</span></code></pre></div>
 <p><img src="figure/Simulation-BMR.Rmd/unnamed-chunk-4-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-1">
+Past versions of unnamed-chunk-4-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-4-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/c81ddf34170e4554aefe6f546d39bdb19b1170cb/docs/figure/Simulation-BMR.Rmd/unnamed-chunk-4-1.png" target="_blank">c81ddf3</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-07-11
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">

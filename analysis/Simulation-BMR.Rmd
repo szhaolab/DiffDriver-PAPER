@@ -152,36 +152,34 @@ for (i1 in c(1)){
     for(i3 in SIZES){
       n <- n+1
       load(paste0("data/bmr_archive/diff/pppower_betaf0=",i1, "_sample",i3,"_",i4,"_",rho,".Rd"))
-         load(paste0("data/bmr_archive/diffFix/pppower_betaf0=",i1,"_sample",i3,"_",i4,"_", rho,".Rd"))
           load(paste0("data/bmr_archive/other/pppower_betaf0=",i1,"_sample",i3,"_",i4,"_",rho,".Rd"))
 
       m5.pvalue <- simuresdiff[["m1.pvalue"]]
-       m6.pvalue <- simuresdiffFix[["m1.pvalue"]]
       m1.pvalue <- simuresother[["m1.pvalue"]]
       m2.pvalue <- simuresother[["m2.pvalue"]]
       m3.pvalue <- simuresother[["m3.pvalue"]]
       m4.pvalue <- simuresother[["m4.pvalue"]]
       m7.pvalue <- mw[[as.character(i3)]][["mannwhitney.pvalue"]]       # Mann-Whitney
       m8.pvalue <- coselens[[as.character(i3)]][["coselens.pvalue"]]    # coselens (true per-group BMR)
-     mylist[[n]] <- c(length(m1.pvalue[m1.pvalue <0.01]),length(m2.pvalue[m2.pvalue <0.01]),length(m3.pvalue[m3.pvalue <0.01]), length(m4.pvalue[m4.pvalue <0.01]),length(m7.pvalue[m7.pvalue <0.01]),length(m8.pvalue[m8.pvalue <0.01]),length(m5.pvalue[m5.pvalue <0.01]),length(m6.pvalue[m6.pvalue <0.01]))/Nsim
+     mylist[[n]] <- c(length(m1.pvalue[m1.pvalue <0.01]),length(m2.pvalue[m2.pvalue <0.01]),length(m3.pvalue[m3.pvalue <0.01]), length(m4.pvalue[m4.pvalue <0.01]),length(m7.pvalue[m7.pvalue <0.01]),length(m8.pvalue[m8.pvalue <0.01]),length(m5.pvalue[m5.pvalue <0.01]))/Nsim
     }
     outdt <- do.call(cbind, mylist)
-    rownames(outdt)=c("Linear","Fisher","Binomial","LogisticR","MannWhitney","coselens","diffDriver","avdiffDriver")
+    rownames(outdt)=c("Linear","Fisher","Binomial","LogisticR","MannWhitney","coselens","diffDriver")
     colnames(outdt) <- SIZES
-    # colors: Linear, Fisher, Binomial, LogisticR, MannWhitney, coselens, diff, diffFix
-    mycol=c("#00AFBB","#2b8cbe","#aa00ff","#0001f6","#1a9850","#ff7f00","#FF3D2E","#f781bf")
-    mypch=c(19,19,19,19,3,8,17,17)
+    # colors: Linear, Fisher, Binomial, LogisticR, MannWhitney, coselens, diff
+    mycol=c("#00AFBB","#2b8cbe","#aa00ff","#0001f6","#1a9850","#ff7f00","#FF3D2E")
+    mypch=c(19,19,19,19,3,8,17)
      plot(1:dim(outdt)[2],ylim=c(0,1), col="white", ylab = "False positive rate (p < 0.01)", xlab="Number of samples", yaxt="n", xaxt="n")
      title( paste( "SC(scale efficient)=",i1,",","para=(",i4,1-i4,")", ",", sep=" "))
     yticks_val <- seq(0,1,0.1)
     axis(2, at=yticks_val, lab=paste0(yticks_val),las=2)
     axis(1, at=1:dim(outdt)[2], lab=colnames(outdt))
     grid()
-    for (r in 1:8){
+    for (r in 1:7){
       points(outdt[r,],col=mycol[r], pch=mypch[r], cex=1.3)
       lines(outdt[r,],col=mycol[r])
     }
-    legend("topleft", legend = c("Linear","Fisher","Binomial","LogisticR","MannWhitney","coselens","diff","diffFix"), col= mycol, lwd=1, bty="n", lty=rep(NA,8), pch=mypch)
+    legend("topleft", legend = c("Linear","Fisher","Binomial","LogisticR","MannWhitney","coselens","diff"), col= mycol, lwd=1, bty="n", lty=rep(NA,7), pch=mypch)
   }
 }
   }
