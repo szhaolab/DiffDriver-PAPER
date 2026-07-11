@@ -79,13 +79,19 @@ build_true_mutrates <- function(bmrpars, betaf0,
 #' @param group2 Data.frame of control mutations.
 #' @param subset.genes.by Character vector of gene names to subset results.
 #' @param true_rate Optional list to replace dndscv's estimated background with
-#'   the simulation's known rate. Must contain: `bmrpars` (log(BMR), length 9),
-#'   `betaf0` (scalar), `bmrfold_sum1` and `bmrfold_sum2` (sum of per-sample
-#'   bmrfold over the samples assigned to group1/group2 respectively, i.e. the
-#'   group's true total exposure). Optional `theta` (default 1e6) sets the
-#'   near-Poisson overdispersion used to force mrfold=1. When supplied, both
-#'   groups are run through `dndscv_truerate` instead of coselens::dndscv;
-#'   source("code/dndscv_truerate.R") first.
+#'   the simulation's known rate. Two ways to supply it:
+#'   (a) SELECTION sim (9 nttypes): `bmrpars` (log(BMR), length 9), `betaf0`
+#'       (scalar), and `bmrfold_sum1`/`bmrfold_sum2` (sum of per-sample bmrfold
+#'       over the samples in group1/group2). The per-context 192 rate is built
+#'       as build_true_mutrates(bmrpars, betaf0) * bmrfold_sum.
+#'   (b) CONFOUNDING sim (96 contexts): `mutrates1`/`mutrates2`, already-built
+#'       length-192 per-context rate vectors in substmodel order (one per group),
+#'       used directly. Build them from the sim's bmrfold$bmr with
+#'       data/context96_map.rds: rate96 = rowSums(bmr[, group]); the 192 vector
+#'       is rate96[context96_map$number].
+#'   Optional `theta` (default 1e6) sets the near-Poisson overdispersion used to
+#'   force mrfold=1. When supplied, both groups are run through `dndscv_truerate`
+#'   instead of coselens::dndscv; source("code/dndscv_truerate.R") first.
 #' @param ... Additional arguments passed to dndscv.
 #' @return coselens result list, or NULL on error.
 run_coselens <- function(group1, group2, subset.genes.by = NULL,
@@ -112,16 +118,27 @@ run_coselens <- function(group1, group2, subset.genes.by = NULL,
     if (!exists("dndscv_truerate"))
       stop("true_rate supplied but dndscv_truerate not found; ",
            "source('code/dndscv_truerate.R') first.")
-    base <- build_true_mutrates(true_rate$bmrpars, true_rate$betaf0)
+    if (!is.null(true_rate$mutrates1)) {
+      # (b) confounding sim: per-group 192-context rates supplied directly
+      mr1 <- true_rate$mutrates1
+      mr2 <- true_rate$mutrates2
+      # covariates are unused when the rate is given; a restricted gene_list
+      # would not match the genome-wide cv matrix, so force cv=NULL. The
+      # list()-assignment keeps an explicit NULL (modifyList would drop it).
+      dnds_args["cv"] <- list(NULL)
+    } else {
+      # (a) selection sim: build from log(BMR)/betaf0 and per-group bmrfold sum
+      base <- build_true_mutrates(true_rate$bmrpars, true_rate$betaf0)
+      mr1 <- base * true_rate$bmrfold_sum1
+      mr2 <- base * true_rate$bmrfold_sum2
+    }
     theta <- if (is.null(true_rate$theta)) 1e6 else true_rate$theta
     message("[coselens] Running dndscv_truerate (true BMR) for group 1")
     dnds1 <- do.call(dndscv_truerate, c(
-      list(mutations = group1, true_mutrates = base * true_rate$bmrfold_sum1,
-           true_theta = theta), dnds_args))
+      list(mutations = group1, true_mutrates = mr1, true_theta = theta), dnds_args))
     message("[coselens] Running dndscv_truerate (true BMR) for group 2")
     dnds2 <- do.call(dndscv_truerate, c(
-      list(mutations = group2, true_mutrates = base * true_rate$bmrfold_sum2,
-           true_theta = theta), dnds_args))
+      list(mutations = group2, true_mutrates = mr2, true_theta = theta), dnds_args))
   }
 
   dnds1 <- patch_dndscv_indels(dnds1)
