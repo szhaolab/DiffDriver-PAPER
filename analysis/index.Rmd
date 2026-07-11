@@ -41,7 +41,9 @@ rank-sum test).
   a false positive. Because the confounding signature inflates the background
   mutation rate, the count-based benchmarks (including Mann-Whitney) increasingly
   false-positive with sample size, while DiffDriver controls the false positive
-  rate. Single gene (ERBB3) with hotspots placed at the signature's peak context.
+  rate. coselens, when given each group's true background rate, also stays
+  controlled. Single gene (ERBB3) with hotspots placed at the signature's peak
+  context.
 
 ## Real Data
 
