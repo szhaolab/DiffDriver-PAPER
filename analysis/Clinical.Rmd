@@ -549,7 +549,7 @@ unique(a[a[, "age_all"]!="", "age_all"])
 ```
 
 ```{r include-png-figure, out.width='85%', fig.cap="Barplot of GO enrichment (age)"}
-knitr::include_graphics("docs/material/barplot-GO-bio-age.png", error = FALSE)
+knitr::include_graphics("material/barplot-GO-bio-age.png", error = FALSE)
 ```
 
 ##  Differential genes for tumor mutation burden
