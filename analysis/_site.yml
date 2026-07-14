@@ -5,13 +5,22 @@ navbar:
   left:
   - text: Home
     href: index.html
+  - text: "Simulation"
+    href: simulation.html
+  - text: "Real Data"
+    href: real-data.html
+  - text: "Download"
+    href: download.html
+  - text: License
+    href: license.html
   right:
-  - icon: fa-github
-    text: Source
-    href: https://github.com/szhaolab/DiffDriver-PAPER
+  - text: "Source"
+    icon: fab fa-github
+    href: https://github.com/szhaolab/DiffDriver-PAPER/
+
 output:
   workflowr::wflow_html:
     toc: yes
     toc_float: yes
-    theme: cosmo
-    highlight: textmate
+    theme: flatly
+    highlight: tango

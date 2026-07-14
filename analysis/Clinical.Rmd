@@ -30,6 +30,12 @@ In total, **120 analyses** were conducted across **20 tumor types**, involving t
 
 All **120 analyses** were successfully completed without errors.
 
+For all phenotypes **except Diagnosis Age**, both **age** and **gender** were initially included as **covariates**. When Diagnosis Age itself was used as the phenotype, only gender was initially included as a covariate.
+
+The initial analyses for **CESC, PRAD, TGCT, UCEC, and UCS** failed because the gender covariate had no variation within these tumor types: CESC = all female, PRAD = all male, TGCT = all male, UCEC = all female, and UCS = all female.
+
+These failed analyses were subsequently rerun after excluding gender as a covariate. For the **5** phenotypes other than Diagnosis Age, only **age** was included as a **covariate**. For **Diagnosis Age**, **no covariates** were included because age was the phenotype itself and gender had no variation within these tumor types.
+
 # Extracting and Summarizing Analysis Results
 This code segment scans through analysis output directories, identifies relevant result files (*_resdd.Rd), extracts corresponding tumor types and phenotypes. Only results from the signature model are included.
 
@@ -79,7 +85,7 @@ get_files <- function(outputdir, tumors = NULL, phenotypes = NULL) {
 }
 
 filedf <- get_files(
-  outputdir = "/Volumes/Szhao/qiruiz/diffdriver/temp/output/new_plot/clinical"
+  outputdir = "/dartfs/rc/lab/S/Szhao/qiruiz/diffdriver/temp/output/clinical-covariate/"
 )
 filedf <- filedf[filedf$mode == "sig", ]
 ```
@@ -292,14 +298,14 @@ plot_diff_number <- function(filedf, mode = c("reg", "sig")){
 ```
 
 ## Visualization
-```{r, fig.width=7, fig.height=20}
+```{r, fig.width=12, fig.height=20}
 plot_diff_number(filedf, mode = "sig")
 ```
 
 ## Summary across all traits
 
 ```{r}
-immune_sig <- read.csv("/Users/siming/Downloads/Immune Subtypes.csv")
+immune_sig <- read.csv("output/Immune Subtypes.csv")
 immune_sig_genes <- unique(immune_sig$gene)
 
 all_genes <- unique(c(diff_table_all$gene, immune_sig_genes))
@@ -341,7 +347,7 @@ pheno_file_map <- c(
   "TMB.nonsynonymous"                   = "TMB..nonsynonymous..txt"
 )
 
-clinical_data_dir <- "/Volumes/Szhao/diffDriver/data_clinical/cbioportal_download"
+clinical_data_dir <- "/dartfs/rc/lab/S/Szhao/diffDriver/data_clinical/cbioportal_download"
 
 pheno_quantiles <- t(sapply(names(pheno_file_map), function(pheno) {
   f <- file.path(clinical_data_dir, pheno_file_map[pheno])
@@ -541,8 +547,6 @@ Figure is selected FDR, sort by fold enrichment. Top 20. Remove all redundancy.
 ```{r}
 unique(a[a[, "age_all"]!="", "age_all"])
 ```
-
-![Barplot of GO enrichment (age)](docs/material/barplot-GO-bio-age.png)
 
 ```{r include-png-figure, out.width='85%', fig.cap="Barplot of GO enrichment (age)"}
 knitr::include_graphics("docs/material/barplot-GO-bio-age.png")
