@@ -23,11 +23,20 @@ false positives while DiffDriver correctly controls the false positive rate.
 
 ### Simulation setup
 
-- **Background mutation rate**: Estimated from LUAD mutation data (527 samples,
-  bootstrapped up to 1,500 samples). The per-sample background rate is driven by
-  the real per-sample signature loadings (`ll$LUAD`), which are a composition
-  (constant column sums), so a summed-loading covariate cannot adjust the
-  confounding away.
+- **Background mutation rate (realistic, LUAD-derived)**: The per-site
+  background probability is `bmr = (signatures %*% loadings) / sc`, built entirely
+  from LUAD data — so it is *not* an arbitrary rate:
+    - **Shape**: the `signatures` (96 × 6) and per-sample `loadings` (`ll$LUAD`)
+      are the real LUAD mutational signatures and exposures (fastTopics on the
+      LUAD mutation counts, 527 samples, bootstrapped up to 1,500). The loadings
+      are a composition (constant column sums = 62.75), so a summed-loading
+      covariate carries no phenotype information and cannot adjust the confounding
+      away.
+    - **Level**: `sc = 359000` gives a mean per-site probability of ≈1.8×10⁻⁶ and
+      a genome-wide **synonymous burden of ≈63 mutations per sample** (median 62,
+      range 56–73), matching the **observed ≈64 synonymous mutations per sample**
+      in real TCGA-LUAD (530 samples). So both the spectrum and the overall level
+      are LUAD-realistic.
 - **Mutational signatures**: Six signatures extracted from LUAD using
   [fastTopics](https://stephenslab.github.io/fastTopics/). Signature 3 — a
   T>G–dominated (smoking-like) signature whose highest-loading context is
