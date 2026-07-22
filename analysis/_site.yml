@@ -5,14 +5,8 @@ navbar:
   left:
   - text: Home
     href: index.html
-  - text: "Simulation"
-    href: simulation.html
-  - text: "Real Data"
-    href: real-data.html
   - text: "Download"
     href: download.html
-  - text: License
-    href: license.html
   right:
   - text: "Source"
     icon: fab fa-github
