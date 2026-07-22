@@ -44,6 +44,12 @@ rank-sum test).
   rate. coselens, when given each group's true background rate, also stays
   controlled. Single gene (ERBB3) with hotspots placed at the signature's peak
   context.
+- [Simulation: Estimated Background under Signature Confounding](Simulation-BMR-estimated.html) —
+  A stricter version of the above: instead of being *given* the true background
+  rate, DiffDriver and coselens must *estimate* it from a simulated genome-wide
+  silent (synonymous) mutation count matrix calibrated to the observed LUAD
+  burden (~64 syn/sample). Both still control the false positive rate, whereas
+  the count-based benchmarks rise to ~0.6.
 
 ## Real Data
 
