@@ -64,13 +64,16 @@ presets <- list(
     fname=function(b,N,g,pv) sprintf("pppower_betaf0=%s_sample%s_%s.Rd", b, N, g)),
   TSG_binary_0.9 = list(geneset="TSG", phenotype="binary", para_var=0.9,
     fname=function(b,N,g,pv) sprintf("pppower_betaf0=%s_sample%s_%s.Rd", b, N, g)),
-  TSG_conti      = list(geneset="TSG", phenotype="conti", para_var=NA,
+  TSG_conti      = list(geneset="TSG", phenotype="conti", para_var=NA, conti_slope=2,
+    fname=function(b,N,g,pv) sprintf("pppower_betaf0=%s_sample%s_%s.Rd", b, N, g)),
+  # As TSG_conti but with the signal-gene selection slope set to 1 (para = c(0,2,0,1)).
+  TSG_conti_slope1 = list(geneset="TSG", phenotype="conti", para_var=NA, conti_slope=1,
     fname=function(b,N,g,pv) sprintf("pppower_betaf0=%s_sample%s_%s.Rd", b, N, g)),
   OG_binary_0.8  = list(geneset="OG",  phenotype="binary", para_var=0.8,
     fname=function(b,N,g,pv) sprintf("pppower_betaf0=%s_sample%s_%s_%s.Rd", b, N, pv, g)),
   OG_binary_0.9  = list(geneset="OG",  phenotype="binary", para_var=0.9,
     fname=function(b,N,g,pv) sprintf("pppower_betaf0=%s_sample%s_%s_%s.Rd", b, N, pv, g)),
-  OG_conti       = list(geneset="OG",  phenotype="conti", para_var=NA,
+  OG_conti       = list(geneset="OG",  phenotype="conti", para_var=NA, conti_slope=2,
     fname=function(b,N,g,pv) sprintf("pppower_betaf0=%s_sample%s_%s.Rd", b, N, g))
 )
 if (!SETTING %in% names(presets)) stop("Unknown SETTING: ", SETTING,
@@ -148,8 +151,10 @@ for (betaf0 in BETAF0_VALUES) {
       if (phenotype == "binary") {
         para <- if (signal) c(para_var, 1 - para_var) else c(0.5, 0.5)
       } else {
-        # continuous: c(mean, sd, intercept, slope); slope=2 for signal genes
-        para <- c(0, 2, 0, if (signal) 2 else 0)
+        # continuous: c(mean, sd, intercept, slope); slope for signal genes is
+        # the setting's conti_slope (default 2), 0 for null genes.
+        slope <- if (is.null(S$conti_slope)) 2 else S$conti_slope
+        para <- c(0, 2, 0, if (signal) slope else 0)
       }
 
       set.seed(10)
