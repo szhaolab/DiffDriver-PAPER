@@ -632,15 +632,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree8d704ab74722c90ffd28977e6dbfa7b2b957a557targetblank8d704aba">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtreed0993ed7ce97350c69bf32f9474ba09135b4ba51targetblankd0993eda">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/8d704ab74722c90ffd28977e6dbfa7b2b957a557" target="_blank">8d704ab</a>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/d0993ed7ce97350c69bf32f9474ba09135b4ba51" target="_blank">d0993ed</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree8d704ab74722c90ffd28977e6dbfa7b2b957a557targetblank8d704aba"
+id="strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtreed0993ed7ce97350c69bf32f9474ba09135b4ba51targetblankd0993eda"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -650,7 +650,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/8d704ab74722c90ffd28977e6dbfa7b2b957a557" target="_blank">8d704ab</a>.
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/d0993ed7ce97350c69bf32f9474ba09135b4ba51" target="_blank">d0993ed</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -677,7 +677,6 @@ Untracked files:
 
 Unstaged changes:
     Modified:   analysis/simulation-power.Rmd
-    Modified:   code/simulate_all_genes.R
 
 </code></pre>
 <p>
@@ -722,6 +721,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/d0993ed7ce97350c69bf32f9474ba09135b4ba51/analysis/simulation-power.Rmd" target="_blank">d0993ed</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-07-23
+</td>
+<td>
+Add TSG continuous slope=1 (para=(0,2,0,1)) power/FDR figures
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/szhaolab/DiffDriver-PAPER/d0993ed7ce97350c69bf32f9474ba09135b4ba51/docs/simulation-power.html" target="_blank">d0993ed</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-07-23
+</td>
+<td>
+Add TSG continuous slope=1 (para=(0,2,0,1)) power/FDR figures
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1258,157 +1291,158 @@ underlying model and test functions.</p>
 <span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a>FDR          <span class="ot">&lt;-</span> <span class="fl">0.1</span></span>
 <span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a>BINARY_SIZES <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">200</span>, <span class="dv">400</span>, <span class="dv">600</span>, <span class="dv">800</span>, <span class="dv">1000</span>, <span class="dv">1200</span>, <span class="dv">1500</span>)</span>
 <span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a>CONTI_SIZES  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">200</span>, <span class="dv">400</span>, <span class="dv">600</span>, <span class="dv">800</span>, <span class="dv">1000</span>, <span class="dv">1200</span>)</span>
-<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a></span>
-<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a><span class="co"># Each setting&#39;s consolidated results (pppower_all_&lt;SETTING&gt;_&lt;METHOD&gt;.Rd, produced by</span></span>
-<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a><span class="co"># code/consolidate_results.R) live in that setting&#39;s original folder under DD.</span></span>
-<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a>DD <span class="ot">&lt;-</span> <span class="st">&quot;/Volumes/Szhao/jiezhou/diffdata&quot;</span></span>
-<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a>SETTING_DIR <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a>  <span class="at">TSG_binary_0.8 =</span> <span class="fu">file.path</span>(DD, <span class="st">&quot;gene239/conti/TSG_BRCA&quot;</span>),</span>
-<span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a>  <span class="at">TSG_binary_0.9 =</span> <span class="fu">file.path</span>(DD, <span class="st">&quot;gene239/conti/TSG_BRCA/TSG0.9/TSG_gene&quot;</span>),</span>
-<span id="cb13-19"><a href="#cb13-19" tabindex="-1"></a>  <span class="at">TSG_conti      =</span> <span class="fu">file.path</span>(DD, <span class="st">&quot;gene239/conti/TSG_BRCA/conti/conti2&quot;</span>),</span>
-<span id="cb13-20"><a href="#cb13-20" tabindex="-1"></a>  <span class="at">TSG_conti_slope1 =</span> <span class="fu">file.path</span>(DD, <span class="st">&quot;gene239/conti/TSG_BRCA/conti/conti_slope1&quot;</span>),</span>
-<span id="cb13-21"><a href="#cb13-21" tabindex="-1"></a>  <span class="at">OG_binary_0.8  =</span> <span class="fu">file.path</span>(DD, <span class="st">&quot;binaryEM/OG_gene&quot;</span>),</span>
-<span id="cb13-22"><a href="#cb13-22" tabindex="-1"></a>  <span class="at">OG_binary_0.9  =</span> <span class="fu">file.path</span>(DD, <span class="st">&quot;binaryEM/OG_gene&quot;</span>),</span>
-<span id="cb13-23"><a href="#cb13-23" tabindex="-1"></a>  <span class="at">OG_conti       =</span> <span class="fu">file.path</span>(DD, <span class="st">&quot;gene239/conti/OCG/OG_gene&quot;</span>)</span>
-<span id="cb13-24"><a href="#cb13-24" tabindex="-1"></a>)</span>
-<span id="cb13-25"><a href="#cb13-25" tabindex="-1"></a></span>
-<span id="cb13-26"><a href="#cb13-26" tabindex="-1"></a><span class="co">#&#39; Compute power and FPR from p-value matrices across simulation iterations.</span></span>
-<span id="cb13-27"><a href="#cb13-27" tabindex="-1"></a><span class="co">#&#39; @param m.pvalue List of matrices (one per method), each n_genes x Nsim.</span></span>
-<span id="cb13-28"><a href="#cb13-28" tabindex="-1"></a><span class="co">#&#39; @param Nsim Number of simulation iterations.</span></span>
-<span id="cb13-29"><a href="#cb13-29" tabindex="-1"></a><span class="co">#&#39; @param n_true Number of true positive genes (first n_true genes).</span></span>
-<span id="cb13-30"><a href="#cb13-30" tabindex="-1"></a>compute_metrics <span class="ot">&lt;-</span> <span class="cf">function</span>(m.pvalue, Nsim, <span class="at">n_true =</span> <span class="dv">50</span>) {</span>
-<span id="cb13-31"><a href="#cb13-31" tabindex="-1"></a>  n_methods <span class="ot">&lt;-</span> <span class="fu">length</span>(m.pvalue)</span>
-<span id="cb13-32"><a href="#cb13-32" tabindex="-1"></a>  power <span class="ot">&lt;-</span> fpr <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n_methods)</span>
-<span id="cb13-33"><a href="#cb13-33" tabindex="-1"></a>  <span class="cf">for</span> (k <span class="cf">in</span> <span class="fu">seq_len</span>(n_methods)) {</span>
-<span id="cb13-34"><a href="#cb13-34" tabindex="-1"></a>    sens <span class="ot">&lt;-</span> fpr_vals <span class="ot">&lt;-</span> <span class="fu">numeric</span>(Nsim)</span>
-<span id="cb13-35"><a href="#cb13-35" tabindex="-1"></a>    <span class="cf">for</span> (j <span class="cf">in</span> <span class="fu">seq_len</span>(Nsim)) {</span>
-<span id="cb13-36"><a href="#cb13-36" tabindex="-1"></a>      hits <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">p.adjust</span>(m.pvalue[[k]][, j], <span class="at">method =</span> <span class="st">&quot;BH&quot;</span>) <span class="sc">&lt;</span> FDR)</span>
-<span id="cb13-37"><a href="#cb13-37" tabindex="-1"></a>      <span class="cf">if</span> (<span class="fu">length</span>(hits) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
-<span id="cb13-38"><a href="#cb13-38" tabindex="-1"></a>        sens[j]     <span class="ot">&lt;-</span> <span class="fu">sum</span>(hits <span class="sc">&lt;=</span> n_true) <span class="sc">/</span> n_true</span>
-<span id="cb13-39"><a href="#cb13-39" tabindex="-1"></a>        fpr_vals[j] <span class="ot">&lt;-</span> <span class="fu">sum</span>(hits <span class="sc">&gt;</span> n_true) <span class="sc">/</span> <span class="fu">length</span>(hits)</span>
-<span id="cb13-40"><a href="#cb13-40" tabindex="-1"></a>      }</span>
-<span id="cb13-41"><a href="#cb13-41" tabindex="-1"></a>    }</span>
-<span id="cb13-42"><a href="#cb13-42" tabindex="-1"></a>    power[k] <span class="ot">&lt;-</span> <span class="fu">mean</span>(sens)</span>
-<span id="cb13-43"><a href="#cb13-43" tabindex="-1"></a>    fpr[k]   <span class="ot">&lt;-</span> <span class="fu">mean</span>(fpr_vals)</span>
-<span id="cb13-44"><a href="#cb13-44" tabindex="-1"></a>  }</span>
-<span id="cb13-45"><a href="#cb13-45" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">power =</span> power, <span class="at">fpr =</span> fpr)</span>
-<span id="cb13-46"><a href="#cb13-46" tabindex="-1"></a>}</span>
-<span id="cb13-47"><a href="#cb13-47" tabindex="-1"></a></span>
-<span id="cb13-48"><a href="#cb13-48" tabindex="-1"></a><span class="co">#&#39; Load consolidated simulation results and compute power/FPR per sample size.</span></span>
-<span id="cb13-49"><a href="#cb13-49" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb13-50"><a href="#cb13-50" tabindex="-1"></a><span class="co">#&#39; Each setting has two consolidated files in its folder (SETTING_DIR[[setting]]),</span></span>
-<span id="cb13-51"><a href="#cb13-51" tabindex="-1"></a><span class="co">#&#39; pppower_all_&lt;setting&gt;_diffFix.Rd and _other.Rd, each holding a list</span></span>
-<span id="cb13-52"><a href="#cb13-52" tabindex="-1"></a><span class="co">#&#39; `simures_all` keyed by the per-gene filename stem. The p-values are:</span></span>
-<span id="cb13-53"><a href="#cb13-53" tabindex="-1"></a><span class="co">#&#39;   DiffDriver                       = diffFix result$m1.pvalue</span></span>
-<span id="cb13-54"><a href="#cb13-54" tabindex="-1"></a><span class="co">#&#39;   Linear/Fisher/Binomial/LogisticR = other   result$m1--m4.pvalue</span></span>
-<span id="cb13-55"><a href="#cb13-55" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb13-56"><a href="#cb13-56" tabindex="-1"></a><span class="co">#&#39; @param setting Setting name (e.g. &quot;TSG_binary_0.8&quot;) selecting the two files.</span></span>
-<span id="cb13-57"><a href="#cb13-57" tabindex="-1"></a><span class="co">#&#39; @param file_fn Function(Nsample, gene_index) returning the per-gene .Rd name;</span></span>
-<span id="cb13-58"><a href="#cb13-58" tabindex="-1"></a><span class="co">#&#39;   its stem (without .Rd) is the key into simures_all.</span></span>
-<span id="cb13-59"><a href="#cb13-59" tabindex="-1"></a><span class="co">#&#39; @param sample_sizes Vector of sample sizes to evaluate.</span></span>
-<span id="cb13-60"><a href="#cb13-60" tabindex="-1"></a><span class="co">#&#39; @param Nsim Max number of iterations to use. If NULL, uses all available.</span></span>
-<span id="cb13-61"><a href="#cb13-61" tabindex="-1"></a><span class="co">#&#39; @param n_genes Number of genes (default 200).</span></span>
-<span id="cb13-62"><a href="#cb13-62" tabindex="-1"></a>load_and_compute <span class="ot">&lt;-</span> <span class="cf">function</span>(setting, file_fn, sample_sizes,</span>
-<span id="cb13-63"><a href="#cb13-63" tabindex="-1"></a>                             <span class="at">Nsim =</span> <span class="cn">NULL</span>, <span class="at">n_genes =</span> <span class="dv">200</span>) {</span>
-<span id="cb13-64"><a href="#cb13-64" tabindex="-1"></a>  base <span class="ot">&lt;-</span> SETTING_DIR[[setting]]</span>
-<span id="cb13-65"><a href="#cb13-65" tabindex="-1"></a>  ed <span class="ot">&lt;-</span> <span class="fu">new.env</span>(); <span class="fu">load</span>(<span class="fu">file.path</span>(base, <span class="fu">sprintf</span>(<span class="st">&quot;pppower_all_%s_diffFix.Rd&quot;</span>, setting)), <span class="at">envir =</span> ed)</span>
-<span id="cb13-66"><a href="#cb13-66" tabindex="-1"></a>  eo <span class="ot">&lt;-</span> <span class="fu">new.env</span>(); <span class="fu">load</span>(<span class="fu">file.path</span>(base, <span class="fu">sprintf</span>(<span class="st">&quot;pppower_all_%s_other.Rd&quot;</span>,   setting)), <span class="at">envir =</span> eo)</span>
-<span id="cb13-67"><a href="#cb13-67" tabindex="-1"></a>  diff_all  <span class="ot">&lt;-</span> ed<span class="sc">$</span>simures_all</span>
-<span id="cb13-68"><a href="#cb13-68" tabindex="-1"></a>  other_all <span class="ot">&lt;-</span> eo<span class="sc">$</span>simures_all</span>
-<span id="cb13-69"><a href="#cb13-69" tabindex="-1"></a></span>
-<span id="cb13-70"><a href="#cb13-70" tabindex="-1"></a>  <span class="co"># Extra methods (coselens, Mann-Whitney) are added only where a consolidated file</span></span>
-<span id="cb13-71"><a href="#cb13-71" tabindex="-1"></a>  <span class="co"># exists for the setting; each gene key holds a &lt;field&gt; p-value vector like the others.</span></span>
-<span id="cb13-72"><a href="#cb13-72" tabindex="-1"></a>  EXTRA     <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">coselens =</span> <span class="st">&quot;coselens.pvalue&quot;</span>, <span class="at">MannWhitney =</span> <span class="st">&quot;mannwhitney.pvalue&quot;</span>)</span>
-<span id="cb13-73"><a href="#cb13-73" tabindex="-1"></a>  EXTRA_SFX <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">coselens =</span> <span class="st">&quot;coselens&quot;</span>, <span class="at">MannWhitney =</span> <span class="st">&quot;mannwhitney&quot;</span>)</span>
-<span id="cb13-74"><a href="#cb13-74" tabindex="-1"></a>  extra_all <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb13-75"><a href="#cb13-75" tabindex="-1"></a>  <span class="cf">for</span> (nm <span class="cf">in</span> <span class="fu">names</span>(EXTRA)) {</span>
-<span id="cb13-76"><a href="#cb13-76" tabindex="-1"></a>    f <span class="ot">&lt;-</span> <span class="fu">file.path</span>(base, <span class="fu">sprintf</span>(<span class="st">&quot;pppower_all_%s_%s.Rd&quot;</span>, setting, EXTRA_SFX[[nm]]))</span>
-<span id="cb13-77"><a href="#cb13-77" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">file.exists</span>(f)) { ee <span class="ot">&lt;-</span> <span class="fu">new.env</span>(); <span class="fu">load</span>(f, <span class="at">envir =</span> ee); extra_all[[nm]] <span class="ot">&lt;-</span> ee<span class="sc">$</span>simures_all }</span>
-<span id="cb13-78"><a href="#cb13-78" tabindex="-1"></a>  }</span>
-<span id="cb13-79"><a href="#cb13-79" tabindex="-1"></a>  methods   <span class="ot">&lt;-</span> <span class="fu">c</span>(METHODS, <span class="fu">names</span>(extra_all))</span>
-<span id="cb13-80"><a href="#cb13-80" tabindex="-1"></a>  n_methods <span class="ot">&lt;-</span> <span class="fu">length</span>(methods)</span>
-<span id="cb13-81"><a href="#cb13-81" tabindex="-1"></a></span>
-<span id="cb13-82"><a href="#cb13-82" tabindex="-1"></a>  power_mat <span class="ot">&lt;-</span> fpr_mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(</span>
-<span id="cb13-83"><a href="#cb13-83" tabindex="-1"></a>    <span class="at">nrow =</span> n_methods, <span class="at">ncol =</span> <span class="fu">length</span>(sample_sizes),</span>
-<span id="cb13-84"><a href="#cb13-84" tabindex="-1"></a>    <span class="at">dimnames =</span> <span class="fu">list</span>(methods, sample_sizes)</span>
-<span id="cb13-85"><a href="#cb13-85" tabindex="-1"></a>  )</span>
-<span id="cb13-86"><a href="#cb13-86" tabindex="-1"></a>  <span class="cf">for</span> (s <span class="cf">in</span> <span class="fu">seq_along</span>(sample_sizes)) {</span>
-<span id="cb13-87"><a href="#cb13-87" tabindex="-1"></a>    N <span class="ot">&lt;-</span> sample_sizes[s]</span>
-<span id="cb13-88"><a href="#cb13-88" tabindex="-1"></a>    m.pvalue <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb13-89"><a href="#cb13-89" tabindex="-1"></a>    n_iter   <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb13-90"><a href="#cb13-90" tabindex="-1"></a>    <span class="cf">for</span> (g <span class="cf">in</span> <span class="fu">seq_len</span>(n_genes)) {</span>
-<span id="cb13-91"><a href="#cb13-91" tabindex="-1"></a>      key   <span class="ot">&lt;-</span> <span class="fu">sub</span>(<span class="st">&quot;</span><span class="sc">\\</span><span class="st">.Rd$&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="fu">file_fn</span>(N, g))</span>
-<span id="cb13-92"><a href="#cb13-92" tabindex="-1"></a>      sdiff <span class="ot">&lt;-</span> diff_all[[key]]</span>
-<span id="cb13-93"><a href="#cb13-93" tabindex="-1"></a>      soth  <span class="ot">&lt;-</span> other_all[[key]]</span>
-<span id="cb13-94"><a href="#cb13-94" tabindex="-1"></a>      <span class="cf">if</span> (<span class="fu">is.null</span>(n_iter)) {</span>
-<span id="cb13-95"><a href="#cb13-95" tabindex="-1"></a>        n_avail <span class="ot">&lt;-</span> <span class="fu">length</span>(sdiff[[<span class="st">&quot;m1.pvalue&quot;</span>]])</span>
-<span id="cb13-96"><a href="#cb13-96" tabindex="-1"></a>        n_iter  <span class="ot">&lt;-</span> <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(Nsim)) <span class="fu">min</span>(Nsim, n_avail) <span class="cf">else</span> n_avail</span>
-<span id="cb13-97"><a href="#cb13-97" tabindex="-1"></a>        m.pvalue <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="fu">seq_len</span>(n_methods), <span class="cf">function</span>(x)</span>
-<span id="cb13-98"><a href="#cb13-98" tabindex="-1"></a>          <span class="fu">matrix</span>(<span class="at">nrow =</span> n_genes, <span class="at">ncol =</span> n_iter))</span>
-<span id="cb13-99"><a href="#cb13-99" tabindex="-1"></a>      }</span>
-<span id="cb13-100"><a href="#cb13-100" tabindex="-1"></a>      idx <span class="ot">&lt;-</span> <span class="fu">seq_len</span>(n_iter)</span>
-<span id="cb13-101"><a href="#cb13-101" tabindex="-1"></a>      m.pvalue[[<span class="dv">1</span>]][g, ] <span class="ot">&lt;-</span> sdiff[[<span class="st">&quot;m1.pvalue&quot;</span>]][idx]</span>
-<span id="cb13-102"><a href="#cb13-102" tabindex="-1"></a>      m.pvalue[[<span class="dv">2</span>]][g, ] <span class="ot">&lt;-</span> soth[[<span class="st">&quot;m1.pvalue&quot;</span>]][idx]</span>
-<span id="cb13-103"><a href="#cb13-103" tabindex="-1"></a>      m.pvalue[[<span class="dv">3</span>]][g, ] <span class="ot">&lt;-</span> soth[[<span class="st">&quot;m2.pvalue&quot;</span>]][idx]</span>
-<span id="cb13-104"><a href="#cb13-104" tabindex="-1"></a>      m.pvalue[[<span class="dv">4</span>]][g, ] <span class="ot">&lt;-</span> soth[[<span class="st">&quot;m3.pvalue&quot;</span>]][idx]</span>
-<span id="cb13-105"><a href="#cb13-105" tabindex="-1"></a>      m.pvalue[[<span class="dv">5</span>]][g, ] <span class="ot">&lt;-</span> soth[[<span class="st">&quot;m4.pvalue&quot;</span>]][idx]</span>
-<span id="cb13-106"><a href="#cb13-106" tabindex="-1"></a>      <span class="cf">for</span> (ei <span class="cf">in</span> <span class="fu">seq_along</span>(extra_all)) {</span>
-<span id="cb13-107"><a href="#cb13-107" tabindex="-1"></a>        nm <span class="ot">&lt;-</span> <span class="fu">names</span>(extra_all)[ei]</span>
-<span id="cb13-108"><a href="#cb13-108" tabindex="-1"></a>        m.pvalue[[<span class="fu">length</span>(METHODS) <span class="sc">+</span> ei]][g, ] <span class="ot">&lt;-</span> extra_all[[nm]][[key]][[EXTRA[[nm]]]][idx]</span>
-<span id="cb13-109"><a href="#cb13-109" tabindex="-1"></a>      }</span>
-<span id="cb13-110"><a href="#cb13-110" tabindex="-1"></a>    }</span>
-<span id="cb13-111"><a href="#cb13-111" tabindex="-1"></a>    metrics <span class="ot">&lt;-</span> <span class="fu">compute_metrics</span>(m.pvalue, n_iter)</span>
-<span id="cb13-112"><a href="#cb13-112" tabindex="-1"></a>    power_mat[, s] <span class="ot">&lt;-</span> metrics<span class="sc">$</span>power</span>
-<span id="cb13-113"><a href="#cb13-113" tabindex="-1"></a>    fpr_mat[, s]   <span class="ot">&lt;-</span> metrics<span class="sc">$</span>fpr</span>
-<span id="cb13-114"><a href="#cb13-114" tabindex="-1"></a>  }</span>
-<span id="cb13-115"><a href="#cb13-115" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">power =</span> power_mat, <span class="at">fpr =</span> fpr_mat, <span class="at">methods =</span> methods)</span>
-<span id="cb13-116"><a href="#cb13-116" tabindex="-1"></a>}</span>
-<span id="cb13-117"><a href="#cb13-117" tabindex="-1"></a></span>
-<span id="cb13-118"><a href="#cb13-118" tabindex="-1"></a><span class="co">#&#39; Plot power and FPR side by side.</span></span>
-<span id="cb13-119"><a href="#cb13-119" tabindex="-1"></a><span class="co">#&#39; @param res Output from load_and_compute (list with power and fpr matrices).</span></span>
-<span id="cb13-120"><a href="#cb13-120" tabindex="-1"></a><span class="co">#&#39; @param power_title Title for the power panel.</span></span>
-<span id="cb13-121"><a href="#cb13-121" tabindex="-1"></a><span class="co">#&#39; @param fpr_title Title for the FPR panel.</span></span>
-<span id="cb13-122"><a href="#cb13-122" tabindex="-1"></a><span class="co">#&#39; @param power_ylim Y-axis upper limit for the power panel.</span></span>
-<span id="cb13-123"><a href="#cb13-123" tabindex="-1"></a><span class="co">#&#39; @param show_legend Whether to show the method legend on the power panel.</span></span>
-<span id="cb13-124"><a href="#cb13-124" tabindex="-1"></a>plot_power_fpr <span class="ot">&lt;-</span> <span class="cf">function</span>(res, power_title, fpr_title,</span>
-<span id="cb13-125"><a href="#cb13-125" tabindex="-1"></a>                           <span class="at">power_ylim =</span> <span class="fl">0.4</span>, <span class="at">show_legend =</span> <span class="cn">TRUE</span>) {</span>
-<span id="cb13-126"><a href="#cb13-126" tabindex="-1"></a>  x     <span class="ot">&lt;-</span> <span class="fu">seq_len</span>(<span class="fu">ncol</span>(res<span class="sc">$</span>power))</span>
-<span id="cb13-127"><a href="#cb13-127" tabindex="-1"></a>  sizes <span class="ot">&lt;-</span> <span class="fu">colnames</span>(res<span class="sc">$</span>power)</span>
-<span id="cb13-128"><a href="#cb13-128" tabindex="-1"></a>  <span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">4</span>, <span class="dv">2</span>))</span>
-<span id="cb13-129"><a href="#cb13-129" tabindex="-1"></a></span>
-<span id="cb13-130"><a href="#cb13-130" tabindex="-1"></a>  <span class="co"># Power panel</span></span>
-<span id="cb13-131"><a href="#cb13-131" tabindex="-1"></a>  <span class="fu">plot</span>(x, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, power_ylim), <span class="at">col =</span> <span class="st">&quot;white&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Power&quot;</span>,</span>
-<span id="cb13-132"><a href="#cb13-132" tabindex="-1"></a>       <span class="at">xlab =</span> <span class="st">&quot;Number of samples&quot;</span>, <span class="at">yaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">xaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>,</span>
-<span id="cb13-133"><a href="#cb13-133" tabindex="-1"></a>       <span class="at">cex.lab =</span> <span class="fl">1.3</span>, <span class="at">mgp =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">0</span>))</span>
-<span id="cb13-134"><a href="#cb13-134" tabindex="-1"></a>  <span class="fu">title</span>(power_title)</span>
-<span id="cb13-135"><a href="#cb13-135" tabindex="-1"></a>  yticks <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, power_ylim, <span class="fl">0.1</span>)</span>
-<span id="cb13-136"><a href="#cb13-136" tabindex="-1"></a>  <span class="fu">axis</span>(<span class="dv">2</span>, <span class="at">at =</span> yticks, <span class="at">lab =</span> <span class="fu">paste0</span>(yticks <span class="sc">*</span> <span class="dv">100</span>, <span class="st">&quot;%&quot;</span>), <span class="at">las =</span> <span class="dv">2</span>, <span class="at">cex.axis =</span> <span class="fl">1.3</span>)</span>
-<span id="cb13-137"><a href="#cb13-137" tabindex="-1"></a>  <span class="fu">axis</span>(<span class="dv">1</span>, <span class="at">at =</span> x, <span class="at">lab =</span> sizes, <span class="at">cex.axis =</span> <span class="fl">1.3</span>)</span>
-<span id="cb13-138"><a href="#cb13-138" tabindex="-1"></a>  <span class="fu">grid</span>()</span>
-<span id="cb13-139"><a href="#cb13-139" tabindex="-1"></a>  <span class="cf">for</span> (r <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(res<span class="sc">$</span>power))) {</span>
-<span id="cb13-140"><a href="#cb13-140" tabindex="-1"></a>    <span class="fu">points</span>(x, res<span class="sc">$</span>power[r, ], <span class="at">col =</span> MYCOL[r], <span class="at">pch =</span> PCH[r], <span class="at">cex =</span> <span class="fl">1.8</span>)</span>
-<span id="cb13-141"><a href="#cb13-141" tabindex="-1"></a>    <span class="fu">lines</span>(x, res<span class="sc">$</span>power[r, ], <span class="at">col =</span> MYCOL[r], <span class="at">lwd =</span> <span class="fl">1.5</span>)</span>
-<span id="cb13-142"><a href="#cb13-142" tabindex="-1"></a>  }</span>
-<span id="cb13-143"><a href="#cb13-143" tabindex="-1"></a>  <span class="cf">if</span> (show_legend) {</span>
-<span id="cb13-144"><a href="#cb13-144" tabindex="-1"></a>    mm <span class="ot">&lt;-</span> <span class="fu">rownames</span>(res<span class="sc">$</span>power)</span>
-<span id="cb13-145"><a href="#cb13-145" tabindex="-1"></a>    <span class="fu">legend</span>(<span class="st">&quot;topleft&quot;</span>, <span class="at">legend =</span> mm, <span class="at">col =</span> MYCOL[<span class="fu">seq_along</span>(mm)],</span>
-<span id="cb13-146"><a href="#cb13-146" tabindex="-1"></a>           <span class="at">lwd =</span> <span class="dv">1</span>, <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>, <span class="at">lty =</span> <span class="cn">NA</span>, <span class="at">pch =</span> PCH[<span class="fu">seq_along</span>(mm)])</span>
-<span id="cb13-147"><a href="#cb13-147" tabindex="-1"></a>  }</span>
-<span id="cb13-148"><a href="#cb13-148" tabindex="-1"></a></span>
-<span id="cb13-149"><a href="#cb13-149" tabindex="-1"></a>  <span class="co"># FPR panel</span></span>
-<span id="cb13-150"><a href="#cb13-150" tabindex="-1"></a>  <span class="fu">plot</span>(x, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">col =</span> <span class="st">&quot;white&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;FPR&quot;</span>,</span>
-<span id="cb13-151"><a href="#cb13-151" tabindex="-1"></a>       <span class="at">xlab =</span> <span class="st">&quot;Number of samples&quot;</span>, <span class="at">yaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">xaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>,</span>
-<span id="cb13-152"><a href="#cb13-152" tabindex="-1"></a>       <span class="at">cex.lab =</span> <span class="fl">1.3</span>, <span class="at">mgp =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">0</span>))</span>
-<span id="cb13-153"><a href="#cb13-153" tabindex="-1"></a>  <span class="fu">title</span>(fpr_title)</span>
-<span id="cb13-154"><a href="#cb13-154" tabindex="-1"></a>  <span class="fu">axis</span>(<span class="dv">2</span>, <span class="at">at =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.1</span>), <span class="at">lab =</span> <span class="fu">paste0</span>(<span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">100</span>, <span class="dv">10</span>), <span class="st">&quot;%&quot;</span>),</span>
-<span id="cb13-155"><a href="#cb13-155" tabindex="-1"></a>       <span class="at">las =</span> <span class="dv">2</span>, <span class="at">cex.axis =</span> <span class="fl">1.3</span>)</span>
-<span id="cb13-156"><a href="#cb13-156" tabindex="-1"></a>  <span class="fu">axis</span>(<span class="dv">1</span>, <span class="at">at =</span> x, <span class="at">lab =</span> sizes, <span class="at">cex.axis =</span> <span class="fl">1.3</span>)</span>
-<span id="cb13-157"><a href="#cb13-157" tabindex="-1"></a>  <span class="fu">grid</span>()</span>
-<span id="cb13-158"><a href="#cb13-158" tabindex="-1"></a>  <span class="cf">for</span> (r <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(res<span class="sc">$</span>fpr))) {</span>
-<span id="cb13-159"><a href="#cb13-159" tabindex="-1"></a>    <span class="fu">points</span>(x, res<span class="sc">$</span>fpr[r, ], <span class="at">col =</span> MYCOL[r], <span class="at">pch =</span> PCH[r], <span class="at">cex =</span> <span class="fl">1.8</span>)</span>
-<span id="cb13-160"><a href="#cb13-160" tabindex="-1"></a>    <span class="fu">lines</span>(x, res<span class="sc">$</span>fpr[r, ], <span class="at">col =</span> MYCOL[r], <span class="at">lwd =</span> <span class="fl">1.5</span>)</span>
-<span id="cb13-161"><a href="#cb13-161" tabindex="-1"></a>  }</span>
-<span id="cb13-162"><a href="#cb13-162" tabindex="-1"></a>}</span></code></pre></div>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a>CONTI_SIZES_EXT <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">200</span>, <span class="dv">400</span>, <span class="dv">600</span>, <span class="dv">800</span>, <span class="dv">1000</span>, <span class="dv">1200</span>, <span class="dv">1500</span>, <span class="dv">2000</span>)  <span class="co"># slope=1 setting runs to 2000</span></span>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a></span>
+<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a><span class="co"># Each setting&#39;s consolidated results (pppower_all_&lt;SETTING&gt;_&lt;METHOD&gt;.Rd, produced by</span></span>
+<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a><span class="co"># code/consolidate_results.R) live in that setting&#39;s original folder under DD.</span></span>
+<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a>DD <span class="ot">&lt;-</span> <span class="st">&quot;/Volumes/Szhao/jiezhou/diffdata&quot;</span></span>
+<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a>SETTING_DIR <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a>  <span class="at">TSG_binary_0.8 =</span> <span class="fu">file.path</span>(DD, <span class="st">&quot;gene239/conti/TSG_BRCA&quot;</span>),</span>
+<span id="cb13-19"><a href="#cb13-19" tabindex="-1"></a>  <span class="at">TSG_binary_0.9 =</span> <span class="fu">file.path</span>(DD, <span class="st">&quot;gene239/conti/TSG_BRCA/TSG0.9/TSG_gene&quot;</span>),</span>
+<span id="cb13-20"><a href="#cb13-20" tabindex="-1"></a>  <span class="at">TSG_conti      =</span> <span class="fu">file.path</span>(DD, <span class="st">&quot;gene239/conti/TSG_BRCA/conti/conti2&quot;</span>),</span>
+<span id="cb13-21"><a href="#cb13-21" tabindex="-1"></a>  <span class="at">TSG_conti_slope1 =</span> <span class="fu">file.path</span>(DD, <span class="st">&quot;gene239/conti/TSG_BRCA/conti/conti_slope1&quot;</span>),</span>
+<span id="cb13-22"><a href="#cb13-22" tabindex="-1"></a>  <span class="at">OG_binary_0.8  =</span> <span class="fu">file.path</span>(DD, <span class="st">&quot;binaryEM/OG_gene&quot;</span>),</span>
+<span id="cb13-23"><a href="#cb13-23" tabindex="-1"></a>  <span class="at">OG_binary_0.9  =</span> <span class="fu">file.path</span>(DD, <span class="st">&quot;binaryEM/OG_gene&quot;</span>),</span>
+<span id="cb13-24"><a href="#cb13-24" tabindex="-1"></a>  <span class="at">OG_conti       =</span> <span class="fu">file.path</span>(DD, <span class="st">&quot;gene239/conti/OCG/OG_gene&quot;</span>)</span>
+<span id="cb13-25"><a href="#cb13-25" tabindex="-1"></a>)</span>
+<span id="cb13-26"><a href="#cb13-26" tabindex="-1"></a></span>
+<span id="cb13-27"><a href="#cb13-27" tabindex="-1"></a><span class="co">#&#39; Compute power and FPR from p-value matrices across simulation iterations.</span></span>
+<span id="cb13-28"><a href="#cb13-28" tabindex="-1"></a><span class="co">#&#39; @param m.pvalue List of matrices (one per method), each n_genes x Nsim.</span></span>
+<span id="cb13-29"><a href="#cb13-29" tabindex="-1"></a><span class="co">#&#39; @param Nsim Number of simulation iterations.</span></span>
+<span id="cb13-30"><a href="#cb13-30" tabindex="-1"></a><span class="co">#&#39; @param n_true Number of true positive genes (first n_true genes).</span></span>
+<span id="cb13-31"><a href="#cb13-31" tabindex="-1"></a>compute_metrics <span class="ot">&lt;-</span> <span class="cf">function</span>(m.pvalue, Nsim, <span class="at">n_true =</span> <span class="dv">50</span>) {</span>
+<span id="cb13-32"><a href="#cb13-32" tabindex="-1"></a>  n_methods <span class="ot">&lt;-</span> <span class="fu">length</span>(m.pvalue)</span>
+<span id="cb13-33"><a href="#cb13-33" tabindex="-1"></a>  power <span class="ot">&lt;-</span> fpr <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n_methods)</span>
+<span id="cb13-34"><a href="#cb13-34" tabindex="-1"></a>  <span class="cf">for</span> (k <span class="cf">in</span> <span class="fu">seq_len</span>(n_methods)) {</span>
+<span id="cb13-35"><a href="#cb13-35" tabindex="-1"></a>    sens <span class="ot">&lt;-</span> fpr_vals <span class="ot">&lt;-</span> <span class="fu">numeric</span>(Nsim)</span>
+<span id="cb13-36"><a href="#cb13-36" tabindex="-1"></a>    <span class="cf">for</span> (j <span class="cf">in</span> <span class="fu">seq_len</span>(Nsim)) {</span>
+<span id="cb13-37"><a href="#cb13-37" tabindex="-1"></a>      hits <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">p.adjust</span>(m.pvalue[[k]][, j], <span class="at">method =</span> <span class="st">&quot;BH&quot;</span>) <span class="sc">&lt;</span> FDR)</span>
+<span id="cb13-38"><a href="#cb13-38" tabindex="-1"></a>      <span class="cf">if</span> (<span class="fu">length</span>(hits) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb13-39"><a href="#cb13-39" tabindex="-1"></a>        sens[j]     <span class="ot">&lt;-</span> <span class="fu">sum</span>(hits <span class="sc">&lt;=</span> n_true) <span class="sc">/</span> n_true</span>
+<span id="cb13-40"><a href="#cb13-40" tabindex="-1"></a>        fpr_vals[j] <span class="ot">&lt;-</span> <span class="fu">sum</span>(hits <span class="sc">&gt;</span> n_true) <span class="sc">/</span> <span class="fu">length</span>(hits)</span>
+<span id="cb13-41"><a href="#cb13-41" tabindex="-1"></a>      }</span>
+<span id="cb13-42"><a href="#cb13-42" tabindex="-1"></a>    }</span>
+<span id="cb13-43"><a href="#cb13-43" tabindex="-1"></a>    power[k] <span class="ot">&lt;-</span> <span class="fu">mean</span>(sens)</span>
+<span id="cb13-44"><a href="#cb13-44" tabindex="-1"></a>    fpr[k]   <span class="ot">&lt;-</span> <span class="fu">mean</span>(fpr_vals)</span>
+<span id="cb13-45"><a href="#cb13-45" tabindex="-1"></a>  }</span>
+<span id="cb13-46"><a href="#cb13-46" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">power =</span> power, <span class="at">fpr =</span> fpr)</span>
+<span id="cb13-47"><a href="#cb13-47" tabindex="-1"></a>}</span>
+<span id="cb13-48"><a href="#cb13-48" tabindex="-1"></a></span>
+<span id="cb13-49"><a href="#cb13-49" tabindex="-1"></a><span class="co">#&#39; Load consolidated simulation results and compute power/FPR per sample size.</span></span>
+<span id="cb13-50"><a href="#cb13-50" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb13-51"><a href="#cb13-51" tabindex="-1"></a><span class="co">#&#39; Each setting has two consolidated files in its folder (SETTING_DIR[[setting]]),</span></span>
+<span id="cb13-52"><a href="#cb13-52" tabindex="-1"></a><span class="co">#&#39; pppower_all_&lt;setting&gt;_diffFix.Rd and _other.Rd, each holding a list</span></span>
+<span id="cb13-53"><a href="#cb13-53" tabindex="-1"></a><span class="co">#&#39; `simures_all` keyed by the per-gene filename stem. The p-values are:</span></span>
+<span id="cb13-54"><a href="#cb13-54" tabindex="-1"></a><span class="co">#&#39;   DiffDriver                       = diffFix result$m1.pvalue</span></span>
+<span id="cb13-55"><a href="#cb13-55" tabindex="-1"></a><span class="co">#&#39;   Linear/Fisher/Binomial/LogisticR = other   result$m1--m4.pvalue</span></span>
+<span id="cb13-56"><a href="#cb13-56" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb13-57"><a href="#cb13-57" tabindex="-1"></a><span class="co">#&#39; @param setting Setting name (e.g. &quot;TSG_binary_0.8&quot;) selecting the two files.</span></span>
+<span id="cb13-58"><a href="#cb13-58" tabindex="-1"></a><span class="co">#&#39; @param file_fn Function(Nsample, gene_index) returning the per-gene .Rd name;</span></span>
+<span id="cb13-59"><a href="#cb13-59" tabindex="-1"></a><span class="co">#&#39;   its stem (without .Rd) is the key into simures_all.</span></span>
+<span id="cb13-60"><a href="#cb13-60" tabindex="-1"></a><span class="co">#&#39; @param sample_sizes Vector of sample sizes to evaluate.</span></span>
+<span id="cb13-61"><a href="#cb13-61" tabindex="-1"></a><span class="co">#&#39; @param Nsim Max number of iterations to use. If NULL, uses all available.</span></span>
+<span id="cb13-62"><a href="#cb13-62" tabindex="-1"></a><span class="co">#&#39; @param n_genes Number of genes (default 200).</span></span>
+<span id="cb13-63"><a href="#cb13-63" tabindex="-1"></a>load_and_compute <span class="ot">&lt;-</span> <span class="cf">function</span>(setting, file_fn, sample_sizes,</span>
+<span id="cb13-64"><a href="#cb13-64" tabindex="-1"></a>                             <span class="at">Nsim =</span> <span class="cn">NULL</span>, <span class="at">n_genes =</span> <span class="dv">200</span>) {</span>
+<span id="cb13-65"><a href="#cb13-65" tabindex="-1"></a>  base <span class="ot">&lt;-</span> SETTING_DIR[[setting]]</span>
+<span id="cb13-66"><a href="#cb13-66" tabindex="-1"></a>  ed <span class="ot">&lt;-</span> <span class="fu">new.env</span>(); <span class="fu">load</span>(<span class="fu">file.path</span>(base, <span class="fu">sprintf</span>(<span class="st">&quot;pppower_all_%s_diffFix.Rd&quot;</span>, setting)), <span class="at">envir =</span> ed)</span>
+<span id="cb13-67"><a href="#cb13-67" tabindex="-1"></a>  eo <span class="ot">&lt;-</span> <span class="fu">new.env</span>(); <span class="fu">load</span>(<span class="fu">file.path</span>(base, <span class="fu">sprintf</span>(<span class="st">&quot;pppower_all_%s_other.Rd&quot;</span>,   setting)), <span class="at">envir =</span> eo)</span>
+<span id="cb13-68"><a href="#cb13-68" tabindex="-1"></a>  diff_all  <span class="ot">&lt;-</span> ed<span class="sc">$</span>simures_all</span>
+<span id="cb13-69"><a href="#cb13-69" tabindex="-1"></a>  other_all <span class="ot">&lt;-</span> eo<span class="sc">$</span>simures_all</span>
+<span id="cb13-70"><a href="#cb13-70" tabindex="-1"></a></span>
+<span id="cb13-71"><a href="#cb13-71" tabindex="-1"></a>  <span class="co"># Extra methods (coselens, Mann-Whitney) are added only where a consolidated file</span></span>
+<span id="cb13-72"><a href="#cb13-72" tabindex="-1"></a>  <span class="co"># exists for the setting; each gene key holds a &lt;field&gt; p-value vector like the others.</span></span>
+<span id="cb13-73"><a href="#cb13-73" tabindex="-1"></a>  EXTRA     <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">coselens =</span> <span class="st">&quot;coselens.pvalue&quot;</span>, <span class="at">MannWhitney =</span> <span class="st">&quot;mannwhitney.pvalue&quot;</span>)</span>
+<span id="cb13-74"><a href="#cb13-74" tabindex="-1"></a>  EXTRA_SFX <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">coselens =</span> <span class="st">&quot;coselens&quot;</span>, <span class="at">MannWhitney =</span> <span class="st">&quot;mannwhitney&quot;</span>)</span>
+<span id="cb13-75"><a href="#cb13-75" tabindex="-1"></a>  extra_all <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb13-76"><a href="#cb13-76" tabindex="-1"></a>  <span class="cf">for</span> (nm <span class="cf">in</span> <span class="fu">names</span>(EXTRA)) {</span>
+<span id="cb13-77"><a href="#cb13-77" tabindex="-1"></a>    f <span class="ot">&lt;-</span> <span class="fu">file.path</span>(base, <span class="fu">sprintf</span>(<span class="st">&quot;pppower_all_%s_%s.Rd&quot;</span>, setting, EXTRA_SFX[[nm]]))</span>
+<span id="cb13-78"><a href="#cb13-78" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">file.exists</span>(f)) { ee <span class="ot">&lt;-</span> <span class="fu">new.env</span>(); <span class="fu">load</span>(f, <span class="at">envir =</span> ee); extra_all[[nm]] <span class="ot">&lt;-</span> ee<span class="sc">$</span>simures_all }</span>
+<span id="cb13-79"><a href="#cb13-79" tabindex="-1"></a>  }</span>
+<span id="cb13-80"><a href="#cb13-80" tabindex="-1"></a>  methods   <span class="ot">&lt;-</span> <span class="fu">c</span>(METHODS, <span class="fu">names</span>(extra_all))</span>
+<span id="cb13-81"><a href="#cb13-81" tabindex="-1"></a>  n_methods <span class="ot">&lt;-</span> <span class="fu">length</span>(methods)</span>
+<span id="cb13-82"><a href="#cb13-82" tabindex="-1"></a></span>
+<span id="cb13-83"><a href="#cb13-83" tabindex="-1"></a>  power_mat <span class="ot">&lt;-</span> fpr_mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(</span>
+<span id="cb13-84"><a href="#cb13-84" tabindex="-1"></a>    <span class="at">nrow =</span> n_methods, <span class="at">ncol =</span> <span class="fu">length</span>(sample_sizes),</span>
+<span id="cb13-85"><a href="#cb13-85" tabindex="-1"></a>    <span class="at">dimnames =</span> <span class="fu">list</span>(methods, sample_sizes)</span>
+<span id="cb13-86"><a href="#cb13-86" tabindex="-1"></a>  )</span>
+<span id="cb13-87"><a href="#cb13-87" tabindex="-1"></a>  <span class="cf">for</span> (s <span class="cf">in</span> <span class="fu">seq_along</span>(sample_sizes)) {</span>
+<span id="cb13-88"><a href="#cb13-88" tabindex="-1"></a>    N <span class="ot">&lt;-</span> sample_sizes[s]</span>
+<span id="cb13-89"><a href="#cb13-89" tabindex="-1"></a>    m.pvalue <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb13-90"><a href="#cb13-90" tabindex="-1"></a>    n_iter   <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb13-91"><a href="#cb13-91" tabindex="-1"></a>    <span class="cf">for</span> (g <span class="cf">in</span> <span class="fu">seq_len</span>(n_genes)) {</span>
+<span id="cb13-92"><a href="#cb13-92" tabindex="-1"></a>      key   <span class="ot">&lt;-</span> <span class="fu">sub</span>(<span class="st">&quot;</span><span class="sc">\\</span><span class="st">.Rd$&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="fu">file_fn</span>(N, g))</span>
+<span id="cb13-93"><a href="#cb13-93" tabindex="-1"></a>      sdiff <span class="ot">&lt;-</span> diff_all[[key]]</span>
+<span id="cb13-94"><a href="#cb13-94" tabindex="-1"></a>      soth  <span class="ot">&lt;-</span> other_all[[key]]</span>
+<span id="cb13-95"><a href="#cb13-95" tabindex="-1"></a>      <span class="cf">if</span> (<span class="fu">is.null</span>(n_iter)) {</span>
+<span id="cb13-96"><a href="#cb13-96" tabindex="-1"></a>        n_avail <span class="ot">&lt;-</span> <span class="fu">length</span>(sdiff[[<span class="st">&quot;m1.pvalue&quot;</span>]])</span>
+<span id="cb13-97"><a href="#cb13-97" tabindex="-1"></a>        n_iter  <span class="ot">&lt;-</span> <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(Nsim)) <span class="fu">min</span>(Nsim, n_avail) <span class="cf">else</span> n_avail</span>
+<span id="cb13-98"><a href="#cb13-98" tabindex="-1"></a>        m.pvalue <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="fu">seq_len</span>(n_methods), <span class="cf">function</span>(x)</span>
+<span id="cb13-99"><a href="#cb13-99" tabindex="-1"></a>          <span class="fu">matrix</span>(<span class="at">nrow =</span> n_genes, <span class="at">ncol =</span> n_iter))</span>
+<span id="cb13-100"><a href="#cb13-100" tabindex="-1"></a>      }</span>
+<span id="cb13-101"><a href="#cb13-101" tabindex="-1"></a>      idx <span class="ot">&lt;-</span> <span class="fu">seq_len</span>(n_iter)</span>
+<span id="cb13-102"><a href="#cb13-102" tabindex="-1"></a>      m.pvalue[[<span class="dv">1</span>]][g, ] <span class="ot">&lt;-</span> sdiff[[<span class="st">&quot;m1.pvalue&quot;</span>]][idx]</span>
+<span id="cb13-103"><a href="#cb13-103" tabindex="-1"></a>      m.pvalue[[<span class="dv">2</span>]][g, ] <span class="ot">&lt;-</span> soth[[<span class="st">&quot;m1.pvalue&quot;</span>]][idx]</span>
+<span id="cb13-104"><a href="#cb13-104" tabindex="-1"></a>      m.pvalue[[<span class="dv">3</span>]][g, ] <span class="ot">&lt;-</span> soth[[<span class="st">&quot;m2.pvalue&quot;</span>]][idx]</span>
+<span id="cb13-105"><a href="#cb13-105" tabindex="-1"></a>      m.pvalue[[<span class="dv">4</span>]][g, ] <span class="ot">&lt;-</span> soth[[<span class="st">&quot;m3.pvalue&quot;</span>]][idx]</span>
+<span id="cb13-106"><a href="#cb13-106" tabindex="-1"></a>      m.pvalue[[<span class="dv">5</span>]][g, ] <span class="ot">&lt;-</span> soth[[<span class="st">&quot;m4.pvalue&quot;</span>]][idx]</span>
+<span id="cb13-107"><a href="#cb13-107" tabindex="-1"></a>      <span class="cf">for</span> (ei <span class="cf">in</span> <span class="fu">seq_along</span>(extra_all)) {</span>
+<span id="cb13-108"><a href="#cb13-108" tabindex="-1"></a>        nm <span class="ot">&lt;-</span> <span class="fu">names</span>(extra_all)[ei]</span>
+<span id="cb13-109"><a href="#cb13-109" tabindex="-1"></a>        m.pvalue[[<span class="fu">length</span>(METHODS) <span class="sc">+</span> ei]][g, ] <span class="ot">&lt;-</span> extra_all[[nm]][[key]][[EXTRA[[nm]]]][idx]</span>
+<span id="cb13-110"><a href="#cb13-110" tabindex="-1"></a>      }</span>
+<span id="cb13-111"><a href="#cb13-111" tabindex="-1"></a>    }</span>
+<span id="cb13-112"><a href="#cb13-112" tabindex="-1"></a>    metrics <span class="ot">&lt;-</span> <span class="fu">compute_metrics</span>(m.pvalue, n_iter)</span>
+<span id="cb13-113"><a href="#cb13-113" tabindex="-1"></a>    power_mat[, s] <span class="ot">&lt;-</span> metrics<span class="sc">$</span>power</span>
+<span id="cb13-114"><a href="#cb13-114" tabindex="-1"></a>    fpr_mat[, s]   <span class="ot">&lt;-</span> metrics<span class="sc">$</span>fpr</span>
+<span id="cb13-115"><a href="#cb13-115" tabindex="-1"></a>  }</span>
+<span id="cb13-116"><a href="#cb13-116" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">power =</span> power_mat, <span class="at">fpr =</span> fpr_mat, <span class="at">methods =</span> methods)</span>
+<span id="cb13-117"><a href="#cb13-117" tabindex="-1"></a>}</span>
+<span id="cb13-118"><a href="#cb13-118" tabindex="-1"></a></span>
+<span id="cb13-119"><a href="#cb13-119" tabindex="-1"></a><span class="co">#&#39; Plot power and FPR side by side.</span></span>
+<span id="cb13-120"><a href="#cb13-120" tabindex="-1"></a><span class="co">#&#39; @param res Output from load_and_compute (list with power and fpr matrices).</span></span>
+<span id="cb13-121"><a href="#cb13-121" tabindex="-1"></a><span class="co">#&#39; @param power_title Title for the power panel.</span></span>
+<span id="cb13-122"><a href="#cb13-122" tabindex="-1"></a><span class="co">#&#39; @param fpr_title Title for the FPR panel.</span></span>
+<span id="cb13-123"><a href="#cb13-123" tabindex="-1"></a><span class="co">#&#39; @param power_ylim Y-axis upper limit for the power panel.</span></span>
+<span id="cb13-124"><a href="#cb13-124" tabindex="-1"></a><span class="co">#&#39; @param show_legend Whether to show the method legend on the power panel.</span></span>
+<span id="cb13-125"><a href="#cb13-125" tabindex="-1"></a>plot_power_fpr <span class="ot">&lt;-</span> <span class="cf">function</span>(res, power_title, fpr_title,</span>
+<span id="cb13-126"><a href="#cb13-126" tabindex="-1"></a>                           <span class="at">power_ylim =</span> <span class="fl">0.4</span>, <span class="at">show_legend =</span> <span class="cn">TRUE</span>) {</span>
+<span id="cb13-127"><a href="#cb13-127" tabindex="-1"></a>  x     <span class="ot">&lt;-</span> <span class="fu">seq_len</span>(<span class="fu">ncol</span>(res<span class="sc">$</span>power))</span>
+<span id="cb13-128"><a href="#cb13-128" tabindex="-1"></a>  sizes <span class="ot">&lt;-</span> <span class="fu">colnames</span>(res<span class="sc">$</span>power)</span>
+<span id="cb13-129"><a href="#cb13-129" tabindex="-1"></a>  <span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">4</span>, <span class="dv">2</span>))</span>
+<span id="cb13-130"><a href="#cb13-130" tabindex="-1"></a></span>
+<span id="cb13-131"><a href="#cb13-131" tabindex="-1"></a>  <span class="co"># Power panel</span></span>
+<span id="cb13-132"><a href="#cb13-132" tabindex="-1"></a>  <span class="fu">plot</span>(x, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, power_ylim), <span class="at">col =</span> <span class="st">&quot;white&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Power&quot;</span>,</span>
+<span id="cb13-133"><a href="#cb13-133" tabindex="-1"></a>       <span class="at">xlab =</span> <span class="st">&quot;Number of samples&quot;</span>, <span class="at">yaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">xaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>,</span>
+<span id="cb13-134"><a href="#cb13-134" tabindex="-1"></a>       <span class="at">cex.lab =</span> <span class="fl">1.3</span>, <span class="at">mgp =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">0</span>))</span>
+<span id="cb13-135"><a href="#cb13-135" tabindex="-1"></a>  <span class="fu">title</span>(power_title)</span>
+<span id="cb13-136"><a href="#cb13-136" tabindex="-1"></a>  yticks <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, power_ylim, <span class="fl">0.1</span>)</span>
+<span id="cb13-137"><a href="#cb13-137" tabindex="-1"></a>  <span class="fu">axis</span>(<span class="dv">2</span>, <span class="at">at =</span> yticks, <span class="at">lab =</span> <span class="fu">paste0</span>(yticks <span class="sc">*</span> <span class="dv">100</span>, <span class="st">&quot;%&quot;</span>), <span class="at">las =</span> <span class="dv">2</span>, <span class="at">cex.axis =</span> <span class="fl">1.3</span>)</span>
+<span id="cb13-138"><a href="#cb13-138" tabindex="-1"></a>  <span class="fu">axis</span>(<span class="dv">1</span>, <span class="at">at =</span> x, <span class="at">lab =</span> sizes, <span class="at">cex.axis =</span> <span class="fl">1.3</span>)</span>
+<span id="cb13-139"><a href="#cb13-139" tabindex="-1"></a>  <span class="fu">grid</span>()</span>
+<span id="cb13-140"><a href="#cb13-140" tabindex="-1"></a>  <span class="cf">for</span> (r <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(res<span class="sc">$</span>power))) {</span>
+<span id="cb13-141"><a href="#cb13-141" tabindex="-1"></a>    <span class="fu">points</span>(x, res<span class="sc">$</span>power[r, ], <span class="at">col =</span> MYCOL[r], <span class="at">pch =</span> PCH[r], <span class="at">cex =</span> <span class="fl">1.8</span>)</span>
+<span id="cb13-142"><a href="#cb13-142" tabindex="-1"></a>    <span class="fu">lines</span>(x, res<span class="sc">$</span>power[r, ], <span class="at">col =</span> MYCOL[r], <span class="at">lwd =</span> <span class="fl">1.5</span>)</span>
+<span id="cb13-143"><a href="#cb13-143" tabindex="-1"></a>  }</span>
+<span id="cb13-144"><a href="#cb13-144" tabindex="-1"></a>  <span class="cf">if</span> (show_legend) {</span>
+<span id="cb13-145"><a href="#cb13-145" tabindex="-1"></a>    mm <span class="ot">&lt;-</span> <span class="fu">rownames</span>(res<span class="sc">$</span>power)</span>
+<span id="cb13-146"><a href="#cb13-146" tabindex="-1"></a>    <span class="fu">legend</span>(<span class="st">&quot;topleft&quot;</span>, <span class="at">legend =</span> mm, <span class="at">col =</span> MYCOL[<span class="fu">seq_along</span>(mm)],</span>
+<span id="cb13-147"><a href="#cb13-147" tabindex="-1"></a>           <span class="at">lwd =</span> <span class="dv">1</span>, <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>, <span class="at">lty =</span> <span class="cn">NA</span>, <span class="at">pch =</span> PCH[<span class="fu">seq_along</span>(mm)])</span>
+<span id="cb13-148"><a href="#cb13-148" tabindex="-1"></a>  }</span>
+<span id="cb13-149"><a href="#cb13-149" tabindex="-1"></a></span>
+<span id="cb13-150"><a href="#cb13-150" tabindex="-1"></a>  <span class="co"># FPR panel</span></span>
+<span id="cb13-151"><a href="#cb13-151" tabindex="-1"></a>  <span class="fu">plot</span>(x, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">col =</span> <span class="st">&quot;white&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;FPR&quot;</span>,</span>
+<span id="cb13-152"><a href="#cb13-152" tabindex="-1"></a>       <span class="at">xlab =</span> <span class="st">&quot;Number of samples&quot;</span>, <span class="at">yaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">xaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>,</span>
+<span id="cb13-153"><a href="#cb13-153" tabindex="-1"></a>       <span class="at">cex.lab =</span> <span class="fl">1.3</span>, <span class="at">mgp =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">0</span>))</span>
+<span id="cb13-154"><a href="#cb13-154" tabindex="-1"></a>  <span class="fu">title</span>(fpr_title)</span>
+<span id="cb13-155"><a href="#cb13-155" tabindex="-1"></a>  <span class="fu">axis</span>(<span class="dv">2</span>, <span class="at">at =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.1</span>), <span class="at">lab =</span> <span class="fu">paste0</span>(<span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">100</span>, <span class="dv">10</span>), <span class="st">&quot;%&quot;</span>),</span>
+<span id="cb13-156"><a href="#cb13-156" tabindex="-1"></a>       <span class="at">las =</span> <span class="dv">2</span>, <span class="at">cex.axis =</span> <span class="fl">1.3</span>)</span>
+<span id="cb13-157"><a href="#cb13-157" tabindex="-1"></a>  <span class="fu">axis</span>(<span class="dv">1</span>, <span class="at">at =</span> x, <span class="at">lab =</span> sizes, <span class="at">cex.axis =</span> <span class="fl">1.3</span>)</span>
+<span id="cb13-158"><a href="#cb13-158" tabindex="-1"></a>  <span class="fu">grid</span>()</span>
+<span id="cb13-159"><a href="#cb13-159" tabindex="-1"></a>  <span class="cf">for</span> (r <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(res<span class="sc">$</span>fpr))) {</span>
+<span id="cb13-160"><a href="#cb13-160" tabindex="-1"></a>    <span class="fu">points</span>(x, res<span class="sc">$</span>fpr[r, ], <span class="at">col =</span> MYCOL[r], <span class="at">pch =</span> PCH[r], <span class="at">cex =</span> <span class="fl">1.8</span>)</span>
+<span id="cb13-161"><a href="#cb13-161" tabindex="-1"></a>    <span class="fu">lines</span>(x, res<span class="sc">$</span>fpr[r, ], <span class="at">col =</span> MYCOL[r], <span class="at">lwd =</span> <span class="fl">1.5</span>)</span>
+<span id="cb13-162"><a href="#cb13-162" tabindex="-1"></a>  }</span>
+<span id="cb13-163"><a href="#cb13-163" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 </div>
 <div id="reproducing-figure-3-in-paper" class="section level2">
@@ -1760,7 +1794,7 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb21-1"><a href=
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">load_and_compute</span>(</span>
 <span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>  <span class="at">setting      =</span> <span class="st">&quot;TSG_conti_slope1&quot;</span>,</span>
 <span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a>  <span class="at">file_fn      =</span> <span class="cf">function</span>(N, g) <span class="fu">paste0</span>(<span class="st">&quot;pppower_betaf0=0_sample&quot;</span>, N, <span class="st">&quot;_&quot;</span>, g, <span class="st">&quot;.Rd&quot;</span>),</span>
-<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a>  <span class="at">sample_sizes =</span> CONTI_SIZES</span>
+<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a>  <span class="at">sample_sizes =</span> CONTI_SIZES_EXT</span>
 <span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a>)</span>
 <span id="cb22-6"><a href="#cb22-6" tabindex="-1"></a><span class="fu">plot_power_fpr</span>(res,</span>
 <span id="cb22-7"><a href="#cb22-7" tabindex="-1"></a>  <span class="at">power_title =</span> <span class="st">&quot;betaf0 = 0, para = (0, 2, 0, 1)&quot;</span>,</span>
@@ -1768,13 +1802,50 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb21-1"><a href=
 <span id="cb22-9"><a href="#cb22-9" tabindex="-1"></a>  <span class="at">power_ylim  =</span> <span class="fl">0.6</span></span>
 <span id="cb22-10"><a href="#cb22-10" tabindex="-1"></a>)</span></code></pre></div>
 <p><img src="figure/simulation-power.Rmd/tsg-conti-s1-f0-1.png" alt="" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-tsg-conti-s1-f0-1">
+Past versions of tsg-conti-s1-f0-1.png
+</button>
+</p>
+<div id="fig-tsg-conti-s1-f0-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/d0993ed7ce97350c69bf32f9474ba09135b4ba51/docs/figure/simulation-power.Rmd/tsg-conti-s1-f0-1.png" target="_blank">d0993ed</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-07-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="betaf0-1-1" class="section level4">
 <h4>betaf0 = 1</h4>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">load_and_compute</span>(</span>
 <span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a>  <span class="at">setting      =</span> <span class="st">&quot;TSG_conti_slope1&quot;</span>,</span>
 <span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a>  <span class="at">file_fn      =</span> <span class="cf">function</span>(N, g) <span class="fu">paste0</span>(<span class="st">&quot;pppower_betaf0=1_sample&quot;</span>, N, <span class="st">&quot;_&quot;</span>, g, <span class="st">&quot;.Rd&quot;</span>),</span>
-<span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a>  <span class="at">sample_sizes =</span> CONTI_SIZES</span>
+<span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a>  <span class="at">sample_sizes =</span> CONTI_SIZES_EXT</span>
 <span id="cb23-5"><a href="#cb23-5" tabindex="-1"></a>)</span>
 <span id="cb23-6"><a href="#cb23-6" tabindex="-1"></a><span class="fu">plot_power_fpr</span>(res,</span>
 <span id="cb23-7"><a href="#cb23-7" tabindex="-1"></a>  <span class="at">power_title  =</span> <span class="st">&quot;betaf0 = 1, para = (0, 2, 0, 1)&quot;</span>,</span>
@@ -1783,6 +1854,43 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb21-1"><a href=
 <span id="cb23-10"><a href="#cb23-10" tabindex="-1"></a>  <span class="at">show_legend  =</span> <span class="cn">FALSE</span></span>
 <span id="cb23-11"><a href="#cb23-11" tabindex="-1"></a>)</span></code></pre></div>
 <p><img src="figure/simulation-power.Rmd/tsg-conti-s1-f1-1.png" alt="" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-tsg-conti-s1-f1-1">
+Past versions of tsg-conti-s1-f1-1.png
+</button>
+</p>
+<div id="fig-tsg-conti-s1-f1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/d0993ed7ce97350c69bf32f9474ba09135b4ba51/docs/figure/simulation-power.Rmd/tsg-conti-s1-f1-1.png" target="_blank">d0993ed</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-07-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <hr />
 </div>
 </div>

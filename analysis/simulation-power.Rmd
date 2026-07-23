@@ -192,6 +192,7 @@ PCH          <- c(19, 17, 15, 18, 8, 4, 3)
 FDR          <- 0.1
 BINARY_SIZES <- c(200, 400, 600, 800, 1000, 1200, 1500)
 CONTI_SIZES  <- c(200, 400, 600, 800, 1000, 1200)
+CONTI_SIZES_EXT <- c(200, 400, 600, 800, 1000, 1200, 1500, 2000)  # slope=1 setting runs to 2000
 
 # Each setting's consolidated results (pppower_all_<SETTING>_<METHOD>.Rd, produced by
 # code/consolidate_results.R) live in that setting's original folder under DD.
@@ -463,7 +464,7 @@ Rscript code/simulate_all_genes.R TSG_conti_slope1 other
 res <- load_and_compute(
   setting      = "TSG_conti_slope1",
   file_fn      = function(N, g) paste0("pppower_betaf0=0_sample", N, "_", g, ".Rd"),
-  sample_sizes = CONTI_SIZES
+  sample_sizes = CONTI_SIZES_EXT
 )
 plot_power_fpr(res,
   power_title = "betaf0 = 0, para = (0, 2, 0, 1)",
@@ -478,7 +479,7 @@ plot_power_fpr(res,
 res <- load_and_compute(
   setting      = "TSG_conti_slope1",
   file_fn      = function(N, g) paste0("pppower_betaf0=1_sample", N, "_", g, ".Rd"),
-  sample_sizes = CONTI_SIZES
+  sample_sizes = CONTI_SIZES_EXT
 )
 plot_power_fpr(res,
   power_title  = "betaf0 = 1, para = (0, 2, 0, 1)",
