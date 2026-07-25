@@ -253,8 +253,8 @@ load_and_compute <- function(setting, file_fn, sample_sizes,
 
   # Extra methods (coselens, Mann-Whitney) are added only where a consolidated file
   # exists for the setting; each gene key holds a <field> p-value vector like the others.
-  EXTRA     <- list(coselens = "coselens.pvalue", MannWhitney = "mannwhitney.pvalue")
-  EXTRA_SFX <- c(coselens = "coselens", MannWhitney = "mannwhitney")
+  EXTRA     <- list(Coselens = "coselens.pvalue", MannWhitney = "mannwhitney.pvalue")
+  EXTRA_SFX <- c(Coselens = "coselens", MannWhitney = "mannwhitney")
   extra_all <- list()
   for (nm in names(EXTRA)) {
     f <- file.path(base, sprintf("pppower_all_%s_%s.Rd", setting, EXTRA_SFX[[nm]]))

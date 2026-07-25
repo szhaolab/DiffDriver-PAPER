@@ -11,7 +11,7 @@
 
 <meta name="author" content="Jie Zhou, Siming Zhao" />
 
-<meta name="date" content="2026-07-24" />
+<meta name="date" content="2026-07-25" />
 
 <title>Simulation: Pipeline and Power Results</title>
 
@@ -469,7 +469,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Simulation: Pipeline and Power Results</h1>
 <h4 class="author">Jie Zhou, Siming Zhao</h4>
-<h4 class="date">2026-07-24</h4>
+<h4 class="date">2026-07-25</h4>
 
 </div>
 
@@ -498,7 +498,7 @@ aria-hidden="true"></span> </a>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2026-07-24
+<strong>Last updated:</strong> 2026-07-25
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -632,15 +632,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree999a9b3bf5abd5408d9e5289be26f0d61f6a9576targetblank999a9b3a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree2efa9578f25dfe03108b34ac7d1af49316dd0186targetblank2efa957a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/999a9b3bf5abd5408d9e5289be26f0d61f6a9576" target="_blank">999a9b3</a>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/2efa9578f25dfe03108b34ac7d1af49316dd0186" target="_blank">2efa957</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree999a9b3bf5abd5408d9e5289be26f0d61f6a9576targetblank999a9b3a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree2efa9578f25dfe03108b34ac7d1af49316dd0186targetblank2efa957a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -650,7 +650,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/999a9b3bf5abd5408d9e5289be26f0d61f6a9576" target="_blank">999a9b3</a>.
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/2efa9578f25dfe03108b34ac7d1af49316dd0186" target="_blank">2efa957</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -721,6 +721,42 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/80adacef148abddfa7c673592a55bc2c4d39e852/analysis/simulation-power.Rmd" target="_blank">80adace</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-07-24
+</td>
+<td>
+Fix mislabeled continuous figure titles (TSG_conti &amp; OG_conti are
+slope=2)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/szhaolab/DiffDriver-PAPER/80adacef148abddfa7c673592a55bc2c4d39e852/docs/simulation-power.html" target="_blank">80adace</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-07-24
+</td>
+<td>
+Fix mislabeled continuous figure titles (TSG_conti &amp; OG_conti are
+slope=2)
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1386,8 +1422,8 @@ underlying model and test functions.</p>
 <span id="cb13-70"><a href="#cb13-70" tabindex="-1"></a></span>
 <span id="cb13-71"><a href="#cb13-71" tabindex="-1"></a>  <span class="co"># Extra methods (coselens, Mann-Whitney) are added only where a consolidated file</span></span>
 <span id="cb13-72"><a href="#cb13-72" tabindex="-1"></a>  <span class="co"># exists for the setting; each gene key holds a &lt;field&gt; p-value vector like the others.</span></span>
-<span id="cb13-73"><a href="#cb13-73" tabindex="-1"></a>  EXTRA     <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">coselens =</span> <span class="st">&quot;coselens.pvalue&quot;</span>, <span class="at">MannWhitney =</span> <span class="st">&quot;mannwhitney.pvalue&quot;</span>)</span>
-<span id="cb13-74"><a href="#cb13-74" tabindex="-1"></a>  EXTRA_SFX <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">coselens =</span> <span class="st">&quot;coselens&quot;</span>, <span class="at">MannWhitney =</span> <span class="st">&quot;mannwhitney&quot;</span>)</span>
+<span id="cb13-73"><a href="#cb13-73" tabindex="-1"></a>  EXTRA     <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Coselens =</span> <span class="st">&quot;coselens.pvalue&quot;</span>, <span class="at">MannWhitney =</span> <span class="st">&quot;mannwhitney.pvalue&quot;</span>)</span>
+<span id="cb13-74"><a href="#cb13-74" tabindex="-1"></a>  EXTRA_SFX <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">Coselens =</span> <span class="st">&quot;coselens&quot;</span>, <span class="at">MannWhitney =</span> <span class="st">&quot;mannwhitney&quot;</span>)</span>
 <span id="cb13-75"><a href="#cb13-75" tabindex="-1"></a>  extra_all <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
 <span id="cb13-76"><a href="#cb13-76" tabindex="-1"></a>  <span class="cf">for</span> (nm <span class="cf">in</span> <span class="fu">names</span>(EXTRA)) {</span>
 <span id="cb13-77"><a href="#cb13-77" tabindex="-1"></a>    f <span class="ot">&lt;-</span> <span class="fu">file.path</span>(base, <span class="fu">sprintf</span>(<span class="st">&quot;pppower_all_%s_%s.Rd&quot;</span>, setting, EXTRA_SFX[[nm]]))</span>
@@ -1697,6 +1733,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/80adacef148abddfa7c673592a55bc2c4d39e852/docs/figure/simulation-power.Rmd/tsg-conti-f0-1.png" target="_blank">80adace</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-07-24
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/e8b9fb569295519e2a74900e3bf837672b8c2c87/docs/figure/simulation-power.Rmd/tsg-conti-f0-1.png" target="_blank">e8b9fb5</a>
@@ -2154,6 +2201,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/80adacef148abddfa7c673592a55bc2c4d39e852/docs/figure/simulation-power.Rmd/og-conti-f0-1.png" target="_blank">80adace</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-07-24
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/e8b9fb569295519e2a74900e3bf837672b8c2c87/docs/figure/simulation-power.Rmd/og-conti-f0-1.png" target="_blank">e8b9fb5</a>
