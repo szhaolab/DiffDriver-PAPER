@@ -270,8 +270,13 @@ run_selection_diffdriver <- function(binary, Niter, sganno, sgmatrix, Nsample, p
 #' @param rho Target correlation between phenotype and the confounding loading
 #' @param sc Scaling constant (larger => fewer simulated mutations)
 #' @param sig_confound Index of the confounding signature (default 3)
+#' @param tmb_cv Per-sample total-mutation-burden variation. 0 (default) keeps the
+#'   constant per-sample budget of the LUAD loadings; tmb_cv > 0 multiplies each
+#'   sample's whole loading vector by an independent mean-1 log-normal factor with
+#'   coefficient of variation tmb_cv, so samples get different total mutation
+#'   counts while the (confounded) signature *composition* is preserved.
 #' @return list(bmr = 96 x nsample rate matrix, loadings = permuted loadings, signatures)
-build_confounded_bmr <- function(e, signatures, loadings, rho, sc = 1, sig_confound = 3) {
+build_confounded_bmr <- function(e, signatures, loadings, rho, sc = 1, sig_confound = 3, tmb_cv = 0) {
   if (nrow(signatures) != 96) stop("Signature length should be 96!")
   nn <- length(e)
   cc <- as.matrix(loadings)[, sample(ncol(loadings), nn, replace = TRUE)]  # nsig x nn, colSums constant
@@ -283,6 +288,10 @@ build_confounded_bmr <- function(e, signatures, loadings, rho, sc = 1, sig_confo
   target <- complement(e, rho)                    # correlated with e at rho
   perm <- integer(nn); perm[order(target)] <- order(cc[sig_confound, ])
   cc <- cc[, perm]                                # confounding signature loading now tracks e
+  if (tmb_cv > 0) {                               # per-sample total-burden multiplier (mean 1)
+    sdlog <- sqrt(log(1 + tmb_cv^2))
+    cc <- sweep(cc, 2, rlnorm(nn, meanlog = -sdlog^2 / 2, sdlog = sdlog), "*")
+  }
   yy <- as.matrix(signatures) %*% cc
   bmr <- yy / sc
   list(bmr = bmr, loadings = cc, signatures = signatures)
@@ -294,9 +303,12 @@ build_confounded_bmr <- function(e, signatures, loadings, rho, sc = 1, sig_confo
 #' The neutral per-site probability of nucleotide type t is bmrfold$bmr[t, ]
 #' (from build_confounded_bmr), so it varies per sample and is correlated with
 #' the phenotype. Selection is drawn from `para`; for the confounding benchmark
-#' para = c(0.5, 0.5) gives NO differential selection. Binary phenotypes only.
+#' para = c(0.5, 0.5) gives NO differential selection.
 #'
-#' @param binary Logical; must be TRUE (binary case/control phenotype)
+#' @param binary Logical; TRUE = binary case/control phenotype, FALSE = continuous
+#'   phenotype ~ N(0,1) (both confounded with the signature loading at `rho`)
+#' @param tmb_cv Per-sample total-mutation-burden variation (passed to
+#'   build_confounded_bmr); 0 = constant burden
 #' @param sganno List of 96 annotation data.frames (one per nucleotide type)
 #' @param sgmatrix List of 96 functional annotation matrices
 #' @param Nsample Total number of samples
@@ -313,18 +325,22 @@ build_confounded_bmr <- function(e, signatures, loadings, rho, sc = 1, sig_confo
 #'   bmrmtxlist, para, efsize, nsample
 simulate_confounding <- function(binary = TRUE, sganno, sgmatrix, Nsample, beta_gc,
                                  beta_gcFix = beta_gc, para, hot = 0, hmm,
-                                 signatures, loadings, rho, sc) {
-  if (!isTRUE(binary)) {
-    stop("simulate_confounding() currently supports binary phenotypes only.")
-  }
+                                 signatures, loadings, rho, sc, tmb_cv = 0) {
 
-  # --- binary phenotype + (null) selection --------------------------------
-  Nsamplec  <- round(Nsample / 2)        # samples with phenotype E = 1
-  Nsamplen  <- Nsample - Nsamplec        # samples with phenotype E = 0
-  phenotype <- c(rep(1, Nsamplec), rep(0, Nsamplen))
-  ss <- ifelse(phenotype == 1,
-               sample(c(0, 1), size = Nsamplec, replace = TRUE, prob = c(1 - para[1], para[1])),
-               sample(c(0, 1), size = Nsamplen, replace = TRUE, prob = c(1 - para[2], para[2])))
+  # --- phenotype + (null) selection ---------------------------------------
+  if (isTRUE(binary)) {
+    Nsamplec  <- round(Nsample / 2)        # samples with phenotype E = 1
+    Nsamplen  <- Nsample - Nsamplec        # samples with phenotype E = 0
+    phenotype <- c(rep(1, Nsamplec), rep(0, Nsamplen))
+    ss <- ifelse(phenotype == 1,
+                 sample(c(0, 1), size = Nsamplec, replace = TRUE, prob = c(1 - para[1], para[1])),
+                 sample(c(0, 1), size = Nsamplen, replace = TRUE, prob = c(1 - para[2], para[2])))
+  } else {
+    # continuous phenotype ~ N(0,1); selection is independent of phenotype
+    # (para[1] is the per-sample selection probability; para = c(0.5,0.5) => none)
+    phenotype <- rnorm(Nsample)
+    ss <- rbinom(Nsample, size = 1, prob = para[1])
+  }
   selection   <- rbind(ss, 1 - ss)
   Nsample.ps  <- sum(ss)
   Nsample.neu <- Nsample - Nsample.ps
@@ -333,7 +349,7 @@ simulate_confounding <- function(binary = TRUE, sganno, sgmatrix, Nsample, beta_
   sig1 <- merge(signatures, codeSignature)
   sig2 <- sig1[order(sig1$number), c(2, 3, 4, 5, 6, 7)]   # k1..k6 in context order
   bmrfold <- build_confounded_bmr(e = phenotype, signatures = sig2,
-                                  loadings = loadings, rho = rho, sc = sc)
+                                  loadings = loadings, rho = rho, sc = sc, tmb_cv = tmb_cv)
 
   # --- simulate mutations, one matrix per nucleotide-type segment ---------
   betagc    <- c(beta_gc,    hmm[9])     # hmm[9] = log hotspot fold
