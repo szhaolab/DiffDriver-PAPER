@@ -162,7 +162,7 @@ lines(x, ddT,  col = "#FF3D2E", lwd = 2);              points(x, ddT,  col = "#F
 lines(x, ddE,  col = "#FF3D2E", lwd = 2, lty = 2);     points(x, ddE,  col = "#FF3D2E", pch = 2,  cex = 1.4, lwd = 2)
 
 legend(par("usr")[2], par("usr")[4], bty = "n", cex = 0.85, xjust = 0,
-  legend = c("coselens (true bkg)","coselens (estimated)",
+  legend = c("Coselens (true bkg)","Coselens (estimated)",
              "DiffDriver (true bkg)","DiffDriver (estimated)","",
              "Linear","Fisher","Binomial","LogisticR","MannWhitney"),
   col = c("#ff7f00","#ff7f00","#FF3D2E","#FF3D2E",NA, cbcol),

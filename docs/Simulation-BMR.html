@@ -11,7 +11,7 @@
 
 <meta name="author" content="Jie Zhou, Siming Zhao" />
 
-<meta name="date" content="2026-07-21" />
+<meta name="date" content="2026-07-25" />
 
 <title>Simulation: Confounding Between Phenotype and Mutational Signatures</title>
 
@@ -470,7 +470,7 @@ div.tocify {
 <h1 class="title toc-ignore">Simulation: Confounding Between Phenotype
 and Mutational Signatures</h1>
 <h4 class="author">Jie Zhou, Siming Zhao</h4>
-<h4 class="date">2026-07-21</h4>
+<h4 class="date">2026-07-25</h4>
 
 </div>
 
@@ -499,7 +499,7 @@ aria-hidden="true"></span> </a>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2026-07-21
+<strong>Last updated:</strong> 2026-07-25
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -633,15 +633,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtreed7a542cc36573a5b4b5fb9fb83066dfdeb16c437targetblankd7a542ca">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree80adacef148abddfa7c673592a55bc2c4d39e852targetblank80adacea">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/d7a542cc36573a5b4b5fb9fb83066dfdeb16c437" target="_blank">d7a542c</a>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/80adacef148abddfa7c673592a55bc2c4d39e852" target="_blank">80adace</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtreed7a542cc36573a5b4b5fb9fb83066dfdeb16c437targetblankd7a542ca"
+id="strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree80adacef148abddfa7c673592a55bc2c4d39e852targetblank80adacea"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -651,7 +651,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/d7a542cc36573a5b4b5fb9fb83066dfdeb16c437" target="_blank">d7a542c</a>.
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/80adacef148abddfa7c673592a55bc2c4d39e852" target="_blank">80adace</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -677,7 +677,9 @@ Untracked files:
     Untracked:  data/sgmatrixsig.Rd
 
 Unstaged changes:
+    Modified:   analysis/Simulation-BMR-estimated.Rmd
     Modified:   analysis/Simulation-BMR.Rmd
+    Modified:   analysis/simulation-power.Rmd
 
 </code></pre>
 <p>
@@ -722,6 +724,59 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/szhaolab/DiffDriver-PAPER/8d704ab74722c90ffd28977e6dbfa7b2b957a557/docs/Simulation-BMR.html" target="_blank">8d704ab</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-07-22
+</td>
+<td>
+Remove broken navbar tabs (Simulation, Real Data, License)
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/70f490c1ceea779b2bca1d35e8e2d0ab0e9b78f0/analysis/Simulation-BMR.Rmd" target="_blank">70f490c</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-07-21
+</td>
+<td>
+Document that the confounding-sim background rate is realistic
+(LUAD-derived)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/szhaolab/DiffDriver-PAPER/70f490c1ceea779b2bca1d35e8e2d0ab0e9b78f0/docs/Simulation-BMR.html" target="_blank">70f490c</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-07-21
+</td>
+<td>
+Document that the confounding-sim background rate is realistic
+(LUAD-derived)
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1159,7 +1214,7 @@ across all 100 iterations and 7 sample sizes). Its p-values are saved to
 <span id="cb4-26"><a href="#cb4-26" tabindex="-1"></a>     mylist[[n]] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">length</span>(m1.pvalue[m1.pvalue <span class="sc">&lt;</span><span class="fl">0.01</span>]),<span class="fu">length</span>(m2.pvalue[m2.pvalue <span class="sc">&lt;</span><span class="fl">0.01</span>]),<span class="fu">length</span>(m3.pvalue[m3.pvalue <span class="sc">&lt;</span><span class="fl">0.01</span>]), <span class="fu">length</span>(m4.pvalue[m4.pvalue <span class="sc">&lt;</span><span class="fl">0.01</span>]),<span class="fu">length</span>(m7.pvalue[m7.pvalue <span class="sc">&lt;</span><span class="fl">0.01</span>]),<span class="fu">length</span>(m8.pvalue[m8.pvalue <span class="sc">&lt;</span><span class="fl">0.01</span>]),<span class="fu">length</span>(m5.pvalue[m5.pvalue <span class="sc">&lt;</span><span class="fl">0.01</span>]))<span class="sc">/</span>Nsim</span>
 <span id="cb4-27"><a href="#cb4-27" tabindex="-1"></a>    }</span>
 <span id="cb4-28"><a href="#cb4-28" tabindex="-1"></a>    outdt <span class="ot">&lt;-</span> <span class="fu">do.call</span>(cbind, mylist)</span>
-<span id="cb4-29"><a href="#cb4-29" tabindex="-1"></a>    <span class="fu">rownames</span>(outdt)<span class="ot">=</span><span class="fu">c</span>(<span class="st">&quot;Linear&quot;</span>,<span class="st">&quot;Fisher&quot;</span>,<span class="st">&quot;Binomial&quot;</span>,<span class="st">&quot;LogisticR&quot;</span>,<span class="st">&quot;MannWhitney&quot;</span>,<span class="st">&quot;coselens&quot;</span>,<span class="st">&quot;diffDriver&quot;</span>)</span>
+<span id="cb4-29"><a href="#cb4-29" tabindex="-1"></a>    <span class="fu">rownames</span>(outdt)<span class="ot">=</span><span class="fu">c</span>(<span class="st">&quot;Linear&quot;</span>,<span class="st">&quot;Fisher&quot;</span>,<span class="st">&quot;Binomial&quot;</span>,<span class="st">&quot;LogisticR&quot;</span>,<span class="st">&quot;MannWhitney&quot;</span>,<span class="st">&quot;Coselens&quot;</span>,<span class="st">&quot;diffDriver&quot;</span>)</span>
 <span id="cb4-30"><a href="#cb4-30" tabindex="-1"></a>    <span class="fu">colnames</span>(outdt) <span class="ot">&lt;-</span> SIZES</span>
 <span id="cb4-31"><a href="#cb4-31" tabindex="-1"></a>    <span class="co"># colors: Linear, Fisher, Binomial, LogisticR, MannWhitney, coselens, diff</span></span>
 <span id="cb4-32"><a href="#cb4-32" tabindex="-1"></a>    mycol<span class="ot">=</span><span class="fu">c</span>(<span class="st">&quot;#00AFBB&quot;</span>,<span class="st">&quot;#2b8cbe&quot;</span>,<span class="st">&quot;#aa00ff&quot;</span>,<span class="st">&quot;#0001f6&quot;</span>,<span class="st">&quot;#1a9850&quot;</span>,<span class="st">&quot;#ff7f00&quot;</span>,<span class="st">&quot;#FF3D2E&quot;</span>)</span>
@@ -1174,7 +1229,7 @@ across all 100 iterations and 7 sample sizes). Its p-values are saved to
 <span id="cb4-41"><a href="#cb4-41" tabindex="-1"></a>      <span class="fu">points</span>(outdt[r,],<span class="at">col=</span>mycol[r], <span class="at">pch=</span>mypch[r], <span class="at">cex=</span><span class="fl">1.3</span>)</span>
 <span id="cb4-42"><a href="#cb4-42" tabindex="-1"></a>      <span class="fu">lines</span>(outdt[r,],<span class="at">col=</span>mycol[r])</span>
 <span id="cb4-43"><a href="#cb4-43" tabindex="-1"></a>    }</span>
-<span id="cb4-44"><a href="#cb4-44" tabindex="-1"></a>    <span class="fu">legend</span>(<span class="st">&quot;topleft&quot;</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">&quot;Linear&quot;</span>,<span class="st">&quot;Fisher&quot;</span>,<span class="st">&quot;Binomial&quot;</span>,<span class="st">&quot;LogisticR&quot;</span>,<span class="st">&quot;MannWhitney&quot;</span>,<span class="st">&quot;coselens&quot;</span>,<span class="st">&quot;diff&quot;</span>), <span class="at">col=</span> mycol, <span class="at">lwd=</span><span class="dv">1</span>, <span class="at">bty=</span><span class="st">&quot;n&quot;</span>, <span class="at">lty=</span><span class="fu">rep</span>(<span class="cn">NA</span>,<span class="dv">7</span>), <span class="at">pch=</span>mypch)</span>
+<span id="cb4-44"><a href="#cb4-44" tabindex="-1"></a>    <span class="fu">legend</span>(<span class="st">&quot;topleft&quot;</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">&quot;Linear&quot;</span>,<span class="st">&quot;Fisher&quot;</span>,<span class="st">&quot;Binomial&quot;</span>,<span class="st">&quot;LogisticR&quot;</span>,<span class="st">&quot;MannWhitney&quot;</span>,<span class="st">&quot;Coselens&quot;</span>,<span class="st">&quot;diff&quot;</span>), <span class="at">col=</span> mycol, <span class="at">lwd=</span><span class="dv">1</span>, <span class="at">bty=</span><span class="st">&quot;n&quot;</span>, <span class="at">lty=</span><span class="fu">rep</span>(<span class="cn">NA</span>,<span class="dv">7</span>), <span class="at">pch=</span>mypch)</span>
 <span id="cb4-45"><a href="#cb4-45" tabindex="-1"></a>  }</span>
 <span id="cb4-46"><a href="#cb4-46" tabindex="-1"></a>}</span>
 <span id="cb4-47"><a href="#cb4-47" tabindex="-1"></a>  }</span></code></pre></div>

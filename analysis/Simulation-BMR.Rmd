@@ -173,7 +173,7 @@ for (i1 in c(1)){
      mylist[[n]] <- c(length(m1.pvalue[m1.pvalue <0.01]),length(m2.pvalue[m2.pvalue <0.01]),length(m3.pvalue[m3.pvalue <0.01]), length(m4.pvalue[m4.pvalue <0.01]),length(m7.pvalue[m7.pvalue <0.01]),length(m8.pvalue[m8.pvalue <0.01]),length(m5.pvalue[m5.pvalue <0.01]))/Nsim
     }
     outdt <- do.call(cbind, mylist)
-    rownames(outdt)=c("Linear","Fisher","Binomial","LogisticR","MannWhitney","coselens","diffDriver")
+    rownames(outdt)=c("Linear","Fisher","Binomial","LogisticR","MannWhitney","Coselens","diffDriver")
     colnames(outdt) <- SIZES
     # colors: Linear, Fisher, Binomial, LogisticR, MannWhitney, coselens, diff
     mycol=c("#00AFBB","#2b8cbe","#aa00ff","#0001f6","#1a9850","#ff7f00","#FF3D2E")
@@ -188,7 +188,7 @@ for (i1 in c(1)){
       points(outdt[r,],col=mycol[r], pch=mypch[r], cex=1.3)
       lines(outdt[r,],col=mycol[r])
     }
-    legend("topleft", legend = c("Linear","Fisher","Binomial","LogisticR","MannWhitney","coselens","diff"), col= mycol, lwd=1, bty="n", lty=rep(NA,7), pch=mypch)
+    legend("topleft", legend = c("Linear","Fisher","Binomial","LogisticR","MannWhitney","Coselens","diff"), col= mycol, lwd=1, bty="n", lty=rep(NA,7), pch=mypch)
   }
 }
   }
