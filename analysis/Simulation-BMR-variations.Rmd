@@ -117,7 +117,7 @@ plot_fp(bmrvar$partA$continuous, "Continuous phenotype, R² = 0.78")
 
 ## Variation 4 — robustness to the number of signatures
 
-In the [estimated-background simulation](Simulation-BMR-estimated.html), DiffDriver
+In the [estimated-background test](Simulation-BMR.html#estimated-background-a-stricter-test), DiffDriver
 does not receive the true background — it *estimates* it by fitting a mutational-
 signature model (fastTopics) to the simulated silent count matrix. The silent
 mutations here are generated under **6** LUAD signatures. This variation asks how

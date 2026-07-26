@@ -203,3 +203,144 @@ for (i1 in c(1)){
   }
 
 ```
+
+## Estimated background: a stricter test
+
+The result above hands DiffDriver and Coselens the **true** per-context background
+rate. A stricter test is to make them **estimate** the background from a simulated
+genome-wide **silent (synonymous) mutation count matrix**, rather than being given
+it:
+
+- **DiffDriver** estimates its background by running its signature model
+  (`fastTopics` on the 96 × N silent count matrix, exactly as
+  `diffdriver::matrixlistToBMR` does) to recover the per-sample per-context
+  spectrum.
+- **Coselens** estimates its per-context substitution rate as counts / sites —
+  `N_syn / Lsyn96` per group — which is exactly the Poisson fit `dndscv` performs;
+  this rate is fed to `dndscv_truerate`.
+
+The question is whether estimating the background from a finite, confounded silent
+spectrum still controls the false positive rate the way the true rate did.
+
+### Realistic LUAD silent count matrix
+
+The silent count matrix is not arbitrary — it is simulated from the same realistic
+LUAD background:
+
+$$Y[c,s] \sim \text{Poisson}\big(\text{Lsyn96}[c]\cdot \text{bmr}[c,s]\cdot g\big),$$
+
+where `bmr = (signatures %*% loadings) / sc` uses the **real LUAD** signatures
+(96 × 6) and per-sample loadings, `Lsyn96` is the number of synonymous sites per
+trinucleotide context (dndscv RefCDS; `data/Lsyn.rds`, ≈ 23.3 M sites), and `g`
+calibrates the mean per-sample synonymous burden to the **observed ≈ 64 synonymous
+mutations per sample** in TCGA-LUAD (530 samples). Since the true `bmr`
+(`sc = 359000`) already yields ≈ 63 syn/sample, **`g = 64.2 / 63 ≈ 1.02`** — the
+silent matrix and the ERBB3 mutations share **one realistic LUAD-scale
+background**. Both methods run on the **same simulated cohorts** as the
+true-background result (the cohort RNG stream is frozen around the estimation step,
+so per-iteration mutation counts are identical).
+
+### Rerunning the estimated-background version
+
+The estimated-background helpers are in
+[`code/simulate_silent_estimate.R`](https://github.com/szhaolab/diffdriver-paper/blob/main/code/simulate_silent_estimate.R):
+`build_silent_matrix()` (the LUAD-calibrated silent count matrix),
+`coselens_estimated_rate()` (`N_syn/Lsyn96` per group → `dndscv_truerate`), and
+`diffdriver_estimated_mr()` (fastTopics spectrum → per-site log-background). Per
+iteration:
+
+```{r eval=FALSE}
+source("code/simulate_functions.R"); source("code/simulate_silent_estimate.R")
+source("code/run_coselens.R"); source("code/dndscv_truerate.R")
+library(diffdriver); library(coselens)
+load("data/bmr_sim_inputs.rda"); load("data/hmm.rda")
+load("data/codeSignature.rda");  load("data/hotspot1sig.rda")
+cm <- readRDS("data/context96_map.rds"); Lsyn96 <- readRDS("data/Lsyn.rds")$Lsyn96
+
+sim <- simulate_confounding(binary = TRUE, sganno = bmr_sim$sganno,
+  sgmatrix = bmr_sim$sgmatrix, Nsample = 1500, para = c(0.5, 0.5),
+  beta_gc = bmr_sim$beta_gc, signatures = bmr_sim$signature, loadings = bmr_sim$ll,
+  rho = sqrt(0.78), hot = 1, hmm = hmm, sc = 359000)
+bmr <- sim$bmrfold$bmr; e <- sim$pheno; g1 <- which(e == 1); g2 <- which(e == 0)
+maf <- sim_to_maf(sim$mutlist, sim$annodata, e)
+
+Y <- build_silent_matrix(bmr, Lsyn96, target_silent = 64.2)   # ~64 syn/sample
+
+# coselens: estimated per-group rate from the silent counts
+mr1 <- coselens_estimated_rate(Y, g1, Lsyn96, cm)
+mr2 <- coselens_estimated_rate(Y, g2, Lsyn96, cm)
+cos <- run_coselens(maf$group1, maf$group2, subset.genes.by = "ERBB3",
+         true_rate = list(mutrates1 = mr1, mutrates2 = mr2, theta = 1e6),
+         gene_list = "ERBB3", cv = NULL)$substitutions$pval
+
+# DiffDriver: estimated per-site background from fastTopics(Y)
+mr_est <- do.call(rbind, diffdriver_estimated_mr(Y, sim$bmrmtxlist, bmr))
+dd <- ddmodel_binary(do.call(rbind, sim$mutlist), e, mr_est, sim$efsize$diffFe)$pvalue
+```
+
+The full benchmark loops this over `Nsample = 200 … 1500` (100 iterations each)
+and stores the results in `data/pppower_estimatedBMR_bmr.Rd`.
+
+### Estimated vs. true background
+
+Both DiffDriver and Coselens **control the false positive rate whether they are
+given the true background or estimate it** from the LUAD-calibrated silent count
+matrix (all four curves stay near zero). The count-based benchmarks do **not** use
+or estimate a background rate — they operate on the raw mutation counts, so the
+"true vs estimated" distinction does not apply to them; they are shown only for
+context (from the true-background result above) and rise toward ~0.6.
+
+```{r estimated, fig.width=8, fig.height=6}
+Nsim <- 100
+SIZES <- c(200,400,600,800,1000,1200,1500)
+load("data/pppower_estimatedBMR_bmr.Rd")     # object `estBMR`, keyed by N
+load("data/pppower_mannwhitney_bmr.Rd")      # object `mw`
+
+fp <- function(p) mean(p < 0.01, na.rm = TRUE)
+rate <- function(field) sapply(as.character(SIZES), function(n) fp(estBMR[[n]][[field]]))
+
+# background-modeling methods (this simulation): 4 series
+cosT <- rate("coselens_true"); cosE <- rate("coselens_est")
+ddT  <- rate("diff_true");     ddE  <- rate("diff_est")
+
+# count-based benchmarks (for context; from the true-background sim, same setup)
+lin <- fis <- bin <- lr <- mw_fp <- numeric(length(SIZES))
+for (i in seq_along(SIZES)) {
+  N <- SIZES[i]
+  o <- new.env(); load(sprintf("data/bmr_archive/other/pppower_betaf0=1_sample%d_0.5_0.Rd", N), envir = o)
+  s <- o$simuresother
+  lin[i] <- fp(s$m1.pvalue); fis[i] <- fp(s$m2.pvalue); bin[i] <- fp(s$m3.pvalue); lr[i] <- fp(s$m4.pvalue)
+  mw_fp[i] <- fp(mw[[as.character(N)]]$mannwhitney.pvalue)
+}
+
+x <- seq_along(SIZES)
+par(mar = c(5,5,3,9), xpd = NA)
+plot(x, ylim = c(0,0.7), col = "white", ylab = "False positive rate (p < 0.01)",
+     xlab = "Number of samples", xaxt = "n", las = 1)
+axis(1, at = x, labels = SIZES); grid(); abline(h = 0.01, lty = 3, col = "grey60")
+
+# count-based (thin) for context
+cb <- list(Linear = lin, Fisher = fis, Binomial = bin, LogisticR = lr, MannWhitney = mw_fp)
+cbcol <- c("#00AFBB","#2b8cbe","#aa00ff","#0001f6","#1a9850")
+for (j in seq_along(cb)) { lines(x, cb[[j]], col = cbcol[j], lwd = 1.2); points(x, cb[[j]], col = cbcol[j], pch = 20, cex = 0.9) }
+
+# background-modeling: Coselens (orange) / DiffDriver (red); true = filled/solid, est = open/dashed
+lines(x, cosT, col = "#ff7f00", lwd = 2);              points(x, cosT, col = "#ff7f00", pch = 19, cex = 1.4)
+lines(x, cosE, col = "#ff7f00", lwd = 2, lty = 2);     points(x, cosE, col = "#ff7f00", pch = 1,  cex = 1.4, lwd = 2)
+lines(x, ddT,  col = "#FF3D2E", lwd = 2);              points(x, ddT,  col = "#FF3D2E", pch = 17, cex = 1.4)
+lines(x, ddE,  col = "#FF3D2E", lwd = 2, lty = 2);     points(x, ddE,  col = "#FF3D2E", pch = 2,  cex = 1.4, lwd = 2)
+
+legend(par("usr")[2], par("usr")[4], bty = "n", cex = 0.85, xjust = 0,
+  legend = c("Coselens (true bkg)","Coselens (estimated)",
+             "DiffDriver (true bkg)","DiffDriver (estimated)","",
+             "Linear","Fisher","Binomial","LogisticR","MannWhitney"),
+  col = c("#ff7f00","#ff7f00","#FF3D2E","#FF3D2E",NA, cbcol),
+  pch = c(19,1,17,2,NA, rep(20,5)),
+  lty = c(1,2,1,2,NA, rep(1.2,5)), lwd = c(2,2,2,2,NA, rep(1.2,5)))
+title("Estimated vs. true background under signature confounding")
+```
+
+The two dashed curves (estimated background) sit right on top of their solid
+counterparts (true background), near zero — estimating the background from a
+realistic, LUAD-calibrated silent count matrix does not reintroduce the
+confounding, for either DiffDriver or Coselens.

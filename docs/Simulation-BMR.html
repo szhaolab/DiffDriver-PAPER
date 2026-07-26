@@ -633,15 +633,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtreeaa3931bc88a854656a5af61561e25a4493ddcd74targetblankaa3931ba">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree6eb64559467138d3f0a3e78eca079034be723144targetblank6eb6455a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/aa3931bc88a854656a5af61561e25a4493ddcd74" target="_blank">aa3931b</a>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/6eb64559467138d3f0a3e78eca079034be723144" target="_blank">6eb6455</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtreeaa3931bc88a854656a5af61561e25a4493ddcd74targetblankaa3931ba"
+id="strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree6eb64559467138d3f0a3e78eca079034be723144targetblank6eb6455a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -651,7 +651,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/aa3931bc88a854656a5af61561e25a4493ddcd74" target="_blank">aa3931b</a>.
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/6eb64559467138d3f0a3e78eca079034be723144" target="_blank">6eb6455</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -677,7 +677,12 @@ Untracked files:
     Untracked:  data/sgmatrixsig.Rd
 
 Unstaged changes:
+    Modified:   analysis/Simulation-BMR-variations.Rmd
     Modified:   analysis/Simulation-BMR.Rmd
+    Modified:   analysis/index.Rmd
+
+Staged changes:
+    Deleted:    analysis/Simulation-BMR-estimated.Rmd
 
 </code></pre>
 <p>
@@ -722,6 +727,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/6eb64559467138d3f0a3e78eca079034be723144/analysis/Simulation-BMR.Rmd" target="_blank">6eb6455</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-07-26
+</td>
+<td>
+Link variations page from Simulation-BMR
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/szhaolab/DiffDriver-PAPER/6eb64559467138d3f0a3e78eca079034be723144/docs/Simulation-BMR.html" target="_blank">6eb6455</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-07-26
+</td>
+<td>
+Link variations page from Simulation-BMR
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1335,6 +1374,152 @@ Siming
 </table>
 </div>
 </div>
+</div>
+</div>
+<div id="estimated-background-a-stricter-test" class="section level2">
+<h2>Estimated background: a stricter test</h2>
+<p>The result above hands DiffDriver and Coselens the
+<strong>true</strong> per-context background rate. A stricter test is to
+make them <strong>estimate</strong> the background from a simulated
+genome-wide <strong>silent (synonymous) mutation count matrix</strong>,
+rather than being given it:</p>
+<ul>
+<li><strong>DiffDriver</strong> estimates its background by running its
+signature model (<code>fastTopics</code> on the 96 × N silent count
+matrix, exactly as <code>diffdriver::matrixlistToBMR</code> does) to
+recover the per-sample per-context spectrum.</li>
+<li><strong>Coselens</strong> estimates its per-context substitution
+rate as counts / sites — <code>N_syn / Lsyn96</code> per group — which
+is exactly the Poisson fit <code>dndscv</code> performs; this rate is
+fed to <code>dndscv_truerate</code>.</li>
+</ul>
+<p>The question is whether estimating the background from a finite,
+confounded silent spectrum still controls the false positive rate the
+way the true rate did.</p>
+<div id="realistic-luad-silent-count-matrix" class="section level3">
+<h3>Realistic LUAD silent count matrix</h3>
+<p>The silent count matrix is not arbitrary — it is simulated from the
+same realistic LUAD background:</p>
+<p><span class="math display">\[Y[c,s] \sim
+\text{Poisson}\big(\text{Lsyn96}[c]\cdot \text{bmr}[c,s]\cdot
+g\big),\]</span></p>
+<p>where <code>bmr = (signatures %*% loadings) / sc</code> uses the
+<strong>real LUAD</strong> signatures (96 × 6) and per-sample loadings,
+<code>Lsyn96</code> is the number of synonymous sites per trinucleotide
+context (dndscv RefCDS; <code>data/Lsyn.rds</code>, ≈ 23.3 M sites), and
+<code>g</code> calibrates the mean per-sample synonymous burden to the
+<strong>observed ≈ 64 synonymous mutations per sample</strong> in
+TCGA-LUAD (530 samples). Since the true <code>bmr</code>
+(<code>sc = 359000</code>) already yields ≈ 63 syn/sample,
+<strong><code>g = 64.2 / 63 ≈ 1.02</code></strong> — the silent matrix
+and the ERBB3 mutations share <strong>one realistic LUAD-scale
+background</strong>. Both methods run on the <strong>same simulated
+cohorts</strong> as the true-background result (the cohort RNG stream is
+frozen around the estimation step, so per-iteration mutation counts are
+identical).</p>
+</div>
+<div id="rerunning-the-estimated-background-version"
+class="section level3">
+<h3>Rerunning the estimated-background version</h3>
+<p>The estimated-background helpers are in <a
+href="https://github.com/szhaolab/diffdriver-paper/blob/main/code/simulate_silent_estimate.R"><code>code/simulate_silent_estimate.R</code></a>:
+<code>build_silent_matrix()</code> (the LUAD-calibrated silent count
+matrix), <code>coselens_estimated_rate()</code>
+(<code>N_syn/Lsyn96</code> per group → <code>dndscv_truerate</code>),
+and <code>diffdriver_estimated_mr()</code> (fastTopics spectrum →
+per-site log-background). Per iteration:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;code/simulate_functions.R&quot;</span>); <span class="fu">source</span>(<span class="st">&quot;code/simulate_silent_estimate.R&quot;</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;code/run_coselens.R&quot;</span>); <span class="fu">source</span>(<span class="st">&quot;code/dndscv_truerate.R&quot;</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="fu">library</span>(diffdriver); <span class="fu">library</span>(coselens)</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;data/bmr_sim_inputs.rda&quot;</span>); <span class="fu">load</span>(<span class="st">&quot;data/hmm.rda&quot;</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;data/codeSignature.rda&quot;</span>);  <span class="fu">load</span>(<span class="st">&quot;data/hotspot1sig.rda&quot;</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>cm <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;data/context96_map.rds&quot;</span>); Lsyn96 <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;data/Lsyn.rds&quot;</span>)<span class="sc">$</span>Lsyn96</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">simulate_confounding</span>(<span class="at">binary =</span> <span class="cn">TRUE</span>, <span class="at">sganno =</span> bmr_sim<span class="sc">$</span>sganno,</span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>  <span class="at">sgmatrix =</span> bmr_sim<span class="sc">$</span>sgmatrix, <span class="at">Nsample =</span> <span class="dv">1500</span>, <span class="at">para =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>),</span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>  <span class="at">beta_gc =</span> bmr_sim<span class="sc">$</span>beta_gc, <span class="at">signatures =</span> bmr_sim<span class="sc">$</span>signature, <span class="at">loadings =</span> bmr_sim<span class="sc">$</span>ll,</span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>  <span class="at">rho =</span> <span class="fu">sqrt</span>(<span class="fl">0.78</span>), <span class="at">hot =</span> <span class="dv">1</span>, <span class="at">hmm =</span> hmm, <span class="at">sc =</span> <span class="dv">359000</span>)</span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>bmr <span class="ot">&lt;-</span> sim<span class="sc">$</span>bmrfold<span class="sc">$</span>bmr; e <span class="ot">&lt;-</span> sim<span class="sc">$</span>pheno; g1 <span class="ot">&lt;-</span> <span class="fu">which</span>(e <span class="sc">==</span> <span class="dv">1</span>); g2 <span class="ot">&lt;-</span> <span class="fu">which</span>(e <span class="sc">==</span> <span class="dv">0</span>)</span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>maf <span class="ot">&lt;-</span> <span class="fu">sim_to_maf</span>(sim<span class="sc">$</span>mutlist, sim<span class="sc">$</span>annodata, e)</span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="fu">build_silent_matrix</span>(bmr, Lsyn96, <span class="at">target_silent =</span> <span class="fl">64.2</span>)   <span class="co"># ~64 syn/sample</span></span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a><span class="co"># coselens: estimated per-group rate from the silent counts</span></span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a>mr1 <span class="ot">&lt;-</span> <span class="fu">coselens_estimated_rate</span>(Y, g1, Lsyn96, cm)</span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a>mr2 <span class="ot">&lt;-</span> <span class="fu">coselens_estimated_rate</span>(Y, g2, Lsyn96, cm)</span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a>cos <span class="ot">&lt;-</span> <span class="fu">run_coselens</span>(maf<span class="sc">$</span>group1, maf<span class="sc">$</span>group2, <span class="at">subset.genes.by =</span> <span class="st">&quot;ERBB3&quot;</span>,</span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a>         <span class="at">true_rate =</span> <span class="fu">list</span>(<span class="at">mutrates1 =</span> mr1, <span class="at">mutrates2 =</span> mr2, <span class="at">theta =</span> <span class="fl">1e6</span>),</span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a>         <span class="at">gene_list =</span> <span class="st">&quot;ERBB3&quot;</span>, <span class="at">cv =</span> <span class="cn">NULL</span>)<span class="sc">$</span>substitutions<span class="sc">$</span>pval</span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a></span>
+<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a><span class="co"># DiffDriver: estimated per-site background from fastTopics(Y)</span></span>
+<span id="cb5-25"><a href="#cb5-25" tabindex="-1"></a>mr_est <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, <span class="fu">diffdriver_estimated_mr</span>(Y, sim<span class="sc">$</span>bmrmtxlist, bmr))</span>
+<span id="cb5-26"><a href="#cb5-26" tabindex="-1"></a>dd <span class="ot">&lt;-</span> <span class="fu">ddmodel_binary</span>(<span class="fu">do.call</span>(rbind, sim<span class="sc">$</span>mutlist), e, mr_est, sim<span class="sc">$</span>efsize<span class="sc">$</span>diffFe)<span class="sc">$</span>pvalue</span></code></pre></div>
+<p>The full benchmark loops this over <code>Nsample = 200 … 1500</code>
+(100 iterations each) and stores the results in
+<code>data/pppower_estimatedBMR_bmr.Rd</code>.</p>
+</div>
+<div id="estimated-vs.-true-background" class="section level3">
+<h3>Estimated vs. true background</h3>
+<p>Both DiffDriver and Coselens <strong>control the false positive rate
+whether they are given the true background or estimate it</strong> from
+the LUAD-calibrated silent count matrix (all four curves stay near
+zero). The count-based benchmarks do <strong>not</strong> use or
+estimate a background rate — they operate on the raw mutation counts, so
+the “true vs estimated” distinction does not apply to them; they are
+shown only for context (from the true-background result above) and rise
+toward ~0.6.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>Nsim <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>SIZES <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">200</span>,<span class="dv">400</span>,<span class="dv">600</span>,<span class="dv">800</span>,<span class="dv">1000</span>,<span class="dv">1200</span>,<span class="dv">1500</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;data/pppower_estimatedBMR_bmr.Rd&quot;</span>)     <span class="co"># object `estBMR`, keyed by N</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;data/pppower_mannwhitney_bmr.Rd&quot;</span>)      <span class="co"># object `mw`</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>fp <span class="ot">&lt;-</span> <span class="cf">function</span>(p) <span class="fu">mean</span>(p <span class="sc">&lt;</span> <span class="fl">0.01</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>rate <span class="ot">&lt;-</span> <span class="cf">function</span>(field) <span class="fu">sapply</span>(<span class="fu">as.character</span>(SIZES), <span class="cf">function</span>(n) <span class="fu">fp</span>(estBMR[[n]][[field]]))</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co"># background-modeling methods (this simulation): 4 series</span></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>cosT <span class="ot">&lt;-</span> <span class="fu">rate</span>(<span class="st">&quot;coselens_true&quot;</span>); cosE <span class="ot">&lt;-</span> <span class="fu">rate</span>(<span class="st">&quot;coselens_est&quot;</span>)</span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>ddT  <span class="ot">&lt;-</span> <span class="fu">rate</span>(<span class="st">&quot;diff_true&quot;</span>);     ddE  <span class="ot">&lt;-</span> <span class="fu">rate</span>(<span class="st">&quot;diff_est&quot;</span>)</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co"># count-based benchmarks (for context; from the true-background sim, same setup)</span></span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>lin <span class="ot">&lt;-</span> fis <span class="ot">&lt;-</span> bin <span class="ot">&lt;-</span> lr <span class="ot">&lt;-</span> mw_fp <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(SIZES))</span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(SIZES)) {</span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a>  N <span class="ot">&lt;-</span> SIZES[i]</span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a>  o <span class="ot">&lt;-</span> <span class="fu">new.env</span>(); <span class="fu">load</span>(<span class="fu">sprintf</span>(<span class="st">&quot;data/bmr_archive/other/pppower_betaf0=1_sample%d_0.5_0.Rd&quot;</span>, N), <span class="at">envir =</span> o)</span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a>  s <span class="ot">&lt;-</span> o<span class="sc">$</span>simuresother</span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a>  lin[i] <span class="ot">&lt;-</span> <span class="fu">fp</span>(s<span class="sc">$</span>m1.pvalue); fis[i] <span class="ot">&lt;-</span> <span class="fu">fp</span>(s<span class="sc">$</span>m2.pvalue); bin[i] <span class="ot">&lt;-</span> <span class="fu">fp</span>(s<span class="sc">$</span>m3.pvalue); lr[i] <span class="ot">&lt;-</span> <span class="fu">fp</span>(s<span class="sc">$</span>m4.pvalue)</span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a>  mw_fp[i] <span class="ot">&lt;-</span> <span class="fu">fp</span>(mw[[<span class="fu">as.character</span>(N)]]<span class="sc">$</span>mannwhitney.pvalue)</span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a>}</span>
+<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a></span>
+<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq_along</span>(SIZES)</span>
+<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">3</span>,<span class="dv">9</span>), <span class="at">xpd =</span> <span class="cn">NA</span>)</span>
+<span id="cb6-25"><a href="#cb6-25" tabindex="-1"></a><span class="fu">plot</span>(x, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.7</span>), <span class="at">col =</span> <span class="st">&quot;white&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;False positive rate (p &lt; 0.01)&quot;</span>,</span>
+<span id="cb6-26"><a href="#cb6-26" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Number of samples&quot;</span>, <span class="at">xaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">las =</span> <span class="dv">1</span>)</span>
+<span id="cb6-27"><a href="#cb6-27" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>, <span class="at">at =</span> x, <span class="at">labels =</span> SIZES); <span class="fu">grid</span>(); <span class="fu">abline</span>(<span class="at">h =</span> <span class="fl">0.01</span>, <span class="at">lty =</span> <span class="dv">3</span>, <span class="at">col =</span> <span class="st">&quot;grey60&quot;</span>)</span>
+<span id="cb6-28"><a href="#cb6-28" tabindex="-1"></a></span>
+<span id="cb6-29"><a href="#cb6-29" tabindex="-1"></a><span class="co"># count-based (thin) for context</span></span>
+<span id="cb6-30"><a href="#cb6-30" tabindex="-1"></a>cb <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Linear =</span> lin, <span class="at">Fisher =</span> fis, <span class="at">Binomial =</span> bin, <span class="at">LogisticR =</span> lr, <span class="at">MannWhitney =</span> mw_fp)</span>
+<span id="cb6-31"><a href="#cb6-31" tabindex="-1"></a>cbcol <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;#00AFBB&quot;</span>,<span class="st">&quot;#2b8cbe&quot;</span>,<span class="st">&quot;#aa00ff&quot;</span>,<span class="st">&quot;#0001f6&quot;</span>,<span class="st">&quot;#1a9850&quot;</span>)</span>
+<span id="cb6-32"><a href="#cb6-32" tabindex="-1"></a><span class="cf">for</span> (j <span class="cf">in</span> <span class="fu">seq_along</span>(cb)) { <span class="fu">lines</span>(x, cb[[j]], <span class="at">col =</span> cbcol[j], <span class="at">lwd =</span> <span class="fl">1.2</span>); <span class="fu">points</span>(x, cb[[j]], <span class="at">col =</span> cbcol[j], <span class="at">pch =</span> <span class="dv">20</span>, <span class="at">cex =</span> <span class="fl">0.9</span>) }</span>
+<span id="cb6-33"><a href="#cb6-33" tabindex="-1"></a></span>
+<span id="cb6-34"><a href="#cb6-34" tabindex="-1"></a><span class="co"># background-modeling: Coselens (orange) / DiffDriver (red); true = filled/solid, est = open/dashed</span></span>
+<span id="cb6-35"><a href="#cb6-35" tabindex="-1"></a><span class="fu">lines</span>(x, cosT, <span class="at">col =</span> <span class="st">&quot;#ff7f00&quot;</span>, <span class="at">lwd =</span> <span class="dv">2</span>);              <span class="fu">points</span>(x, cosT, <span class="at">col =</span> <span class="st">&quot;#ff7f00&quot;</span>, <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">cex =</span> <span class="fl">1.4</span>)</span>
+<span id="cb6-36"><a href="#cb6-36" tabindex="-1"></a><span class="fu">lines</span>(x, cosE, <span class="at">col =</span> <span class="st">&quot;#ff7f00&quot;</span>, <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">lty =</span> <span class="dv">2</span>);     <span class="fu">points</span>(x, cosE, <span class="at">col =</span> <span class="st">&quot;#ff7f00&quot;</span>, <span class="at">pch =</span> <span class="dv">1</span>,  <span class="at">cex =</span> <span class="fl">1.4</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb6-37"><a href="#cb6-37" tabindex="-1"></a><span class="fu">lines</span>(x, ddT,  <span class="at">col =</span> <span class="st">&quot;#FF3D2E&quot;</span>, <span class="at">lwd =</span> <span class="dv">2</span>);              <span class="fu">points</span>(x, ddT,  <span class="at">col =</span> <span class="st">&quot;#FF3D2E&quot;</span>, <span class="at">pch =</span> <span class="dv">17</span>, <span class="at">cex =</span> <span class="fl">1.4</span>)</span>
+<span id="cb6-38"><a href="#cb6-38" tabindex="-1"></a><span class="fu">lines</span>(x, ddE,  <span class="at">col =</span> <span class="st">&quot;#FF3D2E&quot;</span>, <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">lty =</span> <span class="dv">2</span>);     <span class="fu">points</span>(x, ddE,  <span class="at">col =</span> <span class="st">&quot;#FF3D2E&quot;</span>, <span class="at">pch =</span> <span class="dv">2</span>,  <span class="at">cex =</span> <span class="fl">1.4</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb6-39"><a href="#cb6-39" tabindex="-1"></a></span>
+<span id="cb6-40"><a href="#cb6-40" tabindex="-1"></a><span class="fu">legend</span>(<span class="fu">par</span>(<span class="st">&quot;usr&quot;</span>)[<span class="dv">2</span>], <span class="fu">par</span>(<span class="st">&quot;usr&quot;</span>)[<span class="dv">4</span>], <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>, <span class="at">cex =</span> <span class="fl">0.85</span>, <span class="at">xjust =</span> <span class="dv">0</span>,</span>
+<span id="cb6-41"><a href="#cb6-41" tabindex="-1"></a>  <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">&quot;Coselens (true bkg)&quot;</span>,<span class="st">&quot;Coselens (estimated)&quot;</span>,</span>
+<span id="cb6-42"><a href="#cb6-42" tabindex="-1"></a>             <span class="st">&quot;DiffDriver (true bkg)&quot;</span>,<span class="st">&quot;DiffDriver (estimated)&quot;</span>,<span class="st">&quot;&quot;</span>,</span>
+<span id="cb6-43"><a href="#cb6-43" tabindex="-1"></a>             <span class="st">&quot;Linear&quot;</span>,<span class="st">&quot;Fisher&quot;</span>,<span class="st">&quot;Binomial&quot;</span>,<span class="st">&quot;LogisticR&quot;</span>,<span class="st">&quot;MannWhitney&quot;</span>),</span>
+<span id="cb6-44"><a href="#cb6-44" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;#ff7f00&quot;</span>,<span class="st">&quot;#ff7f00&quot;</span>,<span class="st">&quot;#FF3D2E&quot;</span>,<span class="st">&quot;#FF3D2E&quot;</span>,<span class="cn">NA</span>, cbcol),</span>
+<span id="cb6-45"><a href="#cb6-45" tabindex="-1"></a>  <span class="at">pch =</span> <span class="fu">c</span>(<span class="dv">19</span>,<span class="dv">1</span>,<span class="dv">17</span>,<span class="dv">2</span>,<span class="cn">NA</span>, <span class="fu">rep</span>(<span class="dv">20</span>,<span class="dv">5</span>)),</span>
+<span id="cb6-46"><a href="#cb6-46" tabindex="-1"></a>  <span class="at">lty =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="cn">NA</span>, <span class="fu">rep</span>(<span class="fl">1.2</span>,<span class="dv">5</span>)), <span class="at">lwd =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="cn">NA</span>, <span class="fu">rep</span>(<span class="fl">1.2</span>,<span class="dv">5</span>)))</span>
+<span id="cb6-47"><a href="#cb6-47" tabindex="-1"></a><span class="fu">title</span>(<span class="st">&quot;Estimated vs. true background under signature confounding&quot;</span>)</span></code></pre></div>
+<p><img src="figure/Simulation-BMR.Rmd/estimated-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>The two dashed curves (estimated background) sit right on top of
+their solid counterparts (true background), near zero — estimating the
+background from a realistic, LUAD-calibrated silent count matrix does
+not reintroduce the confounding, for either DiffDriver or Coselens.</p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1343,7 +1528,7 @@ Session information
 </button>
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
 <pre><code>R version 4.3.2 (2023-10-31)
 Platform: aarch64-apple-darwin20 (64-bit)
 Running under: macOS Sonoma 14.6.1

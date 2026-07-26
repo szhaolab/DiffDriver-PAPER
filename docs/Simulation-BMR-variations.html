@@ -537,10 +537,10 @@ changes </a>
 <div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown is untracked by Git. To know which version of the R
-Markdown file created these results, you’ll want to first commit it to
-the Git repo. If you’re still working on the analysis, you can ignore
-this warning. When you’re finished, you can run
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
 <code>wflow_publish</code> to commit the R Markdown file and build the
 HTML.</p>
 </div>
@@ -633,15 +633,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree9949f83259b74914fe34dd136400f8816013301ftargetblank9949f83a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree6eb64559467138d3f0a3e78eca079034be723144targetblank6eb6455a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/9949f83259b74914fe34dd136400f8816013301f" target="_blank">9949f83</a>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/6eb64559467138d3f0a3e78eca079034be723144" target="_blank">6eb6455</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree9949f83259b74914fe34dd136400f8816013301ftargetblank9949f83a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree6eb64559467138d3f0a3e78eca079034be723144targetblank6eb6455a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -651,7 +651,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/9949f83259b74914fe34dd136400f8816013301f" target="_blank">9949f83</a>.
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/6eb64559467138d3f0a3e78eca079034be723144" target="_blank">6eb6455</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -673,13 +673,16 @@ Ignored files:
     Ignored:    data/.DS_Store
 
 Untracked files:
-    Untracked:  analysis/Simulation-BMR-variations.Rmd
-    Untracked:  data/pppower_bmr_variations.Rd
     Untracked:  data/sgannosig.Rd
     Untracked:  data/sgmatrixsig.Rd
 
 Unstaged changes:
+    Modified:   analysis/Simulation-BMR-variations.Rmd
+    Modified:   analysis/Simulation-BMR.Rmd
     Modified:   analysis/index.Rmd
+
+Staged changes:
+    Deleted:    analysis/Simulation-BMR-estimated.Rmd
 
 </code></pre>
 <p>
@@ -695,9 +698,75 @@ have uncommitted changes.
 </div>
 <div id="versions" class="tab-pane fade">
 <p>
-There are no past versions. Publish this analysis with
-<code>wflow_publish()</code> to start tracking its development.
+These are the previous versions of the repository in which changes were
+made to the R Markdown
+(<code>analysis/Simulation-BMR-variations.Rmd</code>) and HTML
+(<code>docs/Simulation-BMR-variations.html</code>) files. If you’ve
+configured a remote Git repository (see <code>?wflow_git_remote</code>),
+click on the hyperlinks in the table below to view the files as they
+were in that past version.
 </p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/aa3931bc88a854656a5af61561e25a4493ddcd74/analysis/Simulation-BMR-variations.Rmd" target="_blank">aa3931b</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-07-26
+</td>
+<td>
+Add signature-confounding variations page (burden, R^2, continuous,
+#signatures)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/szhaolab/DiffDriver-PAPER/aa3931bc88a854656a5af61561e25a4493ddcd74/docs/Simulation-BMR-variations.html" target="_blank">aa3931b</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-07-26
+</td>
+<td>
+Add signature-confounding variations page (burden, R^2, continuous,
+#signatures)
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 <hr>
 </div>
 </div>
@@ -746,6 +815,43 @@ methods increasingly false-positive with sample size, while Coselens and
 DiffDriver stay controlled.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">plot_fp</span>(bmrvar<span class="sc">$</span>partA<span class="sc">$</span>baseline, <span class="st">&quot;Baseline: binary, R² = 0.78, constant burden&quot;</span>)</span></code></pre></div>
 <p><img src="figure/Simulation-BMR-variations.Rmd/baseline-1.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-baseline-1">
+Past versions of baseline-1.png
+</button>
+</p>
+<div id="fig-baseline-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/aa3931bc88a854656a5af61561e25a4493ddcd74/docs/figure/Simulation-BMR-variations.Rmd/baseline-1.png" target="_blank">aa3931b</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-07-26
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="variation-1-variable-per-sample-mutation-burden"
 class="section level2">
@@ -767,6 +873,43 @@ tests.</p>
 <span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="fu">plot_fp</span>(bmrvar<span class="sc">$</span>partA<span class="sc">$</span>tmb_cv0<span class="fl">.5</span>, <span class="st">&quot;tmb_cv = 0.5&quot;</span>, <span class="at">legend =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="fu">plot_fp</span>(bmrvar<span class="sc">$</span>partA<span class="sc">$</span>tmb_cv0<span class="fl">.9</span>, <span class="st">&quot;tmb_cv = 0.9 (5–10× spread)&quot;</span>, <span class="at">legend =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <p><img src="figure/Simulation-BMR-variations.Rmd/burden-1.png" alt="" width="1440" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-burden-1">
+Past versions of burden-1.png
+</button>
+</p>
+<div id="fig-burden-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/aa3931bc88a854656a5af61561e25a4493ddcd74/docs/figure/Simulation-BMR-variations.Rmd/burden-1.png" target="_blank">aa3931b</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-07-26
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="variation-2-confounding-strength-phenotypesignature-r²"
 class="section level2">
@@ -787,6 +930,43 @@ controlled at every level.</p>
 <span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="fu">plot_fp</span>(bmrvar<span class="sc">$</span>partA<span class="sc">$</span>baseline, <span class="st">&quot;R² = 0.78&quot;</span>, <span class="at">legend =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="fu">plot_fp</span>(bmrvar<span class="sc">$</span>partA<span class="sc">$</span>R2_0<span class="fl">.95</span>, <span class="st">&quot;R² = 0.95 (saturated)&quot;</span>, <span class="at">legend =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <p><img src="figure/Simulation-BMR-variations.Rmd/r2-1.png" alt="" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-r2-1">
+Past versions of r2-1.png
+</button>
+</p>
+<div id="fig-r2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/aa3931bc88a854656a5af61561e25a4493ddcd74/docs/figure/Simulation-BMR-variations.Rmd/r2-1.png" target="_blank">aa3931b</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-07-26
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="variation-3-continuous-phenotype" class="section level2">
 <h2>Variation 3 — continuous phenotype</h2>
@@ -801,12 +981,50 @@ case because the dichotomization discards the continuous gradient),
 while DiffDriver (≤ 2%) and Coselens (≈ 0%) stay controlled.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">plot_fp</span>(bmrvar<span class="sc">$</span>partA<span class="sc">$</span>continuous, <span class="st">&quot;Continuous phenotype, R² = 0.78&quot;</span>)</span></code></pre></div>
 <p><img src="figure/Simulation-BMR-variations.Rmd/continuous-1.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-continuous-1">
+Past versions of continuous-1.png
+</button>
+</p>
+<div id="fig-continuous-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/aa3931bc88a854656a5af61561e25a4493ddcd74/docs/figure/Simulation-BMR-variations.Rmd/continuous-1.png" target="_blank">aa3931b</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-07-26
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="variation-4-robustness-to-the-number-of-signatures"
 class="section level2">
 <h2>Variation 4 — robustness to the number of signatures</h2>
-<p>In the <a href="Simulation-BMR-estimated.html">estimated-background
-simulation</a>, DiffDriver does not receive the true background — it
+<p>In the <a
+href="Simulation-BMR.html#estimated-background-a-stricter-test">estimated-background
+test</a>, DiffDriver does not receive the true background — it
 <em>estimates</em> it by fitting a mutational- signature model
 (fastTopics) to the simulated silent count matrix. The silent mutations
 here are generated under <strong>6</strong> LUAD signatures. This
@@ -829,6 +1047,43 @@ sizes. The signature-count choice is not a fragile knob.</p>
 <span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>}</span>
 <span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;topleft&quot;</span>, <span class="fu">paste</span>(<span class="st">&quot;k =&quot;</span>, <span class="fu">sub</span>(<span class="st">&quot;k&quot;</span>, <span class="st">&quot;&quot;</span>, ks)), <span class="at">col =</span> kcols, <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">lwd =</span> <span class="fl">1.5</span>, <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>)</span></code></pre></div>
 <p><img src="figure/Simulation-BMR-variations.Rmd/sigk-1.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-sigk-1">
+Past versions of sigk-1.png
+</button>
+</p>
+<div id="fig-sigk-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/aa3931bc88a854656a5af61561e25a4493ddcd74/docs/figure/Simulation-BMR-variations.Rmd/sigk-1.png" target="_blank">aa3931b</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-07-26
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="summary" class="section level2">
 <h2>Summary</h2>

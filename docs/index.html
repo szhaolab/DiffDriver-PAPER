@@ -422,15 +422,15 @@ HTML.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree9949f83259b74914fe34dd136400f8816013301ftargetblank9949f83a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree6eb64559467138d3f0a3e78eca079034be723144targetblank6eb6455a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/9949f83259b74914fe34dd136400f8816013301f" target="_blank">9949f83</a>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/6eb64559467138d3f0a3e78eca079034be723144" target="_blank">6eb6455</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree9949f83259b74914fe34dd136400f8816013301ftargetblank9949f83a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree6eb64559467138d3f0a3e78eca079034be723144targetblank6eb6455a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -440,7 +440,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/9949f83259b74914fe34dd136400f8816013301f" target="_blank">9949f83</a>.
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/6eb64559467138d3f0a3e78eca079034be723144" target="_blank">6eb6455</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -462,13 +462,16 @@ Ignored files:
     Ignored:    data/.DS_Store
 
 Untracked files:
-    Untracked:  analysis/Simulation-BMR-variations.Rmd
-    Untracked:  data/pppower_bmr_variations.Rd
     Untracked:  data/sgannosig.Rd
     Untracked:  data/sgmatrixsig.Rd
 
 Unstaged changes:
+    Modified:   analysis/Simulation-BMR-variations.Rmd
+    Modified:   analysis/Simulation-BMR.Rmd
     Modified:   analysis/index.Rmd
+
+Staged changes:
+    Deleted:    analysis/Simulation-BMR-estimated.Rmd
 
 </code></pre>
 <p>
@@ -512,6 +515,42 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/aa3931bc88a854656a5af61561e25a4493ddcd74/analysis/index.Rmd" target="_blank">aa3931b</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-07-26
+</td>
+<td>
+Add signature-confounding variations page (burden, R^2, continuous,
+#signatures)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/szhaolab/DiffDriver-PAPER/aa3931bc88a854656a5af61561e25a4493ddcd74/docs/index.html" target="_blank">aa3931b</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-07-26
+</td>
+<td>
+Add signature-confounding variations page (burden, R^2, continuous,
+#signatures)
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -939,7 +978,12 @@ inflates the background mutation rate, the count-based benchmarks
 (including Mann-Whitney) increasingly false-positive with sample size,
 while DiffDriver controls the false positive rate. coselens, when given
 each group’s true background rate, also stays controlled. Single gene
-(ERBB3) with hotspots placed at the signature’s peak context.</li>
+(ERBB3) with hotspots placed at the signature’s peak context. The page
+also includes a <strong>stricter test</strong> where DiffDriver and
+coselens must <em>estimate</em> the background from a simulated
+genome-wide silent (synonymous) mutation count matrix (calibrated to the
+observed LUAD burden, ~64 syn/sample) instead of being given it — both
+still control the false positive rate.</li>
 <li><a href="Simulation-BMR-variations.html">Simulation: Signature
 Confounding under Realistic Variations</a> — Stress-tests the
 confounding scenario across realistic variations: variable per-sample
@@ -947,13 +991,6 @@ mutation burden, confounding strength (R²), a continuous phenotype, and
 DiffDriver’s robustness to the number of fitted signatures. The
 count-based benchmarks stay vulnerable throughout, while DiffDriver and
 coselens keep the false positive rate controlled.</li>
-<li><a href="Simulation-BMR-estimated.html">Simulation: Estimated
-Background under Signature Confounding</a> — A stricter version of the
-above: instead of being <em>given</em> the true background rate,
-DiffDriver and coselens must <em>estimate</em> it from a simulated
-genome-wide silent (synonymous) mutation count matrix calibrated to the
-observed LUAD burden (~64 syn/sample). Both still control the false
-positive rate, whereas the count-based benchmarks rise to ~0.6.</li>
 </ul>
 </div>
 </div>
