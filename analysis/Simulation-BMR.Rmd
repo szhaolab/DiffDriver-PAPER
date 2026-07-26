@@ -2,7 +2,7 @@
 title: "Simulation: Confounding Between Phenotype and Mutational Signatures"
 author: "Jie Zhou, Siming Zhao"
 date: "`r Sys.Date()`"
-output: 
+output:
   workflowr::wflow_html:
     theme: flatly
     highlight: tango
@@ -47,6 +47,12 @@ false positives while DiffDriver correctly controls the false positive rate.
   rates (background + selection), with two hotspots placed at nucleotide type 34
   (the context with the highest loading in signature 3), so that the
   hotspot-dominated mutations track the phenotype.
+- **Background estimation (as in real analyses)**: Neither DiffDriver nor
+  [coselens](https://github.com/ggonzalezlopez/coselens) is handed the true
+  background rate. Both **estimate** it from a simulated genome-wide **silent
+  (synonymous) mutation count matrix** calibrated to the LUAD synonymous burden —
+  exactly what each tool does on real data (see
+  [below](#estimating-the-background-from-silent-mutations)).
 
 ### Key result
 
@@ -54,17 +60,50 @@ Because the phenotype correlates with a mutational signature that affects
 overall mutation rates, the count-based benchmark methods (Linear regression,
 Fisher's exact test, Binomial test, Logistic regression, and the Mann-Whitney
 rank-sum test) increasingly detect differential selection as sample size grows —
-all false positives. DiffDriver, which accounts for signature-based background
-mutation rates, maintains a low false positive rate.
+all false positives. DiffDriver and coselens, which model a signature-based
+background mutation rate estimated from the silent spectrum, maintain a low false
+positive rate. The count-based benchmarks do **not** use or estimate a background
+rate — they operate on the raw mutation counts, which is why they cannot separate
+the confounded background from selection.
 
-[coselens](https://github.com/ggonzalezlopez/coselens) is also included as a
-"true-background" reference: the phenotype is binarized into two groups and
-coselens is given each group's **real** mutation rate (the group-summed neutral
-rate per trinucleotide context from the simulation, assuming the rate is the same
-across samples within a group; see [coselens setup](#coselens-with-the-true-per-group-rate)).
-Because it is handed the true confounded background, coselens correctly
-attributes the case/control mutation excess to background rather than selection
-and also controls the false positive rate.
+```{r keyresult, fig.width=7, fig.height=6}
+Nsim <- 100
+SIZES <- c(200,400,600,800,1000,1200,1500)
+load("data/pppower_estimatedBMR_bmr.Rd")     # object `estBMR`, keyed by N (estimated background)
+load("data/pppower_mannwhitney_bmr.Rd")      # object `mw`
+
+fp   <- function(p) mean(p < 0.01, na.rm = TRUE)
+rate <- function(field) sapply(as.character(SIZES), function(n) fp(estBMR[[n]][[field]]))
+cosE <- rate("coselens_est"); ddE <- rate("diff_est")   # estimated-background methods
+
+# count-based benchmarks (do not use a background rate; from the archived runs)
+lin <- fis <- bin <- lr <- mw_fp <- numeric(length(SIZES))
+for (i in seq_along(SIZES)) {
+  N <- SIZES[i]
+  o <- new.env(); load(sprintf("data/bmr_archive/other/pppower_betaf0=1_sample%d_0.5_0.Rd", N), envir = o)
+  s <- o$simuresother
+  lin[i] <- fp(s$m1.pvalue); fis[i] <- fp(s$m2.pvalue); bin[i] <- fp(s$m3.pvalue); lr[i] <- fp(s$m4.pvalue)
+  mw_fp[i] <- fp(mw[[as.character(N)]]$mannwhitney.pvalue)
+}
+
+outdt <- rbind(Linear = lin, Fisher = fis, Binomial = bin, LogisticR = lr,
+               MannWhitney = mw_fp, Coselens = cosE, DiffDriver = ddE)
+colnames(outdt) <- SIZES
+mycol <- c("#00AFBB","#2b8cbe","#aa00ff","#0001f6","#1a9850","#ff7f00","#FF3D2E")
+mypch <- c(19,19,19,19,3,8,17)
+x <- seq_along(SIZES)
+plot(x, ylim = c(0,1), col = "white", ylab = "False positive rate (p < 0.01)",
+     xlab = "Number of samples", yaxt = "n", xaxt = "n")
+title("Phenotype–signature confounding (background estimated from silent mutations)")
+axis(2, at = seq(0,1,0.1), las = 2); axis(1, at = x, labels = SIZES); grid()
+abline(h = 0.01, lty = 3, col = "grey60")
+for (r in 1:7) { lines(x, outdt[r,], col = mycol[r]); points(x, outdt[r,], col = mycol[r], pch = mypch[r], cex = 1.3) }
+legend("topleft", rownames(outdt), col = mycol, lwd = 1, bty = "n", lty = NA, pch = mypch)
+```
+
+DiffDriver and coselens keep the false positive rate near zero even though they
+must *estimate* the confounded background from a finite silent spectrum — the
+estimation does not reintroduce the confounding.
 
 ### Robustness across realistic variations
 
@@ -79,16 +118,14 @@ controlled.
 
 The simulation functions live in [`code/simulate_functions.R`](https://github.com/szhaolab/diffdriver-paper/blob/main/code/simulate_functions.R)
 under the "CONFOUNDING scenario" section (`build_confounded_bmr`,
-`simulate_confounding`, `run_confounding_benchmarks`,
-`run_confounding_diffdriver`, `run_confounding_diffdriver_fixed`). The benchmark
+`simulate_confounding`, `run_confounding_benchmarks`). The count-based benchmark
 methods are all in `run_confounding_benchmarks`
-(Linear/Fisher/Binomial/LogisticR + Mann-Whitney); DiffDriver is run by
-`run_confounding_diffdriver_fixed`.
+(Linear/Fisher/Binomial/LogisticR + Mann-Whitney).
 
 The inputs are bundled in `data/bmr_sim_inputs.rda` (`beta_gc`, `beta_gcFix`,
 `signature`, `ll`, `sganno`, `sgmatrix`), together with `data/hmm.rda`,
 `data/codeSignature.rda`, and `data/hotspot1sig.rda` (hotspots at nttype 34).
-A single sample size is reproduced with:
+The count-based benchmarks at a single sample size are reproduced with:
 
 ```{r eval=FALSE}
 library(diffdriver); library(data.table); library(Matrix)
@@ -112,120 +149,19 @@ sapply(res_other[c("m1.pvalue","m2.pvalue","m3.pvalue","m4.pvalue",
 ```
 
 The full benchmark loops this over `Nsample = 200 … 1500`; the Mann-Whitney
-p-values used below were produced this way and saved to
+p-values used above were produced this way and saved to
 `data/pppower_mannwhitney_bmr.Rd`. Because the original
 `scripts/simulate_functions.R` (and the exact HMM coefficients) were lost, the
 rerun is *close* to — but not bit-identical to — the archived runs; the Linear
-and Fisher/Binomial/LogisticR curves plotted below are read from the original
+and Fisher/Binomial/LogisticR curves plotted above are read from the original
 archived results.
 
-### coselens with the true per-group rate
+### Estimating the background from silent mutations
 
-coselens compares dN/dS between two groups. We binarize the phenotype into cases
-(E = 1) and controls (E = 0) and, rather than letting dndscv estimate the
-background, feed each group its **true** neutral rate from the simulation. Under
-the assumption that the rate is the same across samples within a group, a group's
-per-context rate is the group-summed neutral rate `rowSums(bmrfold$bmr[, group])`;
-this 96-context vector is mapped to dndscv's 192 substitution contexts via
-`data/context96_map.rds` and passed to `dndscv_truerate` (a rate-fixed dndscv).
-`code/run_coselens.R` wraps this; the per-iteration driver is:
-
-```{r eval=FALSE}
-source("code/run_coselens.R"); source("code/dndscv_truerate.R")
-library(coselens)
-context96_map <- readRDS("data/context96_map.rds")
-
-# `sim` is one cohort returned by simulate_confounding() (same set.seed(1) loop
-# as above, so the cohorts are identical to the other methods).
-e   <- sim$pheno; g1 <- which(e == 1); g2 <- which(e == 0)
-maf <- sim_to_maf(sim$mutlist, sim$annodata, e)           # case/control MAFs
-mr1 <- rowSums(sim$bmrfold$bmr[, g1])[context96_map$number]  # 192-context true rate
-mr2 <- rowSums(sim$bmrfold$bmr[, g2])[context96_map$number]
-res <- run_coselens(maf$group1, maf$group2, subset.genes.by = "ERBB3",
-                    true_rate = list(mutrates1 = mr1, mutrates2 = mr2, theta = 1e6),
-                    gene_list = "ERBB3", cv = NULL)
-res$substitutions$pval          # differential-selection p-value for ERBB3
-```
-
-coselens was run on the **same simulated cohorts** as the other methods (verified:
-per-iteration mutation counts are identical across all 100 iterations and 7 sample
-sizes). Its p-values are saved to `data/pppower_coselens_bmr.Rd`.
-
-
-
-```{r}
-Nsim=100
-SIZES <- c(200,400,600,800,1000,1200,1500)
-
-# Mann-Whitney and coselens FPs from the rerun on the SAME simulated cohorts
-# (code/simulate_functions.R::run_confounding_benchmarks + code/run_coselens.R).
-load("data/pppower_mannwhitney_bmr.Rd")   # object `mw`,       keyed by sample size
-load("data/pppower_coselens_bmr.Rd")      # object `coselens`, keyed by sample size
-
-mylist <- list()
-for (i1 in c(1)){
-   for (rho in c(0)) {
-    for (i4 in c(0.5)) {
-    n<-0
-    for(i3 in SIZES){
-      n <- n+1
-      load(paste0("data/bmr_archive/diff/pppower_betaf0=",i1, "_sample",i3,"_",i4,"_",rho,".Rd"))
-          load(paste0("data/bmr_archive/other/pppower_betaf0=",i1,"_sample",i3,"_",i4,"_",rho,".Rd"))
-
-      m5.pvalue <- simuresdiff[["m1.pvalue"]]
-      m1.pvalue <- simuresother[["m1.pvalue"]]
-      m2.pvalue <- simuresother[["m2.pvalue"]]
-      m3.pvalue <- simuresother[["m3.pvalue"]]
-      m4.pvalue <- simuresother[["m4.pvalue"]]
-      m7.pvalue <- mw[[as.character(i3)]][["mannwhitney.pvalue"]]       # Mann-Whitney
-      m8.pvalue <- coselens[[as.character(i3)]][["coselens.pvalue"]]    # coselens (true per-group BMR)
-     mylist[[n]] <- c(length(m1.pvalue[m1.pvalue <0.01]),length(m2.pvalue[m2.pvalue <0.01]),length(m3.pvalue[m3.pvalue <0.01]), length(m4.pvalue[m4.pvalue <0.01]),length(m7.pvalue[m7.pvalue <0.01]),length(m8.pvalue[m8.pvalue <0.01]),length(m5.pvalue[m5.pvalue <0.01]))/Nsim
-    }
-    outdt <- do.call(cbind, mylist)
-    rownames(outdt)=c("Linear","Fisher","Binomial","LogisticR","MannWhitney","Coselens","diffDriver")
-    colnames(outdt) <- SIZES
-    # colors: Linear, Fisher, Binomial, LogisticR, MannWhitney, coselens, diff
-    mycol=c("#00AFBB","#2b8cbe","#aa00ff","#0001f6","#1a9850","#ff7f00","#FF3D2E")
-    mypch=c(19,19,19,19,3,8,17)
-     plot(1:dim(outdt)[2],ylim=c(0,1), col="white", ylab = "False positive rate (p < 0.01)", xlab="Number of samples", yaxt="n", xaxt="n")
-     title( paste( "SC(scale efficient)=",i1,",","para=(",i4,1-i4,")", ",", sep=" "))
-    yticks_val <- seq(0,1,0.1)
-    axis(2, at=yticks_val, lab=paste0(yticks_val),las=2)
-    axis(1, at=1:dim(outdt)[2], lab=colnames(outdt))
-    grid()
-    for (r in 1:7){
-      points(outdt[r,],col=mycol[r], pch=mypch[r], cex=1.3)
-      lines(outdt[r,],col=mycol[r])
-    }
-    legend("topleft", legend = c("Linear","Fisher","Binomial","LogisticR","MannWhitney","Coselens","diff"), col= mycol, lwd=1, bty="n", lty=rep(NA,7), pch=mypch)
-  }
-}
-  }
-
-```
-
-## Estimated background: a stricter test
-
-The result above hands DiffDriver and Coselens the **true** per-context background
-rate. A stricter test is to make them **estimate** the background from a simulated
-genome-wide **silent (synonymous) mutation count matrix**, rather than being given
-it:
-
-- **DiffDriver** estimates its background by running its signature model
-  (`fastTopics` on the 96 × N silent count matrix, exactly as
-  `diffdriver::matrixlistToBMR` does) to recover the per-sample per-context
-  spectrum.
-- **Coselens** estimates its per-context substitution rate as counts / sites —
-  `N_syn / Lsyn96` per group — which is exactly the Poisson fit `dndscv` performs;
-  this rate is fed to `dndscv_truerate`.
-
-The question is whether estimating the background from a finite, confounded silent
-spectrum still controls the false positive rate the way the true rate did.
-
-### Realistic LUAD silent count matrix
-
-The silent count matrix is not arbitrary — it is simulated from the same realistic
-LUAD background:
+DiffDriver and coselens do not receive the true background — each **estimates** it
+from a simulated genome-wide **silent (synonymous) mutation count matrix**, exactly
+as it would on real data. The silent matrix is not arbitrary — it is simulated from
+the same realistic LUAD background:
 
 $$Y[c,s] \sim \text{Poisson}\big(\text{Lsyn96}[c]\cdot \text{bmr}[c,s]\cdot g\big),$$
 
@@ -236,18 +172,20 @@ calibrates the mean per-sample synonymous burden to the **observed ≈ 64 synony
 mutations per sample** in TCGA-LUAD (530 samples). Since the true `bmr`
 (`sc = 359000`) already yields ≈ 63 syn/sample, **`g = 64.2 / 63 ≈ 1.02`** — the
 silent matrix and the ERBB3 mutations share **one realistic LUAD-scale
-background**. Both methods run on the **same simulated cohorts** as the
-true-background result (the cohort RNG stream is frozen around the estimation step,
-so per-iteration mutation counts are identical).
-
-### Rerunning the estimated-background version
+background**, run on the **same simulated cohorts** as the count-based methods.
 
 The estimated-background helpers are in
 [`code/simulate_silent_estimate.R`](https://github.com/szhaolab/diffdriver-paper/blob/main/code/simulate_silent_estimate.R):
-`build_silent_matrix()` (the LUAD-calibrated silent count matrix),
-`coselens_estimated_rate()` (`N_syn/Lsyn96` per group → `dndscv_truerate`), and
-`diffdriver_estimated_mr()` (fastTopics spectrum → per-site log-background). Per
-iteration:
+
+- **DiffDriver** estimates its background by running its signature model
+  (`fastTopics` on the 96 × N silent count matrix, exactly as
+  `diffdriver::matrixlistToBMR` does) to recover the per-sample per-context
+  spectrum (`diffdriver_estimated_mr()`).
+- **coselens** estimates its per-context substitution rate as counts / sites —
+  `N_syn / Lsyn96` per group (`coselens_estimated_rate()`) — which is exactly the
+  Poisson fit `dndscv` performs; this rate is fed to `dndscv_truerate`.
+
+Per iteration:
 
 ```{r eval=FALSE}
 source("code/simulate_functions.R"); source("code/simulate_silent_estimate.R")
@@ -279,68 +217,5 @@ dd <- ddmodel_binary(do.call(rbind, sim$mutlist), e, mr_est, sim$efsize$diffFe)$
 ```
 
 The full benchmark loops this over `Nsample = 200 … 1500` (100 iterations each)
-and stores the results in `data/pppower_estimatedBMR_bmr.Rd`.
-
-### Estimated vs. true background
-
-Both DiffDriver and Coselens **control the false positive rate whether they are
-given the true background or estimate it** from the LUAD-calibrated silent count
-matrix (all four curves stay near zero). The count-based benchmarks do **not** use
-or estimate a background rate — they operate on the raw mutation counts, so the
-"true vs estimated" distinction does not apply to them; they are shown only for
-context (from the true-background result above) and rise toward ~0.6.
-
-```{r estimated, fig.width=8, fig.height=6}
-Nsim <- 100
-SIZES <- c(200,400,600,800,1000,1200,1500)
-load("data/pppower_estimatedBMR_bmr.Rd")     # object `estBMR`, keyed by N
-load("data/pppower_mannwhitney_bmr.Rd")      # object `mw`
-
-fp <- function(p) mean(p < 0.01, na.rm = TRUE)
-rate <- function(field) sapply(as.character(SIZES), function(n) fp(estBMR[[n]][[field]]))
-
-# background-modeling methods (this simulation): 4 series
-cosT <- rate("coselens_true"); cosE <- rate("coselens_est")
-ddT  <- rate("diff_true");     ddE  <- rate("diff_est")
-
-# count-based benchmarks (for context; from the true-background sim, same setup)
-lin <- fis <- bin <- lr <- mw_fp <- numeric(length(SIZES))
-for (i in seq_along(SIZES)) {
-  N <- SIZES[i]
-  o <- new.env(); load(sprintf("data/bmr_archive/other/pppower_betaf0=1_sample%d_0.5_0.Rd", N), envir = o)
-  s <- o$simuresother
-  lin[i] <- fp(s$m1.pvalue); fis[i] <- fp(s$m2.pvalue); bin[i] <- fp(s$m3.pvalue); lr[i] <- fp(s$m4.pvalue)
-  mw_fp[i] <- fp(mw[[as.character(N)]]$mannwhitney.pvalue)
-}
-
-x <- seq_along(SIZES)
-par(mar = c(5,5,3,9), xpd = NA)
-plot(x, ylim = c(0,0.7), col = "white", ylab = "False positive rate (p < 0.01)",
-     xlab = "Number of samples", xaxt = "n", las = 1)
-axis(1, at = x, labels = SIZES); grid(); abline(h = 0.01, lty = 3, col = "grey60")
-
-# count-based (thin) for context
-cb <- list(Linear = lin, Fisher = fis, Binomial = bin, LogisticR = lr, MannWhitney = mw_fp)
-cbcol <- c("#00AFBB","#2b8cbe","#aa00ff","#0001f6","#1a9850")
-for (j in seq_along(cb)) { lines(x, cb[[j]], col = cbcol[j], lwd = 1.2); points(x, cb[[j]], col = cbcol[j], pch = 20, cex = 0.9) }
-
-# background-modeling: Coselens (orange) / DiffDriver (red); true = filled/solid, est = open/dashed
-lines(x, cosT, col = "#ff7f00", lwd = 2);              points(x, cosT, col = "#ff7f00", pch = 19, cex = 1.4)
-lines(x, cosE, col = "#ff7f00", lwd = 2, lty = 2);     points(x, cosE, col = "#ff7f00", pch = 1,  cex = 1.4, lwd = 2)
-lines(x, ddT,  col = "#FF3D2E", lwd = 2);              points(x, ddT,  col = "#FF3D2E", pch = 17, cex = 1.4)
-lines(x, ddE,  col = "#FF3D2E", lwd = 2, lty = 2);     points(x, ddE,  col = "#FF3D2E", pch = 2,  cex = 1.4, lwd = 2)
-
-legend(par("usr")[2], par("usr")[4], bty = "n", cex = 0.85, xjust = 0,
-  legend = c("Coselens (true bkg)","Coselens (estimated)",
-             "DiffDriver (true bkg)","DiffDriver (estimated)","",
-             "Linear","Fisher","Binomial","LogisticR","MannWhitney"),
-  col = c("#ff7f00","#ff7f00","#FF3D2E","#FF3D2E",NA, cbcol),
-  pch = c(19,1,17,2,NA, rep(20,5)),
-  lty = c(1,2,1,2,NA, rep(1.2,5)), lwd = c(2,2,2,2,NA, rep(1.2,5)))
-title("Estimated vs. true background under signature confounding")
-```
-
-The two dashed curves (estimated background) sit right on top of their solid
-counterparts (true background), near zero — estimating the background from a
-realistic, LUAD-calibrated silent count matrix does not reintroduce the
-confounding, for either DiffDriver or Coselens.
+and stores the estimated-background results in `data/pppower_estimatedBMR_bmr.Rd`
+(the `coselens_est` and `diff_est` fields plotted above).
