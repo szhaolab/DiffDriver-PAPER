@@ -26,7 +26,11 @@ VARS <- list(
   continuous  = list(binary=FALSE, tmb_cv=0,   rho=sqrt(0.78)))
 
 a <- commandArgs(trailingOnly=TRUE); VAR <- a[1]; N <- as.integer(a[2])
-V <- VARS[[VAR]]; Nite <- if (V$binary) 100L else 50L
+V <- VARS[[VAR]]
+# optional args: a[3]=Nite override, a[4]=RNG seed (default 1). A non-default seed
+# generates additional INDEPENDENT iterations, saved to a seed-tagged file to merge.
+Nite <- if (length(a) >= 3 && !is.na(a[3]) && nzchar(a[3])) as.integer(a[3]) else if (V$binary) 100L else 50L
+SEED <- if (length(a) >= 4 && !is.na(a[4]) && nzchar(a[4])) as.integer(a[4]) else 1L
 
 cos_p <- function(mr1, mr2, maf) {
   r <- tryCatch(run_coselens(maf$group1, maf$group2, subset.genes.by="ERBB3",
@@ -37,7 +41,7 @@ cos_p <- function(mr1, mr2, maf) {
   if (nrow(row)==1 && is.finite(row$pval)) row$pval else 1
 }
 R <- data.frame(Linear=1,Fisher=1,Binomial=1,LogisticR=1,MannWhitney=1,Coselens=1,DiffDriver=1,nmut=0)[rep(1,Nite),]
-set.seed(1)
+set.seed(SEED)
 for (i in 1:Nite) {
   sim <- simulate_confounding(binary=V$binary, sganno=b$sganno, sgmatrix=b$sgmatrix, Nsample=N,
     para=c(0.5,0.5), beta_gc=b$beta_gc, signatures=b$signature, loadings=b$ll, rho=V$rho, hot=1,
@@ -78,7 +82,8 @@ for (i in 1:Nite) {
   .Random.seed <- cohort_seed
   cat(sprintf("%s N=%d i=%d nmut=%d Lin=%.3f Cos=%.3f DD=%.3f\n", VAR,N,i,R$nmut[i],R$Linear[i],R$Coselens[i],R$DiffDriver[i])); flush.console()
 }
-saveRDS(R, file.path(OUT, sprintf("var_%s_N%d.rds", VAR, N)))
+outf <- if (SEED == 1L) sprintf("var_%s_N%d.rds", VAR, N) else sprintf("var_%s_N%d_s%d.rds", VAR, N, SEED)
+saveRDS(R, file.path(OUT, outf))
 fp <- function(p) round(mean(p<0.01, na.rm=TRUE),3)
 cat(sprintf("DONE %s N=%d FP(p<.01): Lin=%.2f Fis=%.2f Bin=%.2f LR=%.2f MW=%.2f Cos=%.2f DD=%.2f meanMut=%.0f\n",
     VAR,N,fp(R$Linear),fp(R$Fisher),fp(R$Binomial),fp(R$LogisticR),fp(R$MannWhitney),fp(R$Coselens),fp(R$DiffDriver),mean(R$nmut)))

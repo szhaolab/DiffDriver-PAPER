@@ -26,9 +26,9 @@ positive). As on the [main page](Simulation-BMR.html#estimating-the-background-f
 **DiffDriver** and **Coselens** are **not** given the true background — each
 *estimates* it from a per-cohort simulated silent (synonymous) count matrix
 (`build_silent_matrix` → `fastTopics` / `N_syn` per site), exactly as on real
-data. Each variation reruns the full 7-method benchmark (100 iterations, 50 for
-the continuous variant) over N = 200–1500 and we plot the false-positive rate
-(FPR, p < 0.01) vs. sample size.
+data. Each variation reruns the full 7-method benchmark (100 iterations — 150 and
+250 for the two variable-burden settings, 50 for the continuous variant) over
+N = 200–1500 and we plot the false-positive rate (FPR, p < 0.01) vs. sample size.
 
 The knobs live in `code/simulate_functions.R` (`build_confounded_bmr`'s `tmb_cv`
 for per-sample burden; `simulate_confounding`'s `binary = FALSE` for a continuous
@@ -155,7 +155,7 @@ All methods **estimate** the background from the simulated silent count matrix
 | Variation | Count-based methods | Coselens | DiffDriver |
 |---|---|---|---|
 | Baseline (R²=0.78) | false-positive, →~60% at N=1500 | controlled (≈0%) | controlled (≤4%) |
-| Variable burden (tmb_cv 0.5, 0.9) | still false-positive (~50–60%) | controlled (≈0%) | controlled (≤6%) |
+| Variable burden (tmb_cv 0.5, 0.9) | still false-positive (~50–60%) | controlled (≈0%) | controlled (≤7%) |
 | Confounding strength R² | scales with R²: 0.3→~10%, 0.5→~35%, ≥0.78→~60% (saturates) | controlled (≈0%) | controlled (≤4%) |
 | Continuous phenotype | false-positive (→~40%) | controlled (≈0%) | controlled (≤2%) |
 | # signatures (estimated bkg) | — | — | robust: ~1–4% for k = 4…10 |

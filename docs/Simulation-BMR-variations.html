@@ -633,15 +633,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree2a3270efd6818b22acfc7cd58ea1db2f2b6cdacdtargetblank2a3270ea">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree24f536118b4112801e99c02b93eb6101e2579ea9targetblank24f5361a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/2a3270efd6818b22acfc7cd58ea1db2f2b6cdacd" target="_blank">2a3270e</a>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/24f536118b4112801e99c02b93eb6101e2579ea9" target="_blank">24f5361</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree2a3270efd6818b22acfc7cd58ea1db2f2b6cdacdtargetblank2a3270ea"
+id="strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree24f536118b4112801e99c02b93eb6101e2579ea9targetblank24f5361a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -651,7 +651,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/2a3270efd6818b22acfc7cd58ea1db2f2b6cdacd" target="_blank">2a3270e</a>.
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/24f536118b4112801e99c02b93eb6101e2579ea9" target="_blank">24f5361</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -678,6 +678,8 @@ Untracked files:
 
 Unstaged changes:
     Modified:   analysis/Simulation-BMR-variations.Rmd
+    Modified:   code/consolidate_bmr_variations.R
+    Modified:   code/simulate_bmr_variations.R
     Modified:   data/pppower_bmr_variations.Rd
 
 </code></pre>
@@ -724,6 +726,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/3f9450ac554000281418889e9b9162180202709b/analysis/Simulation-BMR-variations.Rmd" target="_blank">3f9450a</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-07-26
+</td>
+<td>
+Re-run confounding variations with estimated background
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/szhaolab/DiffDriver-PAPER/3f9450ac554000281418889e9b9162180202709b/docs/Simulation-BMR-variations.html" target="_blank">3f9450a</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-07-26
+</td>
+<td>
+Re-run confounding variations with estimated background
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -818,9 +854,10 @@ page</a>, <strong>DiffDriver</strong> and <strong>Coselens</strong> are
 it from a per-cohort simulated silent (synonymous) count matrix
 (<code>build_silent_matrix</code> → <code>fastTopics</code> /
 <code>N_syn</code> per site), exactly as on real data. Each variation
-reruns the full 7-method benchmark (100 iterations, 50 for the
-continuous variant) over N = 200–1500 and we plot the false-positive
-rate (FPR, p &lt; 0.01) vs. sample size.</p>
+reruns the full 7-method benchmark (100 iterations — 150 and 250 for the
+two variable-burden settings, 50 for the continuous variant) over N =
+200–1500 and we plot the false-positive rate (FPR, p &lt; 0.01)
+vs. sample size.</p>
 <p>The knobs live in <code>code/simulate_functions.R</code>
 (<code>build_confounded_bmr</code>’s <code>tmb_cv</code> for per-sample
 burden; <code>simulate_confounding</code>’s <code>binary = FALSE</code>
@@ -873,6 +910,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/3f9450ac554000281418889e9b9162180202709b/docs/figure/Simulation-BMR-variations.Rmd/baseline-1.png" target="_blank">3f9450a</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-07-26
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/aa3931bc88a854656a5af61561e25a4493ddcd74/docs/figure/Simulation-BMR-variations.Rmd/baseline-1.png" target="_blank">aa3931b</a>
@@ -933,6 +981,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/3f9450ac554000281418889e9b9162180202709b/docs/figure/Simulation-BMR-variations.Rmd/burden-1.png" target="_blank">3f9450a</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-07-26
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/aa3931bc88a854656a5af61561e25a4493ddcd74/docs/figure/Simulation-BMR-variations.Rmd/burden-1.png" target="_blank">aa3931b</a>
 </td>
 <td>
@@ -988,6 +1047,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/3f9450ac554000281418889e9b9162180202709b/docs/figure/Simulation-BMR-variations.Rmd/r2-1.png" target="_blank">3f9450a</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-07-26
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/aa3931bc88a854656a5af61561e25a4493ddcd74/docs/figure/Simulation-BMR-variations.Rmd/r2-1.png" target="_blank">aa3931b</a>
@@ -1152,7 +1222,7 @@ DiffDriver via fastTopics), as on real data.</p>
 <td>Variable burden (tmb_cv 0.5, 0.9)</td>
 <td>still false-positive (~50–60%)</td>
 <td>controlled (≈0%)</td>
-<td>controlled (≤6%)</td>
+<td>controlled (≤7%)</td>
 </tr>
 <tr class="odd">
 <td>Confounding strength R²</td>

@@ -13,13 +13,19 @@ missing <- character(0)
 for (v in VARS) {
   lst <- setNames(vector("list", length(SIZES)), as.character(SIZES))
   for (N in SIZES) {
-    f <- file.path(SRC, sprintf("var_%s_N%d.rds", v, N))
-    if (file.exists(f)) lst[[as.character(N)]] <- readRDS(f)
-    else missing <- c(missing, sprintf("%s_N%d", v, N))
+    f <- file.path(SRC, sprintf("var_%s_N%d.rds", v, N))     # seed-1 base run
+    if (!file.exists(f)) { missing <- c(missing, sprintf("%s_N%d", v, N)); next }
+    d <- readRDS(f)
+    # append any independent seed-tagged extra-iteration files (var_<v>_N<N>_s<seed>.rds)
+    for (extra in list.files(SRC, sprintf("^var_%s_N%d_s[0-9]+\\.rds$", v, N), full.names = TRUE))
+      d <- rbind(d, readRDS(extra))
+    lst[[as.character(N)]] <- d
   }
   partA[[v]] <- lst
 }
 if (length(missing)) { cat("MISSING:\n"); print(missing); stop("incomplete results") }
+cat("iterations per (variation,N):\n")
+print(sapply(partA, function(v) sapply(v, nrow)))
 
 bmrvar$partA <- partA            # replace partA with estimated-rate results; keep partB
 save(bmrvar, file = "data/pppower_bmr_variations.Rd")
