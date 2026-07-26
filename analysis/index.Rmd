@@ -41,13 +41,11 @@ rank-sum test).
   a false positive. Because the confounding signature inflates the background
   mutation rate, the count-based benchmarks (including Mann-Whitney) increasingly
   false-positive with sample size, while DiffDriver controls the false positive
-  rate. coselens, when given each group's true background rate, also stays
+  rate. Both DiffDriver and coselens **estimate** the background from a simulated
+  genome-wide silent (synonymous) mutation count matrix (calibrated to the
+  observed LUAD burden, ~64 syn/sample) — exactly as on real data — and both stay
   controlled. Single gene (ERBB3) with hotspots placed at the signature's peak
-  context. The page also includes a **stricter test** where DiffDriver and
-  coselens must *estimate* the background from a simulated genome-wide silent
-  (synonymous) mutation count matrix (calibrated to the observed LUAD burden,
-  ~64 syn/sample) instead of being given it — both still control the false
-  positive rate.
+  context.
 - [Simulation: Signature Confounding under Realistic Variations](Simulation-BMR-variations.html) —
   Stress-tests the confounding scenario across realistic variations: variable
   per-sample mutation burden, confounding strength (R²), a continuous phenotype,

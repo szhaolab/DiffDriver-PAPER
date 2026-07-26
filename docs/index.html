@@ -422,15 +422,15 @@ HTML.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree6eb64559467138d3f0a3e78eca079034be723144targetblank6eb6455a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree3f9450ac554000281418889e9b9162180202709btargetblank3f9450aa">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/6eb64559467138d3f0a3e78eca079034be723144" target="_blank">6eb6455</a>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/3f9450ac554000281418889e9b9162180202709b" target="_blank">3f9450a</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree6eb64559467138d3f0a3e78eca079034be723144targetblank6eb6455a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree3f9450ac554000281418889e9b9162180202709btargetblank3f9450aa"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -440,7 +440,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/6eb64559467138d3f0a3e78eca079034be723144" target="_blank">6eb6455</a>.
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/3f9450ac554000281418889e9b9162180202709b" target="_blank">3f9450a</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -466,12 +466,7 @@ Untracked files:
     Untracked:  data/sgmatrixsig.Rd
 
 Unstaged changes:
-    Modified:   analysis/Simulation-BMR-variations.Rmd
-    Modified:   analysis/Simulation-BMR.Rmd
     Modified:   analysis/index.Rmd
-
-Staged changes:
-    Deleted:    analysis/Simulation-BMR-estimated.Rmd
 
 </code></pre>
 <p>
@@ -515,6 +510,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/dfa3eb4ccb2daac76127e4f2ba68bdbec33204c8/analysis/index.Rmd" target="_blank">dfa3eb4</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-07-26
+</td>
+<td>
+Merge estimated-background page into Simulation-BMR
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/szhaolab/DiffDriver-PAPER/dfa3eb4ccb2daac76127e4f2ba68bdbec33204c8/docs/index.html" target="_blank">dfa3eb4</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-07-26
+</td>
+<td>
+Merge estimated-background page into Simulation-BMR
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -976,14 +1005,12 @@ signature (LUAD signature 3, <span class="math inline">\(R^2 =
 so any detection is a false positive. Because the confounding signature
 inflates the background mutation rate, the count-based benchmarks
 (including Mann-Whitney) increasingly false-positive with sample size,
-while DiffDriver controls the false positive rate. coselens, when given
-each group’s true background rate, also stays controlled. Single gene
-(ERBB3) with hotspots placed at the signature’s peak context. The page
-also includes a <strong>stricter test</strong> where DiffDriver and
-coselens must <em>estimate</em> the background from a simulated
+while DiffDriver controls the false positive rate. Both DiffDriver and
+coselens <strong>estimate</strong> the background from a simulated
 genome-wide silent (synonymous) mutation count matrix (calibrated to the
-observed LUAD burden, ~64 syn/sample) instead of being given it — both
-still control the false positive rate.</li>
+observed LUAD burden, ~64 syn/sample) — exactly as on real data — and
+both stay controlled. Single gene (ERBB3) with hotspots placed at the
+signature’s peak context.</li>
 <li><a href="Simulation-BMR-variations.html">Simulation: Signature
 Confounding under Realistic Variations</a> — Stress-tests the
 confounding scenario across realistic variations: variable per-sample
