@@ -1,0 +1,160 @@
+---
+title: "Simulation: Signature-Confounding under Realistic Variations"
+author: "Jie Zhou, Siming Zhao"
+date: "`r Sys.Date()`"
+output:
+  workflowr::wflow_html:
+    theme: flatly
+    highlight: tango
+    toc: true
+    toc_float: true
+    code_folding: hide
+---
+
+```{r}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Overview
+
+This page stress-tests the [phenotype–signature confounding
+simulation](Simulation-BMR.html) under several realistic parameter variations.
+The baseline is unchanged: binary phenotype, confounder = LUAD **signature 3**
+(R² = 0.78 with the phenotype), driver hotspots at the signature's peak context
+(nttype 34), single gene (ERBB3), **no selection** (so any hit is a false
+positive). Across all variations, **DiffDriver** and **Coselens** are given the
+*true* per-group background rate. Each variation reruns the full 7-method
+benchmark (100 iterations, 50 for the continuous variant) over N = 200–1500 and
+we plot the false-positive rate (FPR, p < 0.01) vs. sample size.
+
+The knobs live in `code/simulate_functions.R` (`build_confounded_bmr`'s `tmb_cv`
+for per-sample burden; `simulate_confounding`'s `binary = FALSE` for a continuous
+phenotype; `rho` for the confounding strength) and `code/simulate_silent_estimate.R`
+(`k` for the number of fitted signatures).
+
+```{r load}
+load("data/pppower_bmr_variations.Rd")   # object `bmrvar`: partA (7 variations), partB (signature-count)
+SIZES <- bmrvar$sizes
+MCOL <- c(Linear="#00AFBB", Fisher="#2b8cbe", Binomial="#aa00ff", LogisticR="#0001f6",
+          MannWhitney="#1a9850", Coselens="#ff7f00", DiffDriver="#FF3D2E")
+MPCH <- c(Linear=19, Fisher=17, Binomial=15, LogisticR=18, MannWhitney=3, Coselens=8, DiffDriver=17)
+fp_by_size <- function(vlist, m) sapply(vlist, function(d) if (is.null(d)) NA else mean(d[[m]] < 0.01, na.rm = TRUE))
+plot_fp <- function(vlist, title = "", methods = names(MCOL), legend = TRUE, ymax = 0.7) {
+  x <- seq_along(SIZES)
+  plot(NA, xlim = c(1, length(SIZES)), ylim = c(0, ymax), xaxt = "n",
+       xlab = "Number of samples", ylab = "FPR (p < 0.01)", main = title, las = 1)
+  axis(1, x, SIZES); grid(); abline(h = 0.01, lty = 3, col = "grey60")
+  for (m in methods) { y <- fp_by_size(vlist, m); lines(x, y, col = MCOL[m], lwd = 1.4); points(x, y, col = MCOL[m], pch = MPCH[m], cex = 1.1) }
+  if (legend) legend("topleft", methods, col = MCOL[methods], pch = MPCH[methods], lwd = 1.4, lty = NA, bty = "n", cex = 0.75)
+}
+```
+
+## Baseline
+
+For reference, the baseline confounding benchmark (same as the
+[Simulation-BMR](Simulation-BMR.html) figure): count-based methods increasingly
+false-positive with sample size, while Coselens and DiffDriver stay controlled.
+
+```{r baseline, fig.width=6, fig.height=5}
+plot_fp(bmrvar$partA$baseline, "Baseline: binary, R² = 0.78, constant burden")
+```
+
+## Variation 1 — variable per-sample mutation burden
+
+Real tumors vary widely in mutation burden. Here each sample's whole signature
+loading vector is multiplied by an independent mean-1 log-normal factor
+(coefficient of variation `tmb_cv`), so samples get very different *total*
+mutation counts while the confounded signature *composition* is preserved.
+
+**Result:** adding realistic burden variation (up to ~5–10× spread at
+`tmb_cv = 0.9`) leaves the picture essentially unchanged — the count-based
+methods still false-positive with sample size, and Coselens/DiffDriver stay
+controlled. The confounding is a property of the signature *composition*, not the
+per-sample total, so burden noise does not rescue the count-based tests.
+
+```{r burden, fig.width=15, fig.height=5}
+par(mfrow = c(1, 3), mar = c(5, 5, 4, 1))
+plot_fp(bmrvar$partA$baseline,  "tmb_cv = 0 (constant)")
+plot_fp(bmrvar$partA$tmb_cv0.5, "tmb_cv = 0.5", legend = FALSE)
+plot_fp(bmrvar$partA$tmb_cv0.9, "tmb_cv = 0.9 (5–10× spread)", legend = FALSE)
+```
+
+## Variation 2 — confounding strength (phenotype–signature R²)
+
+Sweeping the phenotype–signature correlation R² ∈ {0.3, 0.5, 0.78, 0.95}.
+
+**Result:** the count-based false-positive rate scales with the confounding
+strength — weak confounding (R² = 0.3) gives only a mild inflation (~10% at
+N = 1500), R² = 0.5 gives ~35%, and R² ≥ 0.78 saturates around ~60%. The
+saturation is expected for a *binary* phenotype: once R² is high enough to fully
+separate cases from controls by signature loading, increasing it further changes
+nothing (R² = 0.78 and 0.95 are essentially identical). Coselens and DiffDriver
+remain controlled at every level.
+
+```{r r2, fig.width=12, fig.height=10}
+par(mfrow = c(2, 2), mar = c(5, 5, 4, 1))
+plot_fp(bmrvar$partA$R2_0.3,  "R² = 0.3")
+plot_fp(bmrvar$partA$R2_0.5,  "R² = 0.5", legend = FALSE)
+plot_fp(bmrvar$partA$baseline, "R² = 0.78", legend = FALSE)
+plot_fp(bmrvar$partA$R2_0.95, "R² = 0.95 (saturated)", legend = FALSE)
+```
+
+## Variation 3 — continuous phenotype
+
+Instead of a binary case/control phenotype, a continuous phenotype ~ N(0,1) is
+confounded with the signature-3 loading at R² = 0.78. The count-based methods
+dichotomize the phenotype at its mean (as in the power simulation), Coselens
+splits at the median, and DiffDriver uses the continuous `ddmodel`.
+
+**Result:** the confounding still fools the count-based methods (rising toward
+~45% at N = 1500 — somewhat lower than the binary case because the dichotomization
+discards the continuous gradient), while DiffDriver (≤ 2%) and Coselens (≈ 0%)
+stay controlled.
+
+```{r continuous, fig.width=6, fig.height=5}
+plot_fp(bmrvar$partA$continuous, "Continuous phenotype, R² = 0.78")
+```
+
+## Variation 4 — robustness to the number of signatures
+
+In the [estimated-background simulation](Simulation-BMR-estimated.html), DiffDriver
+does not receive the true background — it *estimates* it by fitting a mutational-
+signature model (fastTopics) to the simulated silent count matrix. The silent
+mutations here are generated under **6** LUAD signatures. This variation asks how
+sensitive DiffDriver's false-positive control is to the *number of fitted
+signatures* `k`: we refit with k = 4, 5, 6, 8, 10 and measure DiffDriver's
+estimated-background FPR.
+
+**Result:** DiffDriver's control is **robust to misspecifying k** — fitting too
+few (k = 4) or too many (k = 10) signatures, versus the true 6, all keep the FPR
+at ~1–4% across sample sizes. The signature-count choice is not a fragile knob.
+
+```{r sigk, fig.width=6, fig.height=5}
+ks <- names(bmrvar$partB); kcols <- c("#1b9e77","#d95f02","#7570b3","#e7298a","#66a61e")
+x <- seq_along(SIZES)
+plot(NA, xlim = c(1, length(SIZES)), ylim = c(0, 0.15), xaxt = "n",
+     xlab = "Number of samples", ylab = "DiffDriver FPR (p < 0.01)",
+     main = "Estimated background: robustness to # signatures (true = 6)", las = 1)
+axis(1, x, SIZES); grid(); abline(h = 0.01, lty = 3, col = "grey60")
+for (i in seq_along(ks)) {
+  y <- sapply(bmrvar$partB[[ks[i]]], function(d) mean(d$diff_est < 0.01, na.rm = TRUE))
+  lines(x, y, col = kcols[i], lwd = 1.5); points(x, y, col = kcols[i], pch = 19)
+}
+legend("topleft", paste("k =", sub("k", "", ks)), col = kcols, pch = 19, lwd = 1.5, bty = "n")
+```
+
+## Summary
+
+| Variation | Count-based methods | Coselens | DiffDriver |
+|---|---|---|---|
+| Baseline (R²=0.78) | false-positive, →~60% at N=1500 | controlled (≤3%) | controlled (≤4%) |
+| Variable burden (tmb_cv 0.5, 0.9) | still false-positive (~50–60%) | controlled | controlled |
+| Confounding strength R² | scales with R²: 0.3→~10%, 0.5→~35%, ≥0.78→~60% (saturates) | controlled | controlled |
+| Continuous phenotype | false-positive (→~45%) | controlled (≈0%) | controlled (≤2%) |
+| # signatures (estimated bkg) | — | — | robust: ~1–4% for k = 4…10 |
+
+Across every realistic variation, the count-based benchmarks remain vulnerable to
+the phenotype–signature confounding, while **DiffDriver and Coselens (given/estimating
+the confounded background) keep the false positive rate controlled** — and
+DiffDriver's estimated-background control is insensitive to the number of fitted
+signatures.

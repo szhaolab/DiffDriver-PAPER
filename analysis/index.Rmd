@@ -44,6 +44,12 @@ rank-sum test).
   rate. coselens, when given each group's true background rate, also stays
   controlled. Single gene (ERBB3) with hotspots placed at the signature's peak
   context.
+- [Simulation: Signature Confounding under Realistic Variations](Simulation-BMR-variations.html) —
+  Stress-tests the confounding scenario across realistic variations: variable
+  per-sample mutation burden, confounding strength (R²), a continuous phenotype,
+  and DiffDriver's robustness to the number of fitted signatures. The count-based
+  benchmarks stay vulnerable throughout, while DiffDriver and coselens keep the
+  false positive rate controlled.
 - [Simulation: Estimated Background under Signature Confounding](Simulation-BMR-estimated.html) —
   A stricter version of the above: instead of being *given* the true background
   rate, DiffDriver and coselens must *estimate* it from a simulated genome-wide

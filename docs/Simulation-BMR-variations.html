@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Jie Zhou, Siming Zhao" />
+
+<meta name="date" content="2026-07-26" />
+
+<title>Simulation: Signature-Confounding under Realistic Variations</title>
+
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/font-awesome-6.5.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #204a87; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #204a87; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+
+.sourceCode .row {
+  width: 100%;
+}
+.sourceCode {
+  overflow-x: auto;
+}
+.code-folding-btn {
+  margin-right: -30px;
+}
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">DiffDriver</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="download.html">Download</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/szhaolab/DiffDriver-PAPER/">
+    <span class="fab fa-github"></span>
+     
+    Source
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Simulation: Signature-Confounding under
+Realistic Variations</h1>
+<h4 class="author">Jie Zhou, Siming Zhao</h4>
+<h4 class="date">2026-07-26</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2026-07-26
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 1
+</p>
+<p>
+<strong>Knit directory:</strong> <code>DiffDriver-PAPER/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.1). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguncommittedchanges"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The R Markdown is untracked by Git. To know which version of the R
+Markdown file created these results, you’ll want to first commit it to
+the Git repo. If you’re still working on the analysis, you can ignore
+this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20260206code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20260206)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20260206code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20260206)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree9949f83259b74914fe34dd136400f8816013301ftargetblank9949f83a">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/9949f83259b74914fe34dd136400f8816013301f" target="_blank">9949f83</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree9949f83259b74914fe34dd136400f8816013301ftargetblank9949f83a"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/9949f83259b74914fe34dd136400f8816013301f" target="_blank">9949f83</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .DS_Store
+    Ignored:    .claude/
+    Ignored:    analysis/.Rhistory
+    Ignored:    code/.Rhistory
+    Ignored:    data/.DS_Store
+
+Untracked files:
+    Untracked:  analysis/Simulation-BMR-variations.Rmd
+    Untracked:  data/pppower_bmr_variations.Rd
+    Untracked:  data/sgannosig.Rd
+    Untracked:  data/sgmatrixsig.Rd
+
+Unstaged changes:
+    Modified:   analysis/index.Rmd
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+There are no past versions. Publish this analysis with
+<code>wflow_publish()</code> to start tracking its development.
+</p>
+<hr>
+</div>
+</div>
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">echo =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p>This page stress-tests the <a
+href="Simulation-BMR.html">phenotype–signature confounding
+simulation</a> under several realistic parameter variations. The
+baseline is unchanged: binary phenotype, confounder = LUAD
+<strong>signature 3</strong> (R² = 0.78 with the phenotype), driver
+hotspots at the signature’s peak context (nttype 34), single gene
+(ERBB3), <strong>no selection</strong> (so any hit is a false positive).
+Across all variations, <strong>DiffDriver</strong> and
+<strong>Coselens</strong> are given the <em>true</em> per-group
+background rate. Each variation reruns the full 7-method benchmark (100
+iterations, 50 for the continuous variant) over N = 200–1500 and we plot
+the false-positive rate (FPR, p &lt; 0.01) vs. sample size.</p>
+<p>The knobs live in <code>code/simulate_functions.R</code>
+(<code>build_confounded_bmr</code>’s <code>tmb_cv</code> for per-sample
+burden; <code>simulate_confounding</code>’s <code>binary = FALSE</code>
+for a continuous phenotype; <code>rho</code> for the confounding
+strength) and <code>code/simulate_silent_estimate.R</code>
+(<code>k</code> for the number of fitted signatures).</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;data/pppower_bmr_variations.Rd&quot;</span>)   <span class="co"># object `bmrvar`: partA (7 variations), partB (signature-count)</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>SIZES <span class="ot">&lt;-</span> bmrvar<span class="sc">$</span>sizes</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>MCOL <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">Linear=</span><span class="st">&quot;#00AFBB&quot;</span>, <span class="at">Fisher=</span><span class="st">&quot;#2b8cbe&quot;</span>, <span class="at">Binomial=</span><span class="st">&quot;#aa00ff&quot;</span>, <span class="at">LogisticR=</span><span class="st">&quot;#0001f6&quot;</span>,</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>          <span class="at">MannWhitney=</span><span class="st">&quot;#1a9850&quot;</span>, <span class="at">Coselens=</span><span class="st">&quot;#ff7f00&quot;</span>, <span class="at">DiffDriver=</span><span class="st">&quot;#FF3D2E&quot;</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>MPCH <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">Linear=</span><span class="dv">19</span>, <span class="at">Fisher=</span><span class="dv">17</span>, <span class="at">Binomial=</span><span class="dv">15</span>, <span class="at">LogisticR=</span><span class="dv">18</span>, <span class="at">MannWhitney=</span><span class="dv">3</span>, <span class="at">Coselens=</span><span class="dv">8</span>, <span class="at">DiffDriver=</span><span class="dv">17</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>fp_by_size <span class="ot">&lt;-</span> <span class="cf">function</span>(vlist, m) <span class="fu">sapply</span>(vlist, <span class="cf">function</span>(d) <span class="cf">if</span> (<span class="fu">is.null</span>(d)) <span class="cn">NA</span> <span class="cf">else</span> <span class="fu">mean</span>(d[[m]] <span class="sc">&lt;</span> <span class="fl">0.01</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>plot_fp <span class="ot">&lt;-</span> <span class="cf">function</span>(vlist, <span class="at">title =</span> <span class="st">&quot;&quot;</span>, <span class="at">methods =</span> <span class="fu">names</span>(MCOL), <span class="at">legend =</span> <span class="cn">TRUE</span>, <span class="at">ymax =</span> <span class="fl">0.7</span>) {</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fu">seq_along</span>(SIZES)</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="cn">NA</span>, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(SIZES)), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, ymax), <span class="at">xaxt =</span> <span class="st">&quot;n&quot;</span>,</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>       <span class="at">xlab =</span> <span class="st">&quot;Number of samples&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;FPR (p &lt; 0.01)&quot;</span>, <span class="at">main =</span> title, <span class="at">las =</span> <span class="dv">1</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>  <span class="fu">axis</span>(<span class="dv">1</span>, x, SIZES); <span class="fu">grid</span>(); <span class="fu">abline</span>(<span class="at">h =</span> <span class="fl">0.01</span>, <span class="at">lty =</span> <span class="dv">3</span>, <span class="at">col =</span> <span class="st">&quot;grey60&quot;</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>  <span class="cf">for</span> (m <span class="cf">in</span> methods) { y <span class="ot">&lt;-</span> <span class="fu">fp_by_size</span>(vlist, m); <span class="fu">lines</span>(x, y, <span class="at">col =</span> MCOL[m], <span class="at">lwd =</span> <span class="fl">1.4</span>); <span class="fu">points</span>(x, y, <span class="at">col =</span> MCOL[m], <span class="at">pch =</span> MPCH[m], <span class="at">cex =</span> <span class="fl">1.1</span>) }</span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>  <span class="cf">if</span> (legend) <span class="fu">legend</span>(<span class="st">&quot;topleft&quot;</span>, methods, <span class="at">col =</span> MCOL[methods], <span class="at">pch =</span> MPCH[methods], <span class="at">lwd =</span> <span class="fl">1.4</span>, <span class="at">lty =</span> <span class="cn">NA</span>, <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>, <span class="at">cex =</span> <span class="fl">0.75</span>)</span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="baseline" class="section level2">
+<h2>Baseline</h2>
+<p>For reference, the baseline confounding benchmark (same as the <a
+href="Simulation-BMR.html">Simulation-BMR</a> figure): count-based
+methods increasingly false-positive with sample size, while Coselens and
+DiffDriver stay controlled.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">plot_fp</span>(bmrvar<span class="sc">$</span>partA<span class="sc">$</span>baseline, <span class="st">&quot;Baseline: binary, R² = 0.78, constant burden&quot;</span>)</span></code></pre></div>
+<p><img src="figure/Simulation-BMR-variations.Rmd/baseline-1.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+</div>
+<div id="variation-1-variable-per-sample-mutation-burden"
+class="section level2">
+<h2>Variation 1 — variable per-sample mutation burden</h2>
+<p>Real tumors vary widely in mutation burden. Here each sample’s whole
+signature loading vector is multiplied by an independent mean-1
+log-normal factor (coefficient of variation <code>tmb_cv</code>), so
+samples get very different <em>total</em> mutation counts while the
+confounded signature <em>composition</em> is preserved.</p>
+<p><strong>Result:</strong> adding realistic burden variation (up to
+~5–10× spread at <code>tmb_cv = 0.9</code>) leaves the picture
+essentially unchanged — the count-based methods still false-positive
+with sample size, and Coselens/DiffDriver stay controlled. The
+confounding is a property of the signature <em>composition</em>, not the
+per-sample total, so burden noise does not rescue the count-based
+tests.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>), <span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">1</span>))</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">plot_fp</span>(bmrvar<span class="sc">$</span>partA<span class="sc">$</span>baseline,  <span class="st">&quot;tmb_cv = 0 (constant)&quot;</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="fu">plot_fp</span>(bmrvar<span class="sc">$</span>partA<span class="sc">$</span>tmb_cv0<span class="fl">.5</span>, <span class="st">&quot;tmb_cv = 0.5&quot;</span>, <span class="at">legend =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="fu">plot_fp</span>(bmrvar<span class="sc">$</span>partA<span class="sc">$</span>tmb_cv0<span class="fl">.9</span>, <span class="st">&quot;tmb_cv = 0.9 (5–10× spread)&quot;</span>, <span class="at">legend =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<p><img src="figure/Simulation-BMR-variations.Rmd/burden-1.png" alt="" width="1440" style="display: block; margin: auto;" /></p>
+</div>
+<div id="variation-2-confounding-strength-phenotypesignature-r²"
+class="section level2">
+<h2>Variation 2 — confounding strength (phenotype–signature R²)</h2>
+<p>Sweeping the phenotype–signature correlation R² ∈ {0.3, 0.5, 0.78,
+0.95}.</p>
+<p><strong>Result:</strong> the count-based false-positive rate scales
+with the confounding strength — weak confounding (R² = 0.3) gives only a
+mild inflation (~10% at N = 1500), R² = 0.5 gives ~35%, and R² ≥ 0.78
+saturates around ~60%. The saturation is expected for a <em>binary</em>
+phenotype: once R² is high enough to fully separate cases from controls
+by signature loading, increasing it further changes nothing (R² = 0.78
+and 0.95 are essentially identical). Coselens and DiffDriver remain
+controlled at every level.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>), <span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">1</span>))</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">plot_fp</span>(bmrvar<span class="sc">$</span>partA<span class="sc">$</span>R2_0<span class="fl">.3</span>,  <span class="st">&quot;R² = 0.3&quot;</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="fu">plot_fp</span>(bmrvar<span class="sc">$</span>partA<span class="sc">$</span>R2_0<span class="fl">.5</span>,  <span class="st">&quot;R² = 0.5&quot;</span>, <span class="at">legend =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="fu">plot_fp</span>(bmrvar<span class="sc">$</span>partA<span class="sc">$</span>baseline, <span class="st">&quot;R² = 0.78&quot;</span>, <span class="at">legend =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="fu">plot_fp</span>(bmrvar<span class="sc">$</span>partA<span class="sc">$</span>R2_0<span class="fl">.95</span>, <span class="st">&quot;R² = 0.95 (saturated)&quot;</span>, <span class="at">legend =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<p><img src="figure/Simulation-BMR-variations.Rmd/r2-1.png" alt="" width="1152" style="display: block; margin: auto;" /></p>
+</div>
+<div id="variation-3-continuous-phenotype" class="section level2">
+<h2>Variation 3 — continuous phenotype</h2>
+<p>Instead of a binary case/control phenotype, a continuous phenotype ~
+N(0,1) is confounded with the signature-3 loading at R² = 0.78. The
+count-based methods dichotomize the phenotype at its mean (as in the
+power simulation), Coselens splits at the median, and DiffDriver uses
+the continuous <code>ddmodel</code>.</p>
+<p><strong>Result:</strong> the confounding still fools the count-based
+methods (rising toward ~45% at N = 1500 — somewhat lower than the binary
+case because the dichotomization discards the continuous gradient),
+while DiffDriver (≤ 2%) and Coselens (≈ 0%) stay controlled.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">plot_fp</span>(bmrvar<span class="sc">$</span>partA<span class="sc">$</span>continuous, <span class="st">&quot;Continuous phenotype, R² = 0.78&quot;</span>)</span></code></pre></div>
+<p><img src="figure/Simulation-BMR-variations.Rmd/continuous-1.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+</div>
+<div id="variation-4-robustness-to-the-number-of-signatures"
+class="section level2">
+<h2>Variation 4 — robustness to the number of signatures</h2>
+<p>In the <a href="Simulation-BMR-estimated.html">estimated-background
+simulation</a>, DiffDriver does not receive the true background — it
+<em>estimates</em> it by fitting a mutational- signature model
+(fastTopics) to the simulated silent count matrix. The silent mutations
+here are generated under <strong>6</strong> LUAD signatures. This
+variation asks how sensitive DiffDriver’s false-positive control is to
+the <em>number of fitted signatures</em> <code>k</code>: we refit with k
+= 4, 5, 6, 8, 10 and measure DiffDriver’s estimated-background FPR.</p>
+<p><strong>Result:</strong> DiffDriver’s control is <strong>robust to
+misspecifying k</strong> — fitting too few (k = 4) or too many (k = 10)
+signatures, versus the true 6, all keep the FPR at ~1–4% across sample
+sizes. The signature-count choice is not a fragile knob.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>ks <span class="ot">&lt;-</span> <span class="fu">names</span>(bmrvar<span class="sc">$</span>partB); kcols <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;#1b9e77&quot;</span>,<span class="st">&quot;#d95f02&quot;</span>,<span class="st">&quot;#7570b3&quot;</span>,<span class="st">&quot;#e7298a&quot;</span>,<span class="st">&quot;#66a61e&quot;</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq_along</span>(SIZES)</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="fu">plot</span>(<span class="cn">NA</span>, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(SIZES)), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.15</span>), <span class="at">xaxt =</span> <span class="st">&quot;n&quot;</span>,</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Number of samples&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;DiffDriver FPR (p &lt; 0.01)&quot;</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&quot;Estimated background: robustness to # signatures (true = 6)&quot;</span>, <span class="at">las =</span> <span class="dv">1</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>, x, SIZES); <span class="fu">grid</span>(); <span class="fu">abline</span>(<span class="at">h =</span> <span class="fl">0.01</span>, <span class="at">lty =</span> <span class="dv">3</span>, <span class="at">col =</span> <span class="st">&quot;grey60&quot;</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(ks)) {</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>  y <span class="ot">&lt;-</span> <span class="fu">sapply</span>(bmrvar<span class="sc">$</span>partB[[ks[i]]], <span class="cf">function</span>(d) <span class="fu">mean</span>(d<span class="sc">$</span>diff_est <span class="sc">&lt;</span> <span class="fl">0.01</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>  <span class="fu">lines</span>(x, y, <span class="at">col =</span> kcols[i], <span class="at">lwd =</span> <span class="fl">1.5</span>); <span class="fu">points</span>(x, y, <span class="at">col =</span> kcols[i], <span class="at">pch =</span> <span class="dv">19</span>)</span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>}</span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;topleft&quot;</span>, <span class="fu">paste</span>(<span class="st">&quot;k =&quot;</span>, <span class="fu">sub</span>(<span class="st">&quot;k&quot;</span>, <span class="st">&quot;&quot;</span>, ks)), <span class="at">col =</span> kcols, <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">lwd =</span> <span class="fl">1.5</span>, <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>)</span></code></pre></div>
+<p><img src="figure/Simulation-BMR-variations.Rmd/sigk-1.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+</div>
+<div id="summary" class="section level2">
+<h2>Summary</h2>
+<table>
+<colgroup>
+<col width="25%" />
+<col width="25%" />
+<col width="25%" />
+<col width="25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variation</th>
+<th>Count-based methods</th>
+<th>Coselens</th>
+<th>DiffDriver</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Baseline (R²=0.78)</td>
+<td>false-positive, →~60% at N=1500</td>
+<td>controlled (≤3%)</td>
+<td>controlled (≤4%)</td>
+</tr>
+<tr class="even">
+<td>Variable burden (tmb_cv 0.5, 0.9)</td>
+<td>still false-positive (~50–60%)</td>
+<td>controlled</td>
+<td>controlled</td>
+</tr>
+<tr class="odd">
+<td>Confounding strength R²</td>
+<td>scales with R²: 0.3→~10%, 0.5→~35%, ≥0.78→~60% (saturates)</td>
+<td>controlled</td>
+<td>controlled</td>
+</tr>
+<tr class="even">
+<td>Continuous phenotype</td>
+<td>false-positive (→~45%)</td>
+<td>controlled (≈0%)</td>
+<td>controlled (≤2%)</td>
+</tr>
+<tr class="odd">
+<td># signatures (estimated bkg)</td>
+<td>—</td>
+<td>—</td>
+<td>robust: ~1–4% for k = 4…10</td>
+</tr>
+</tbody>
+</table>
+<p>Across every realistic variation, the count-based benchmarks remain
+vulnerable to the phenotype–signature confounding, while
+<strong>DiffDriver and Coselens (given/estimating the confounded
+background) keep the false positive rate controlled</strong> — and
+DiffDriver’s estimated-background control is insensitive to the number
+of fitted signatures.</p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<pre><code>R version 4.3.2 (2023-10-31)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Sonoma 14.6.1
+
+Matrix products: default
+BLAS:   /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: America/New_York
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] workflowr_1.7.1
+
+loaded via a namespace (and not attached):
+ [1] vctrs_0.6.5       httr_1.4.8        cli_3.6.5         knitr_1.51       
+ [5] rlang_1.1.6       xfun_0.52         stringi_1.8.7     otel_0.2.0       
+ [9] processx_3.8.5    promises_1.5.0    jsonlite_2.0.0    glue_1.8.0       
+[13] rprojroot_2.0.4   git2r_0.36.2      htmltools_0.5.9   httpuv_1.6.15    
+[17] ps_1.8.1          sass_0.4.10       rmarkdown_2.29    jquerylib_0.1.4  
+[21] tibble_3.3.1      evaluate_1.0.5    fastmap_1.2.0     yaml_2.3.12      
+[25] lifecycle_1.0.5   whisker_0.4.1     stringr_1.6.0     compiler_4.3.2   
+[29] fs_1.6.6          pkgconfig_2.0.3   Rcpp_1.1.0        rstudioapi_0.17.1
+[33] later_1.4.8       digest_0.6.39     R6_2.6.1          pillar_1.11.1    
+[37] callr_3.7.6       magrittr_2.0.3    bslib_0.10.0      tools_4.3.2      
+[41] cachem_1.1.0      getPass_0.2-4    </code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
