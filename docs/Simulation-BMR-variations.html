@@ -633,15 +633,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree6eb64559467138d3f0a3e78eca079034be723144targetblank6eb6455a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree2a3270efd6818b22acfc7cd58ea1db2f2b6cdacdtargetblank2a3270ea">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/6eb64559467138d3f0a3e78eca079034be723144" target="_blank">6eb6455</a>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/2a3270efd6818b22acfc7cd58ea1db2f2b6cdacd" target="_blank">2a3270e</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree6eb64559467138d3f0a3e78eca079034be723144targetblank6eb6455a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree2a3270efd6818b22acfc7cd58ea1db2f2b6cdacdtargetblank2a3270ea"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -651,7 +651,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/6eb64559467138d3f0a3e78eca079034be723144" target="_blank">6eb6455</a>.
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/2a3270efd6818b22acfc7cd58ea1db2f2b6cdacd" target="_blank">2a3270e</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -678,11 +678,7 @@ Untracked files:
 
 Unstaged changes:
     Modified:   analysis/Simulation-BMR-variations.Rmd
-    Modified:   analysis/Simulation-BMR.Rmd
-    Modified:   analysis/index.Rmd
-
-Staged changes:
-    Deleted:    analysis/Simulation-BMR-estimated.Rmd
+    Modified:   data/pppower_bmr_variations.Rd
 
 </code></pre>
 <p>
@@ -728,6 +724,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/dfa3eb4ccb2daac76127e4f2ba68bdbec33204c8/analysis/Simulation-BMR-variations.Rmd" target="_blank">dfa3eb4</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-07-26
+</td>
+<td>
+Merge estimated-background page into Simulation-BMR
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/szhaolab/DiffDriver-PAPER/dfa3eb4ccb2daac76127e4f2ba68bdbec33204c8/docs/Simulation-BMR-variations.html" target="_blank">dfa3eb4</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-07-26
+</td>
+<td>
+Merge estimated-background page into Simulation-BMR
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -781,17 +811,23 @@ baseline is unchanged: binary phenotype, confounder = LUAD
 <strong>signature 3</strong> (R² = 0.78 with the phenotype), driver
 hotspots at the signature’s peak context (nttype 34), single gene
 (ERBB3), <strong>no selection</strong> (so any hit is a false positive).
-Across all variations, <strong>DiffDriver</strong> and
-<strong>Coselens</strong> are given the <em>true</em> per-group
-background rate. Each variation reruns the full 7-method benchmark (100
-iterations, 50 for the continuous variant) over N = 200–1500 and we plot
-the false-positive rate (FPR, p &lt; 0.01) vs. sample size.</p>
+As on the <a
+href="Simulation-BMR.html#estimating-the-background-from-silent-mutations">main
+page</a>, <strong>DiffDriver</strong> and <strong>Coselens</strong> are
+<strong>not</strong> given the true background — each <em>estimates</em>
+it from a per-cohort simulated silent (synonymous) count matrix
+(<code>build_silent_matrix</code> → <code>fastTopics</code> /
+<code>N_syn</code> per site), exactly as on real data. Each variation
+reruns the full 7-method benchmark (100 iterations, 50 for the
+continuous variant) over N = 200–1500 and we plot the false-positive
+rate (FPR, p &lt; 0.01) vs. sample size.</p>
 <p>The knobs live in <code>code/simulate_functions.R</code>
 (<code>build_confounded_bmr</code>’s <code>tmb_cv</code> for per-sample
 burden; <code>simulate_confounding</code>’s <code>binary = FALSE</code>
 for a continuous phenotype; <code>rho</code> for the confounding
-strength) and <code>code/simulate_silent_estimate.R</code>
-(<code>k</code> for the number of fitted signatures).</p>
+strength), the estimated-background helpers in
+<code>code/simulate_silent_estimate.R</code>, and the variations worker
+<code>code/simulate_bmr_variations.R</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;data/pppower_bmr_variations.Rd&quot;</span>)   <span class="co"># object `bmrvar`: partA (7 variations), partB (signature-count)</span></span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>SIZES <span class="ot">&lt;-</span> bmrvar<span class="sc">$</span>sizes</span>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>MCOL <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">Linear=</span><span class="st">&quot;#00AFBB&quot;</span>, <span class="at">Fisher=</span><span class="st">&quot;#2b8cbe&quot;</span>, <span class="at">Binomial=</span><span class="st">&quot;#aa00ff&quot;</span>, <span class="at">LogisticR=</span><span class="st">&quot;#0001f6&quot;</span>,</span>
@@ -976,7 +1012,7 @@ count-based methods dichotomize the phenotype at its mean (as in the
 power simulation), Coselens splits at the median, and DiffDriver uses
 the continuous <code>ddmodel</code>.</p>
 <p><strong>Result:</strong> the confounding still fools the count-based
-methods (rising toward ~45% at N = 1500 — somewhat lower than the binary
+methods (rising toward ~40% at N = 1500 — somewhat lower than the binary
 case because the dichotomization discards the continuous gradient),
 while DiffDriver (≤ 2%) and Coselens (≈ 0%) stay controlled.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">plot_fp</span>(bmrvar<span class="sc">$</span>partA<span class="sc">$</span>continuous, <span class="st">&quot;Continuous phenotype, R² = 0.78&quot;</span>)</span></code></pre></div>
@@ -1023,8 +1059,8 @@ Siming
 class="section level2">
 <h2>Variation 4 — robustness to the number of signatures</h2>
 <p>In the <a
-href="Simulation-BMR.html#estimated-background-a-stricter-test">estimated-background
-test</a>, DiffDriver does not receive the true background — it
+href="Simulation-BMR.html#estimating-the-background-from-silent-mutations">estimated-background
+simulation</a>, DiffDriver does not receive the true background — it
 <em>estimates</em> it by fitting a mutational- signature model
 (fastTopics) to the simulated silent count matrix. The silent mutations
 here are generated under <strong>6</strong> LUAD signatures. This
@@ -1087,6 +1123,9 @@ Siming
 </div>
 <div id="summary" class="section level2">
 <h2>Summary</h2>
+<p>All methods <strong>estimate</strong> the background from the
+simulated silent count matrix (Coselens via <code>N_syn/Lsyn96</code>,
+DiffDriver via fastTopics), as on real data.</p>
 <table>
 <colgroup>
 <col width="25%" />
@@ -1106,24 +1145,24 @@ Siming
 <tr class="odd">
 <td>Baseline (R²=0.78)</td>
 <td>false-positive, →~60% at N=1500</td>
-<td>controlled (≤3%)</td>
+<td>controlled (≈0%)</td>
 <td>controlled (≤4%)</td>
 </tr>
 <tr class="even">
 <td>Variable burden (tmb_cv 0.5, 0.9)</td>
 <td>still false-positive (~50–60%)</td>
-<td>controlled</td>
-<td>controlled</td>
+<td>controlled (≈0%)</td>
+<td>controlled (≤6%)</td>
 </tr>
 <tr class="odd">
 <td>Confounding strength R²</td>
 <td>scales with R²: 0.3→~10%, 0.5→~35%, ≥0.78→~60% (saturates)</td>
-<td>controlled</td>
-<td>controlled</td>
+<td>controlled (≈0%)</td>
+<td>controlled (≤4%)</td>
 </tr>
 <tr class="even">
 <td>Continuous phenotype</td>
-<td>false-positive (→~45%)</td>
+<td>false-positive (→~40%)</td>
 <td>controlled (≈0%)</td>
 <td>controlled (≤2%)</td>
 </tr>
@@ -1137,10 +1176,10 @@ Siming
 </table>
 <p>Across every realistic variation, the count-based benchmarks remain
 vulnerable to the phenotype–signature confounding, while
-<strong>DiffDriver and Coselens (given/estimating the confounded
-background) keep the false positive rate controlled</strong> — and
-DiffDriver’s estimated-background control is insensitive to the number
-of fitted signatures.</p>
+<strong>DiffDriver and Coselens, both estimating the confounded
+background from silent mutations, keep the false positive rate
+controlled</strong> — and DiffDriver’s estimated-background control is
+insensitive to the number of fitted signatures.</p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">

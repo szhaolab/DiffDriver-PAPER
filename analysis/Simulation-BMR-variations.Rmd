@@ -22,15 +22,19 @@ simulation](Simulation-BMR.html) under several realistic parameter variations.
 The baseline is unchanged: binary phenotype, confounder = LUAD **signature 3**
 (R² = 0.78 with the phenotype), driver hotspots at the signature's peak context
 (nttype 34), single gene (ERBB3), **no selection** (so any hit is a false
-positive). Across all variations, **DiffDriver** and **Coselens** are given the
-*true* per-group background rate. Each variation reruns the full 7-method
-benchmark (100 iterations, 50 for the continuous variant) over N = 200–1500 and
-we plot the false-positive rate (FPR, p < 0.01) vs. sample size.
+positive). As on the [main page](Simulation-BMR.html#estimating-the-background-from-silent-mutations),
+**DiffDriver** and **Coselens** are **not** given the true background — each
+*estimates* it from a per-cohort simulated silent (synonymous) count matrix
+(`build_silent_matrix` → `fastTopics` / `N_syn` per site), exactly as on real
+data. Each variation reruns the full 7-method benchmark (100 iterations, 50 for
+the continuous variant) over N = 200–1500 and we plot the false-positive rate
+(FPR, p < 0.01) vs. sample size.
 
 The knobs live in `code/simulate_functions.R` (`build_confounded_bmr`'s `tmb_cv`
 for per-sample burden; `simulate_confounding`'s `binary = FALSE` for a continuous
-phenotype; `rho` for the confounding strength) and `code/simulate_silent_estimate.R`
-(`k` for the number of fitted signatures).
+phenotype; `rho` for the confounding strength), the estimated-background helpers
+in `code/simulate_silent_estimate.R`, and the variations worker
+`code/simulate_bmr_variations.R`.
 
 ```{r load}
 load("data/pppower_bmr_variations.Rd")   # object `bmrvar`: partA (7 variations), partB (signature-count)
@@ -107,7 +111,7 @@ dichotomize the phenotype at its mean (as in the power simulation), Coselens
 splits at the median, and DiffDriver uses the continuous `ddmodel`.
 
 **Result:** the confounding still fools the count-based methods (rising toward
-~45% at N = 1500 — somewhat lower than the binary case because the dichotomization
+~40% at N = 1500 — somewhat lower than the binary case because the dichotomization
 discards the continuous gradient), while DiffDriver (≤ 2%) and Coselens (≈ 0%)
 stay controlled.
 
@@ -117,7 +121,7 @@ plot_fp(bmrvar$partA$continuous, "Continuous phenotype, R² = 0.78")
 
 ## Variation 4 — robustness to the number of signatures
 
-In the [estimated-background test](Simulation-BMR.html#estimated-background-a-stricter-test), DiffDriver
+In the [estimated-background simulation](Simulation-BMR.html#estimating-the-background-from-silent-mutations), DiffDriver
 does not receive the true background — it *estimates* it by fitting a mutational-
 signature model (fastTopics) to the simulated silent count matrix. The silent
 mutations here are generated under **6** LUAD signatures. This variation asks how
@@ -145,16 +149,19 @@ legend("topleft", paste("k =", sub("k", "", ks)), col = kcols, pch = 19, lwd = 1
 
 ## Summary
 
+All methods **estimate** the background from the simulated silent count matrix
+(Coselens via `N_syn/Lsyn96`, DiffDriver via fastTopics), as on real data.
+
 | Variation | Count-based methods | Coselens | DiffDriver |
 |---|---|---|---|
-| Baseline (R²=0.78) | false-positive, →~60% at N=1500 | controlled (≤3%) | controlled (≤4%) |
-| Variable burden (tmb_cv 0.5, 0.9) | still false-positive (~50–60%) | controlled | controlled |
-| Confounding strength R² | scales with R²: 0.3→~10%, 0.5→~35%, ≥0.78→~60% (saturates) | controlled | controlled |
-| Continuous phenotype | false-positive (→~45%) | controlled (≈0%) | controlled (≤2%) |
+| Baseline (R²=0.78) | false-positive, →~60% at N=1500 | controlled (≈0%) | controlled (≤4%) |
+| Variable burden (tmb_cv 0.5, 0.9) | still false-positive (~50–60%) | controlled (≈0%) | controlled (≤6%) |
+| Confounding strength R² | scales with R²: 0.3→~10%, 0.5→~35%, ≥0.78→~60% (saturates) | controlled (≈0%) | controlled (≤4%) |
+| Continuous phenotype | false-positive (→~40%) | controlled (≈0%) | controlled (≤2%) |
 | # signatures (estimated bkg) | — | — | robust: ~1–4% for k = 4…10 |
 
 Across every realistic variation, the count-based benchmarks remain vulnerable to
-the phenotype–signature confounding, while **DiffDriver and Coselens (given/estimating
-the confounded background) keep the false positive rate controlled** — and
-DiffDriver's estimated-background control is insensitive to the number of fitted
-signatures.
+the phenotype–signature confounding, while **DiffDriver and Coselens, both
+estimating the confounded background from silent mutations, keep the false positive
+rate controlled** — and DiffDriver's estimated-background control is insensitive to
+the number of fitted signatures.
