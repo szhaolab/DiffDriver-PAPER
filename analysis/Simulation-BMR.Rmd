@@ -66,6 +66,15 @@ Because it is handed the true confounded background, coselens correctly
 attributes the case/control mutation excess to background rather than selection
 and also controls the false positive rate.
 
+### Robustness across realistic variations
+
+The [Signature-Confounding under Realistic Variations](Simulation-BMR-variations.html)
+page stress-tests this benchmark under variable per-sample mutation burden,
+different confounding strengths ($R^2$), a continuous phenotype, and DiffDriver's
+robustness to the number of fitted signatures. The count-based benchmarks stay
+vulnerable throughout, while DiffDriver and Coselens keep the false positive rate
+controlled.
+
 ## Rerunning the simulation
 
 The simulation functions live in [`code/simulate_functions.R`](https://github.com/szhaolab/diffdriver-paper/blob/main/code/simulate_functions.R)
