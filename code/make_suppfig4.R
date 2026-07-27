@@ -8,7 +8,7 @@ al_of <- function(d) 1/nrow(d)
 fpN   <- function(vlist, m) sapply(as.character(SIZES), function(n){d<-vlist[[n]]; mean(d[[m]]<al_of(d),na.rm=TRUE)})
 CA<-0.8; CM<-0.88; CLAB<-0.8; CL<-1.15    # cex: axis ticks / title / axis-label / panel-letter
 
-sub_fpN <- function(vlist, ttl, letter=NULL, xt=c(1,4,7)){
+sub_fpN <- function(vlist, ttl, letter=NULL, xt=c(1,4,7), ladj=-0.42){
   x<-seq_along(SIZES); al<-al_of(vlist[["1500"]])
   plot(NA,xlim=range(x),ylim=c(0,1),xaxt="n",yaxt="n",
        xlab="Number of samples", ylab="FPR", cex.lab=CLAB)
@@ -17,7 +17,7 @@ sub_fpN <- function(vlist, ttl, letter=NULL, xt=c(1,4,7)){
   grid(col="grey88"); abline(h=al,lty=3,col="grey50")
   for(m in names(MCOL)){y<-fpN(vlist,m);lines(x,y,col=MCOL[m],lwd=1.3);points(x,y,col=MCOL[m],pch=MPCH[m],cex=0.85)}
   mtext(ttl,side=3,line=0.25,cex=CM)
-  if(!is.null(letter)) mtext(letter,side=3,line=0.9,adj=-0.42,font=2,cex=CL,xpd=NA)
+  if(!is.null(letter)) mtext(letter,side=3,line=0.9,adj=ladj,font=2,cex=CL,xpd=NA)
 }
 draw <- function(){
   m <- rbind(c(1,2,3,4), c(5,6,7,10), c(8,8,9,9))
@@ -33,7 +33,7 @@ draw <- function(){
   sub_fpN(bmrvar$partA$tmb_cv0.5, "tmb_cv = 0.5")
   sub_fpN(bmrvar$partA$tmb_cv0.9, "tmb_cv = 0.9")
   ## (c) continuous
-  sub_fpN(bmrvar$partA$continuous, "Continuous context, R² = 0.78", "c")
+  sub_fpN(bmrvar$partA$continuous, "Continuous context, R² = 0.78", "c", ladj=-0.16)
   ## (d) number of fitted signatures
   ks<-names(bmrvar$partB); kcols<-c("#1b9e77","#d95f02","#7570b3","#e7298a","#66a61e")
   al<-al_of(bmrvar$partB[[1]][["1500"]]); x<-seq_along(SIZES)
@@ -51,7 +51,7 @@ draw <- function(){
   par(mar=c(0,0,0,0)); plot.new()
   legend("center", MLAB, col=MCOL, pch=MPCH, lwd=1.4, lty=1, bty="n", cex=0.82, title="Method", seg.len=1.3)
 }
-OUT <- "/private/tmp/claude-501/-Users-siming-Dartmouth-College-Dropbox-Siming-Zhao-Project-diffDriver-DiffDriver-PAPER/46eb8cab-f9ce-420f-8359-609ff7701606/scratchpad"
+OUT <- getwd()
 pdf(file.path(OUT,"SuppFig4_confounding_robustness.pdf"), width=7.5, height=7.6, pointsize=10); draw(); dev.off()
 png(file.path(OUT,"SuppFig4_confounding_robustness.png"), width=7.5, height=7.6, units="in", res=200, pointsize=10); draw(); dev.off()
 cat("done\n")
