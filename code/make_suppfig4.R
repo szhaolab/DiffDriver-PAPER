@@ -3,7 +3,7 @@ SIZES <- bmrvar$sizes
 MCOL <- c(Linear="#00AFBB", Fisher="#2b8cbe", Binomial="#aa00ff", LogisticR="#0001f6",
           MannWhitney="#1a9850", Coselens="#ff7f00", DiffDriver="#FF3D2E")
 MPCH <- c(Linear=19, Fisher=17, Binomial=15, LogisticR=18, MannWhitney=3, Coselens=8, DiffDriver=17)
-MLAB <- c("Linear regression","Fisher","Binomial","Logistic reg.","Mann–Whitney","coselens","DiffDriver")
+MLAB <- c("Linear regression","Fisher","Binomial","Logistic reg.","Mann–Whitney","Coselens","DiffDriver")
 al_of <- function(d) 1/nrow(d)
 fpN   <- function(vlist, m) sapply(as.character(SIZES), function(n){d<-vlist[[n]]; mean(d[[m]]<al_of(d),na.rm=TRUE)})
 CA<-0.8; CM<-0.88; CLAB<-0.8; CL<-1.15    # cex: axis ticks / title / axis-label / panel-letter
