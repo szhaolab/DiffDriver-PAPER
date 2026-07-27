@@ -1,8 +1,8 @@
 load("data/pppower_bmr_variations.Rd")
 SIZES <- bmrvar$sizes
-MCOL <- c(Linear="#00AFBB", Fisher="#2b8cbe", Binomial="#aa00ff", LogisticR="#0001f6",
-          MannWhitney="#1a9850", Coselens="#ff7f00", DiffDriver="#FF3D2E")
-MPCH <- c(Linear=19, Fisher=17, Binomial=15, LogisticR=18, MannWhitney=3, Coselens=8, DiffDriver=17)
+MCOL <- c(Linear="#00AFBB", Fisher="#aa00ff", Binomial="#0001f6", LogisticR="#fdae61",
+          MannWhitney="#a65628", Coselens="#1a9850", DiffDriver="#FF3D2E")
+MPCH <- c(Linear=17, Fisher=15, Binomial=18, LogisticR=8, MannWhitney=3, Coselens=4, DiffDriver=19)
 MLAB <- c("Linear regression","Fisher","Binomial","Logistic reg.","Mann–Whitney","Coselens","DiffDriver")
 al_of <- function(d) 1/nrow(d)
 fpN   <- function(vlist, m) sapply(as.character(SIZES), function(n){d<-vlist[[n]]; mean(d[[m]]<al_of(d),na.rm=TRUE)})
