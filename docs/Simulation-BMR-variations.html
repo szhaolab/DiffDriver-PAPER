@@ -633,15 +633,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree24f536118b4112801e99c02b93eb6101e2579ea9targetblank24f5361a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtreecefd056cdf1ceb7c2950c221e951dc0f9ba1e165targetblankcefd056a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/24f536118b4112801e99c02b93eb6101e2579ea9" target="_blank">24f5361</a>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/cefd056cdf1ceb7c2950c221e951dc0f9ba1e165" target="_blank">cefd056</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree24f536118b4112801e99c02b93eb6101e2579ea9targetblank24f5361a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtreecefd056cdf1ceb7c2950c221e951dc0f9ba1e165targetblankcefd056a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -651,7 +651,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/24f536118b4112801e99c02b93eb6101e2579ea9" target="_blank">24f5361</a>.
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/cefd056cdf1ceb7c2950c221e951dc0f9ba1e165" target="_blank">cefd056</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -678,9 +678,7 @@ Untracked files:
 
 Unstaged changes:
     Modified:   analysis/Simulation-BMR-variations.Rmd
-    Modified:   code/consolidate_bmr_variations.R
-    Modified:   code/simulate_bmr_variations.R
-    Modified:   data/pppower_bmr_variations.Rd
+    Modified:   analysis/Simulation-BMR.Rmd
 
 </code></pre>
 <p>
@@ -726,6 +724,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/cefd056cdf1ceb7c2950c221e951dc0f9ba1e165/analysis/Simulation-BMR-variations.Rmd" target="_blank">cefd056</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-07-26
+</td>
+<td>
+Add iterations to variable-burden variations to reduce noise
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/szhaolab/DiffDriver-PAPER/cefd056cdf1ceb7c2950c221e951dc0f9ba1e165/docs/Simulation-BMR-variations.html" target="_blank">cefd056</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-07-26
+</td>
+<td>
+Add iterations to variable-burden variations to reduce noise
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -856,8 +888,12 @@ it from a per-cohort simulated silent (synonymous) count matrix
 <code>N_syn</code> per site), exactly as on real data. Each variation
 reruns the full 7-method benchmark (100 iterations — 150 and 250 for the
 two variable-burden settings, 50 for the continuous variant) over N =
-200–1500 and we plot the false-positive rate (FPR, p &lt; 0.01)
-vs. sample size.</p>
+200–1500 and we plot the false-positive rate (FPR) vs. sample size. FPR
+is assessed at a significance threshold <strong>α = 1/Niter</strong> —
+the finest level resolvable with <code>Niter</code> iterations, at which
+a well-calibrated test yields an expected one false positive — so the
+dashed reference line marks the calibrated level for each panel (0.01 at
+100 iterations, 0.0067 at 150, 0.004 at 250, 0.02 at 50).</p>
 <p>The knobs live in <code>code/simulate_functions.R</code>
 (<code>build_confounded_bmr</code>’s <code>tmb_cv</code> for per-sample
 burden; <code>simulate_confounding</code>’s <code>binary = FALSE</code>
@@ -870,15 +906,19 @@ strength), the estimated-background helpers in
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>MCOL <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">Linear=</span><span class="st">&quot;#00AFBB&quot;</span>, <span class="at">Fisher=</span><span class="st">&quot;#2b8cbe&quot;</span>, <span class="at">Binomial=</span><span class="st">&quot;#aa00ff&quot;</span>, <span class="at">LogisticR=</span><span class="st">&quot;#0001f6&quot;</span>,</span>
 <span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>          <span class="at">MannWhitney=</span><span class="st">&quot;#1a9850&quot;</span>, <span class="at">Coselens=</span><span class="st">&quot;#ff7f00&quot;</span>, <span class="at">DiffDriver=</span><span class="st">&quot;#FF3D2E&quot;</span>)</span>
 <span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>MPCH <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">Linear=</span><span class="dv">19</span>, <span class="at">Fisher=</span><span class="dv">17</span>, <span class="at">Binomial=</span><span class="dv">15</span>, <span class="at">LogisticR=</span><span class="dv">18</span>, <span class="at">MannWhitney=</span><span class="dv">3</span>, <span class="at">Coselens=</span><span class="dv">8</span>, <span class="at">DiffDriver=</span><span class="dv">17</span>)</span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>fp_by_size <span class="ot">&lt;-</span> <span class="cf">function</span>(vlist, m) <span class="fu">sapply</span>(vlist, <span class="cf">function</span>(d) <span class="cf">if</span> (<span class="fu">is.null</span>(d)) <span class="cn">NA</span> <span class="cf">else</span> <span class="fu">mean</span>(d[[m]] <span class="sc">&lt;</span> <span class="fl">0.01</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>plot_fp <span class="ot">&lt;-</span> <span class="cf">function</span>(vlist, <span class="at">title =</span> <span class="st">&quot;&quot;</span>, <span class="at">methods =</span> <span class="fu">names</span>(MCOL), <span class="at">legend =</span> <span class="cn">TRUE</span>, <span class="at">ymax =</span> <span class="fl">0.7</span>) {</span>
-<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fu">seq_along</span>(SIZES)</span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="cn">NA</span>, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(SIZES)), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, ymax), <span class="at">xaxt =</span> <span class="st">&quot;n&quot;</span>,</span>
-<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>       <span class="at">xlab =</span> <span class="st">&quot;Number of samples&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;FPR (p &lt; 0.01)&quot;</span>, <span class="at">main =</span> title, <span class="at">las =</span> <span class="dv">1</span>)</span>
-<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>  <span class="fu">axis</span>(<span class="dv">1</span>, x, SIZES); <span class="fu">grid</span>(); <span class="fu">abline</span>(<span class="at">h =</span> <span class="fl">0.01</span>, <span class="at">lty =</span> <span class="dv">3</span>, <span class="at">col =</span> <span class="st">&quot;grey60&quot;</span>)</span>
-<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>  <span class="cf">for</span> (m <span class="cf">in</span> methods) { y <span class="ot">&lt;-</span> <span class="fu">fp_by_size</span>(vlist, m); <span class="fu">lines</span>(x, y, <span class="at">col =</span> MCOL[m], <span class="at">lwd =</span> <span class="fl">1.4</span>); <span class="fu">points</span>(x, y, <span class="at">col =</span> MCOL[m], <span class="at">pch =</span> MPCH[m], <span class="at">cex =</span> <span class="fl">1.1</span>) }</span>
-<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>  <span class="cf">if</span> (legend) <span class="fu">legend</span>(<span class="st">&quot;topleft&quot;</span>, methods, <span class="at">col =</span> MCOL[methods], <span class="at">pch =</span> MPCH[methods], <span class="at">lwd =</span> <span class="fl">1.4</span>, <span class="at">lty =</span> <span class="cn">NA</span>, <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>, <span class="at">cex =</span> <span class="fl">0.75</span>)</span>
-<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>}</span></code></pre></div>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co"># Significance threshold alpha = 1/Niter: the finest level resolvable with Niter</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co"># iterations (a calibrated test then yields an expected one false positive), so the</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co"># dashed reference line marks the calibrated level for each panel.</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>alpha_of <span class="ot">&lt;-</span> <span class="cf">function</span>(vlist) { nn <span class="ot">&lt;-</span> <span class="fu">vapply</span>(vlist, <span class="cf">function</span>(d) <span class="cf">if</span> (<span class="fu">is.null</span>(d)) <span class="cn">NA_integer_</span> <span class="cf">else</span> <span class="fu">nrow</span>(d), <span class="fu">integer</span>(<span class="dv">1</span>)); <span class="dv">1</span><span class="sc">/</span>stats<span class="sc">::</span><span class="fu">median</span>(nn, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) }</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>fp_by_size <span class="ot">&lt;-</span> <span class="cf">function</span>(vlist, m) <span class="fu">sapply</span>(vlist, <span class="cf">function</span>(d) <span class="cf">if</span> (<span class="fu">is.null</span>(d)) <span class="cn">NA</span> <span class="cf">else</span> <span class="fu">mean</span>(d[[m]] <span class="sc">&lt;</span> <span class="dv">1</span><span class="sc">/</span><span class="fu">nrow</span>(d), <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>plot_fp <span class="ot">&lt;-</span> <span class="cf">function</span>(vlist, <span class="at">title =</span> <span class="st">&quot;&quot;</span>, <span class="at">methods =</span> <span class="fu">names</span>(MCOL), <span class="at">legend =</span> <span class="cn">TRUE</span>, <span class="at">ymax =</span> <span class="fl">0.7</span>) {</span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fu">seq_along</span>(SIZES); al <span class="ot">&lt;-</span> <span class="fu">alpha_of</span>(vlist)</span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="cn">NA</span>, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(SIZES)), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, ymax), <span class="at">xaxt =</span> <span class="st">&quot;n&quot;</span>,</span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>       <span class="at">xlab =</span> <span class="st">&quot;Number of samples&quot;</span>, <span class="at">ylab =</span> <span class="fu">sprintf</span>(<span class="st">&quot;FPR (p &lt; 1/Niter = %.4g)&quot;</span>, al), <span class="at">main =</span> title, <span class="at">las =</span> <span class="dv">1</span>)</span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>  <span class="fu">axis</span>(<span class="dv">1</span>, x, SIZES); <span class="fu">grid</span>(); <span class="fu">abline</span>(<span class="at">h =</span> al, <span class="at">lty =</span> <span class="dv">3</span>, <span class="at">col =</span> <span class="st">&quot;grey60&quot;</span>)</span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>  <span class="cf">for</span> (m <span class="cf">in</span> methods) { y <span class="ot">&lt;-</span> <span class="fu">fp_by_size</span>(vlist, m); <span class="fu">lines</span>(x, y, <span class="at">col =</span> MCOL[m], <span class="at">lwd =</span> <span class="fl">1.4</span>); <span class="fu">points</span>(x, y, <span class="at">col =</span> MCOL[m], <span class="at">pch =</span> MPCH[m], <span class="at">cex =</span> <span class="fl">1.1</span>) }</span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a>  <span class="cf">if</span> (legend) <span class="fu">legend</span>(<span class="st">&quot;topleft&quot;</span>, methods, <span class="at">col =</span> MCOL[methods], <span class="at">pch =</span> MPCH[methods], <span class="at">lwd =</span> <span class="fl">1.4</span>, <span class="at">lty =</span> <span class="cn">NA</span>, <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>, <span class="at">cex =</span> <span class="fl">0.75</span>)</span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <div id="baseline" class="section level2">
 <h2>Baseline</h2>
@@ -979,6 +1019,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/cefd056cdf1ceb7c2950c221e951dc0f9ba1e165/docs/figure/Simulation-BMR-variations.Rmd/burden-1.png" target="_blank">cefd056</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-07-26
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/3f9450ac554000281418889e9b9162180202709b/docs/figure/Simulation-BMR-variations.Rmd/burden-1.png" target="_blank">3f9450a</a>
@@ -1082,9 +1133,11 @@ count-based methods dichotomize the phenotype at its mean (as in the
 power simulation), Coselens splits at the median, and DiffDriver uses
 the continuous <code>ddmodel</code>.</p>
 <p><strong>Result:</strong> the confounding still fools the count-based
-methods (rising toward ~40% at N = 1500 — somewhat lower than the binary
-case because the dichotomization discards the continuous gradient),
-while DiffDriver (≤ 2%) and Coselens (≈ 0%) stay controlled.</p>
+methods (rising toward ~40–55% at N = 1500 — somewhat lower than the
+binary case because the dichotomization discards the continuous
+gradient), while DiffDriver (≤ 4%) and Coselens (≈ 0%) stay controlled.
+(This variant uses 50 iterations, so its threshold α = 1/50 = 0.02 is
+the loosest of the panels.)</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">plot_fp</span>(bmrvar<span class="sc">$</span>partA<span class="sc">$</span>continuous, <span class="st">&quot;Continuous phenotype, R² = 0.78&quot;</span>)</span></code></pre></div>
 <p><img src="figure/Simulation-BMR-variations.Rmd/continuous-1.png" alt="" width="576" style="display: block; margin: auto;" /></p>
 <p>
@@ -1143,15 +1196,16 @@ signatures, versus the true 6, all keep the FPR at ~1–4% across sample
 sizes. The signature-count choice is not a fragile knob.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>ks <span class="ot">&lt;-</span> <span class="fu">names</span>(bmrvar<span class="sc">$</span>partB); kcols <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;#1b9e77&quot;</span>,<span class="st">&quot;#d95f02&quot;</span>,<span class="st">&quot;#7570b3&quot;</span>,<span class="st">&quot;#e7298a&quot;</span>,<span class="st">&quot;#66a61e&quot;</span>)</span>
 <span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq_along</span>(SIZES)</span>
-<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="fu">plot</span>(<span class="cn">NA</span>, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(SIZES)), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.15</span>), <span class="at">xaxt =</span> <span class="st">&quot;n&quot;</span>,</span>
-<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Number of samples&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;DiffDriver FPR (p &lt; 0.01)&quot;</span>,</span>
-<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&quot;Estimated background: robustness to # signatures (true = 6)&quot;</span>, <span class="at">las =</span> <span class="dv">1</span>)</span>
-<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>, x, SIZES); <span class="fu">grid</span>(); <span class="fu">abline</span>(<span class="at">h =</span> <span class="fl">0.01</span>, <span class="at">lty =</span> <span class="dv">3</span>, <span class="at">col =</span> <span class="st">&quot;grey60&quot;</span>)</span>
-<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(ks)) {</span>
-<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>  y <span class="ot">&lt;-</span> <span class="fu">sapply</span>(bmrvar<span class="sc">$</span>partB[[ks[i]]], <span class="cf">function</span>(d) <span class="fu">mean</span>(d<span class="sc">$</span>diff_est <span class="sc">&lt;</span> <span class="fl">0.01</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>  <span class="fu">lines</span>(x, y, <span class="at">col =</span> kcols[i], <span class="at">lwd =</span> <span class="fl">1.5</span>); <span class="fu">points</span>(x, y, <span class="at">col =</span> kcols[i], <span class="at">pch =</span> <span class="dv">19</span>)</span>
-<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>}</span>
-<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;topleft&quot;</span>, <span class="fu">paste</span>(<span class="st">&quot;k =&quot;</span>, <span class="fu">sub</span>(<span class="st">&quot;k&quot;</span>, <span class="st">&quot;&quot;</span>, ks)), <span class="at">col =</span> kcols, <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">lwd =</span> <span class="fl">1.5</span>, <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>)</span></code></pre></div>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>al <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span><span class="fu">median</span>(<span class="fu">sapply</span>(bmrvar<span class="sc">$</span>partB[[<span class="dv">1</span>]], nrow))   <span class="co"># alpha = 1/Niter (100 iters -&gt; 0.01)</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="fu">plot</span>(<span class="cn">NA</span>, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(SIZES)), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.15</span>), <span class="at">xaxt =</span> <span class="st">&quot;n&quot;</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Number of samples&quot;</span>, <span class="at">ylab =</span> <span class="fu">sprintf</span>(<span class="st">&quot;DiffDriver FPR (p &lt; 1/Niter = %.4g)&quot;</span>, al),</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&quot;Estimated background: robustness to # signatures (true = 6)&quot;</span>, <span class="at">las =</span> <span class="dv">1</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>, x, SIZES); <span class="fu">grid</span>(); <span class="fu">abline</span>(<span class="at">h =</span> al, <span class="at">lty =</span> <span class="dv">3</span>, <span class="at">col =</span> <span class="st">&quot;grey60&quot;</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(ks)) {</span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>  y <span class="ot">&lt;-</span> <span class="fu">sapply</span>(bmrvar<span class="sc">$</span>partB[[ks[i]]], <span class="cf">function</span>(d) <span class="fu">mean</span>(d<span class="sc">$</span>diff_est <span class="sc">&lt;</span> <span class="dv">1</span><span class="sc">/</span><span class="fu">nrow</span>(d), <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>  <span class="fu">lines</span>(x, y, <span class="at">col =</span> kcols[i], <span class="at">lwd =</span> <span class="fl">1.5</span>); <span class="fu">points</span>(x, y, <span class="at">col =</span> kcols[i], <span class="at">pch =</span> <span class="dv">19</span>)</span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>}</span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;topleft&quot;</span>, <span class="fu">paste</span>(<span class="st">&quot;k =&quot;</span>, <span class="fu">sub</span>(<span class="st">&quot;k&quot;</span>, <span class="st">&quot;&quot;</span>, ks)), <span class="at">col =</span> kcols, <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">lwd =</span> <span class="fl">1.5</span>, <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>)</span></code></pre></div>
 <p><img src="figure/Simulation-BMR-variations.Rmd/sigk-1.png" alt="" width="576" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-sigk-1">
@@ -1196,6 +1250,8 @@ Siming
 <p>All methods <strong>estimate</strong> the background from the
 simulated silent count matrix (Coselens via <code>N_syn/Lsyn96</code>,
 DiffDriver via fastTopics), as on real data.</p>
+<p>FPR is measured at α = 1/Niter (see Overview); the “≈0%” / “≤x%”
+figures below are the maxima across N at that per-panel threshold.</p>
 <table>
 <colgroup>
 <col width="25%" />
@@ -1222,7 +1278,7 @@ DiffDriver via fastTopics), as on real data.</p>
 <td>Variable burden (tmb_cv 0.5, 0.9)</td>
 <td>still false-positive (~50–60%)</td>
 <td>controlled (≈0%)</td>
-<td>controlled (≤7%)</td>
+<td>controlled (≤6%)</td>
 </tr>
 <tr class="odd">
 <td>Confounding strength R²</td>
@@ -1232,9 +1288,9 @@ DiffDriver via fastTopics), as on real data.</p>
 </tr>
 <tr class="even">
 <td>Continuous phenotype</td>
-<td>false-positive (→~40%)</td>
+<td>false-positive (→~40–55%)</td>
 <td>controlled (≈0%)</td>
-<td>controlled (≤2%)</td>
+<td>controlled (≤4%)</td>
 </tr>
 <tr class="odd">
 <td># signatures (estimated bkg)</td>

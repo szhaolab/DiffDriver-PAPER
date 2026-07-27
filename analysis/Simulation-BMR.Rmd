@@ -72,7 +72,10 @@ SIZES <- c(200,400,600,800,1000,1200,1500)
 load("data/pppower_estimatedBMR_bmr.Rd")     # object `estBMR`, keyed by N (estimated background)
 load("data/pppower_mannwhitney_bmr.Rd")      # object `mw`
 
-fp   <- function(p) mean(p < 0.01, na.rm = TRUE)
+# significance threshold alpha = 1/Niter (Niter = 100 -> 0.01): the finest level
+# resolvable with Niter iterations, where a calibrated test expects one false positive
+alpha <- 1/Nsim
+fp   <- function(p) mean(p < alpha, na.rm = TRUE)
 rate <- function(field) sapply(as.character(SIZES), function(n) fp(estBMR[[n]][[field]]))
 cosE <- rate("coselens_est"); ddE <- rate("diff_est")   # estimated-background methods
 
@@ -92,11 +95,11 @@ colnames(outdt) <- SIZES
 mycol <- c("#00AFBB","#2b8cbe","#aa00ff","#0001f6","#1a9850","#ff7f00","#FF3D2E")
 mypch <- c(19,19,19,19,3,8,17)
 x <- seq_along(SIZES)
-plot(x, ylim = c(0,1), col = "white", ylab = "False positive rate (p < 0.01)",
+plot(x, ylim = c(0,1), col = "white", ylab = sprintf("False positive rate (p < 1/Niter = %.4g)", alpha),
      xlab = "Number of samples", yaxt = "n", xaxt = "n")
 title("Phenotype–signature confounding (background estimated from silent mutations)")
 axis(2, at = seq(0,1,0.1), las = 2); axis(1, at = x, labels = SIZES); grid()
-abline(h = 0.01, lty = 3, col = "grey60")
+abline(h = alpha, lty = 3, col = "grey60")
 for (r in 1:7) { lines(x, outdt[r,], col = mycol[r]); points(x, outdt[r,], col = mycol[r], pch = mypch[r], cex = 1.3) }
 legend("topleft", rownames(outdt), col = mycol, lwd = 1, bty = "n", lty = NA, pch = mypch)
 ```

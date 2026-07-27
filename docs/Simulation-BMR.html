@@ -633,15 +633,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtreedfa3eb4ccb2daac76127e4f2ba68bdbec33204c8targetblankdfa3eb4a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtreecefd056cdf1ceb7c2950c221e951dc0f9ba1e165targetblankcefd056a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/dfa3eb4ccb2daac76127e4f2ba68bdbec33204c8" target="_blank">dfa3eb4</a>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/cefd056cdf1ceb7c2950c221e951dc0f9ba1e165" target="_blank">cefd056</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtreedfa3eb4ccb2daac76127e4f2ba68bdbec33204c8targetblankdfa3eb4a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtreecefd056cdf1ceb7c2950c221e951dc0f9ba1e165targetblankcefd056a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -651,7 +651,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/dfa3eb4ccb2daac76127e4f2ba68bdbec33204c8" target="_blank">dfa3eb4</a>.
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/cefd056cdf1ceb7c2950c221e951dc0f9ba1e165" target="_blank">cefd056</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -679,7 +679,6 @@ Untracked files:
 Unstaged changes:
     Modified:   analysis/Simulation-BMR-variations.Rmd
     Modified:   analysis/Simulation-BMR.Rmd
-    Modified:   code/simulate_bmr_variations.R
 
 </code></pre>
 <p>
@@ -724,6 +723,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/2a3270efd6818b22acfc7cd58ea1db2f2b6cdacd/analysis/Simulation-BMR.Rmd" target="_blank">2a3270e</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-07-26
+</td>
+<td>
+Switch confounding main page to estimated background (drop true rate)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/szhaolab/DiffDriver-PAPER/2a3270efd6818b22acfc7cd58ea1db2f2b6cdacd/docs/Simulation-BMR.html" target="_blank">2a3270e</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-07-26
+</td>
+<td>
+Switch confounding main page to estimated background (drop true rate)
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1217,34 +1250,74 @@ selection.</p>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;data/pppower_estimatedBMR_bmr.Rd&quot;</span>)     <span class="co"># object `estBMR`, keyed by N (estimated background)</span></span>
 <span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;data/pppower_mannwhitney_bmr.Rd&quot;</span>)      <span class="co"># object `mw`</span></span>
 <span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a></span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>fp   <span class="ot">&lt;-</span> <span class="cf">function</span>(p) <span class="fu">mean</span>(p <span class="sc">&lt;</span> <span class="fl">0.01</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>rate <span class="ot">&lt;-</span> <span class="cf">function</span>(field) <span class="fu">sapply</span>(<span class="fu">as.character</span>(SIZES), <span class="cf">function</span>(n) <span class="fu">fp</span>(estBMR[[n]][[field]]))</span>
-<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>cosE <span class="ot">&lt;-</span> <span class="fu">rate</span>(<span class="st">&quot;coselens_est&quot;</span>); ddE <span class="ot">&lt;-</span> <span class="fu">rate</span>(<span class="st">&quot;diff_est&quot;</span>)   <span class="co"># estimated-background methods</span></span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a></span>
-<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co"># count-based benchmarks (do not use a background rate; from the archived runs)</span></span>
-<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>lin <span class="ot">&lt;-</span> fis <span class="ot">&lt;-</span> bin <span class="ot">&lt;-</span> lr <span class="ot">&lt;-</span> mw_fp <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(SIZES))</span>
-<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(SIZES)) {</span>
-<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>  N <span class="ot">&lt;-</span> SIZES[i]</span>
-<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>  o <span class="ot">&lt;-</span> <span class="fu">new.env</span>(); <span class="fu">load</span>(<span class="fu">sprintf</span>(<span class="st">&quot;data/bmr_archive/other/pppower_betaf0=1_sample%d_0.5_0.Rd&quot;</span>, N), <span class="at">envir =</span> o)</span>
-<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>  s <span class="ot">&lt;-</span> o<span class="sc">$</span>simuresother</span>
-<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>  lin[i] <span class="ot">&lt;-</span> <span class="fu">fp</span>(s<span class="sc">$</span>m1.pvalue); fis[i] <span class="ot">&lt;-</span> <span class="fu">fp</span>(s<span class="sc">$</span>m2.pvalue); bin[i] <span class="ot">&lt;-</span> <span class="fu">fp</span>(s<span class="sc">$</span>m3.pvalue); lr[i] <span class="ot">&lt;-</span> <span class="fu">fp</span>(s<span class="sc">$</span>m4.pvalue)</span>
-<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a>  mw_fp[i] <span class="ot">&lt;-</span> <span class="fu">fp</span>(mw[[<span class="fu">as.character</span>(N)]]<span class="sc">$</span>mannwhitney.pvalue)</span>
-<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a>}</span>
-<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a></span>
-<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a>outdt <span class="ot">&lt;-</span> <span class="fu">rbind</span>(<span class="at">Linear =</span> lin, <span class="at">Fisher =</span> fis, <span class="at">Binomial =</span> bin, <span class="at">LogisticR =</span> lr,</span>
-<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a>               <span class="at">MannWhitney =</span> mw_fp, <span class="at">Coselens =</span> cosE, <span class="at">DiffDriver =</span> ddE)</span>
-<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a><span class="fu">colnames</span>(outdt) <span class="ot">&lt;-</span> SIZES</span>
-<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a>mycol <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;#00AFBB&quot;</span>,<span class="st">&quot;#2b8cbe&quot;</span>,<span class="st">&quot;#aa00ff&quot;</span>,<span class="st">&quot;#0001f6&quot;</span>,<span class="st">&quot;#1a9850&quot;</span>,<span class="st">&quot;#ff7f00&quot;</span>,<span class="st">&quot;#FF3D2E&quot;</span>)</span>
-<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a>mypch <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">19</span>,<span class="dv">19</span>,<span class="dv">19</span>,<span class="dv">19</span>,<span class="dv">3</span>,<span class="dv">8</span>,<span class="dv">17</span>)</span>
-<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq_along</span>(SIZES)</span>
-<span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a><span class="fu">plot</span>(x, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">col =</span> <span class="st">&quot;white&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;False positive rate (p &lt; 0.01)&quot;</span>,</span>
-<span id="cb2-27"><a href="#cb2-27" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Number of samples&quot;</span>, <span class="at">yaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">xaxt =</span> <span class="st">&quot;n&quot;</span>)</span>
-<span id="cb2-28"><a href="#cb2-28" tabindex="-1"></a><span class="fu">title</span>(<span class="st">&quot;Phenotype–signature confounding (background estimated from silent mutations)&quot;</span>)</span>
-<span id="cb2-29"><a href="#cb2-29" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">2</span>, <span class="at">at =</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="fl">0.1</span>), <span class="at">las =</span> <span class="dv">2</span>); <span class="fu">axis</span>(<span class="dv">1</span>, <span class="at">at =</span> x, <span class="at">labels =</span> SIZES); <span class="fu">grid</span>()</span>
-<span id="cb2-30"><a href="#cb2-30" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="fl">0.01</span>, <span class="at">lty =</span> <span class="dv">3</span>, <span class="at">col =</span> <span class="st">&quot;grey60&quot;</span>)</span>
-<span id="cb2-31"><a href="#cb2-31" tabindex="-1"></a><span class="cf">for</span> (r <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>) { <span class="fu">lines</span>(x, outdt[r,], <span class="at">col =</span> mycol[r]); <span class="fu">points</span>(x, outdt[r,], <span class="at">col =</span> mycol[r], <span class="at">pch =</span> mypch[r], <span class="at">cex =</span> <span class="fl">1.3</span>) }</span>
-<span id="cb2-32"><a href="#cb2-32" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;topleft&quot;</span>, <span class="fu">rownames</span>(outdt), <span class="at">col =</span> mycol, <span class="at">lwd =</span> <span class="dv">1</span>, <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>, <span class="at">lty =</span> <span class="cn">NA</span>, <span class="at">pch =</span> mypch)</span></code></pre></div>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co"># significance threshold alpha = 1/Niter (Niter = 100 -&gt; 0.01): the finest level</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co"># resolvable with Niter iterations, where a calibrated test expects one false positive</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>Nsim</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>fp   <span class="ot">&lt;-</span> <span class="cf">function</span>(p) <span class="fu">mean</span>(p <span class="sc">&lt;</span> alpha, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>rate <span class="ot">&lt;-</span> <span class="cf">function</span>(field) <span class="fu">sapply</span>(<span class="fu">as.character</span>(SIZES), <span class="cf">function</span>(n) <span class="fu">fp</span>(estBMR[[n]][[field]]))</span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>cosE <span class="ot">&lt;-</span> <span class="fu">rate</span>(<span class="st">&quot;coselens_est&quot;</span>); ddE <span class="ot">&lt;-</span> <span class="fu">rate</span>(<span class="st">&quot;diff_est&quot;</span>)   <span class="co"># estimated-background methods</span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="co"># count-based benchmarks (do not use a background rate; from the archived runs)</span></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>lin <span class="ot">&lt;-</span> fis <span class="ot">&lt;-</span> bin <span class="ot">&lt;-</span> lr <span class="ot">&lt;-</span> mw_fp <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(SIZES))</span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(SIZES)) {</span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>  N <span class="ot">&lt;-</span> SIZES[i]</span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a>  o <span class="ot">&lt;-</span> <span class="fu">new.env</span>(); <span class="fu">load</span>(<span class="fu">sprintf</span>(<span class="st">&quot;data/bmr_archive/other/pppower_betaf0=1_sample%d_0.5_0.Rd&quot;</span>, N), <span class="at">envir =</span> o)</span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a>  s <span class="ot">&lt;-</span> o<span class="sc">$</span>simuresother</span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a>  lin[i] <span class="ot">&lt;-</span> <span class="fu">fp</span>(s<span class="sc">$</span>m1.pvalue); fis[i] <span class="ot">&lt;-</span> <span class="fu">fp</span>(s<span class="sc">$</span>m2.pvalue); bin[i] <span class="ot">&lt;-</span> <span class="fu">fp</span>(s<span class="sc">$</span>m3.pvalue); lr[i] <span class="ot">&lt;-</span> <span class="fu">fp</span>(s<span class="sc">$</span>m4.pvalue)</span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a>  mw_fp[i] <span class="ot">&lt;-</span> <span class="fu">fp</span>(mw[[<span class="fu">as.character</span>(N)]]<span class="sc">$</span>mannwhitney.pvalue)</span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a>}</span>
+<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a></span>
+<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a>outdt <span class="ot">&lt;-</span> <span class="fu">rbind</span>(<span class="at">Linear =</span> lin, <span class="at">Fisher =</span> fis, <span class="at">Binomial =</span> bin, <span class="at">LogisticR =</span> lr,</span>
+<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a>               <span class="at">MannWhitney =</span> mw_fp, <span class="at">Coselens =</span> cosE, <span class="at">DiffDriver =</span> ddE)</span>
+<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a><span class="fu">colnames</span>(outdt) <span class="ot">&lt;-</span> SIZES</span>
+<span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a>mycol <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;#00AFBB&quot;</span>,<span class="st">&quot;#2b8cbe&quot;</span>,<span class="st">&quot;#aa00ff&quot;</span>,<span class="st">&quot;#0001f6&quot;</span>,<span class="st">&quot;#1a9850&quot;</span>,<span class="st">&quot;#ff7f00&quot;</span>,<span class="st">&quot;#FF3D2E&quot;</span>)</span>
+<span id="cb2-27"><a href="#cb2-27" tabindex="-1"></a>mypch <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">19</span>,<span class="dv">19</span>,<span class="dv">19</span>,<span class="dv">19</span>,<span class="dv">3</span>,<span class="dv">8</span>,<span class="dv">17</span>)</span>
+<span id="cb2-28"><a href="#cb2-28" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq_along</span>(SIZES)</span>
+<span id="cb2-29"><a href="#cb2-29" tabindex="-1"></a><span class="fu">plot</span>(x, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">col =</span> <span class="st">&quot;white&quot;</span>, <span class="at">ylab =</span> <span class="fu">sprintf</span>(<span class="st">&quot;False positive rate (p &lt; 1/Niter = %.4g)&quot;</span>, alpha),</span>
+<span id="cb2-30"><a href="#cb2-30" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Number of samples&quot;</span>, <span class="at">yaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">xaxt =</span> <span class="st">&quot;n&quot;</span>)</span>
+<span id="cb2-31"><a href="#cb2-31" tabindex="-1"></a><span class="fu">title</span>(<span class="st">&quot;Phenotype–signature confounding (background estimated from silent mutations)&quot;</span>)</span>
+<span id="cb2-32"><a href="#cb2-32" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">2</span>, <span class="at">at =</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="fl">0.1</span>), <span class="at">las =</span> <span class="dv">2</span>); <span class="fu">axis</span>(<span class="dv">1</span>, <span class="at">at =</span> x, <span class="at">labels =</span> SIZES); <span class="fu">grid</span>()</span>
+<span id="cb2-33"><a href="#cb2-33" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> alpha, <span class="at">lty =</span> <span class="dv">3</span>, <span class="at">col =</span> <span class="st">&quot;grey60&quot;</span>)</span>
+<span id="cb2-34"><a href="#cb2-34" tabindex="-1"></a><span class="cf">for</span> (r <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>) { <span class="fu">lines</span>(x, outdt[r,], <span class="at">col =</span> mycol[r]); <span class="fu">points</span>(x, outdt[r,], <span class="at">col =</span> mycol[r], <span class="at">pch =</span> mypch[r], <span class="at">cex =</span> <span class="fl">1.3</span>) }</span>
+<span id="cb2-35"><a href="#cb2-35" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;topleft&quot;</span>, <span class="fu">rownames</span>(outdt), <span class="at">col =</span> mycol, <span class="at">lwd =</span> <span class="dv">1</span>, <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>, <span class="at">lty =</span> <span class="cn">NA</span>, <span class="at">pch =</span> mypch)</span></code></pre></div>
 <p><img src="figure/Simulation-BMR.Rmd/keyresult-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-keyresult-1">
+Past versions of keyresult-1.png
+</button>
+</p>
+<div id="fig-keyresult-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/2a3270efd6818b22acfc7cd58ea1db2f2b6cdacd/docs/figure/Simulation-BMR.Rmd/keyresult-1.png" target="_blank">2a3270e</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-07-26
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>DiffDriver and coselens keep the false positive rate near zero even
 though they must <em>estimate</em> the confounded background from a
 finite silent spectrum — the estimation does not reintroduce the
