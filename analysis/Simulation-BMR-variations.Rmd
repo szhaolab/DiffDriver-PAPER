@@ -146,7 +146,7 @@ at ~1–4% across sample sizes. The signature-count choice is not a fragile knob
 ks <- names(bmrvar$partB); kcols <- c("#1b9e77","#d95f02","#7570b3","#e7298a","#66a61e")
 x <- seq_along(SIZES)
 al <- 1/median(sapply(bmrvar$partB[[1]], nrow))   # alpha = 1/Niter (100 iters -> 0.01)
-plot(NA, xlim = c(1, length(SIZES)), ylim = c(0, 0.15), xaxt = "n",
+plot(NA, xlim = c(1, length(SIZES)), ylim = c(0, 1), xaxt = "n",
      xlab = "Number of samples", ylab = sprintf("DiffDriver FPR (p < 1/Niter = %.4g)", al),
      main = "Estimated background: robustness to # signatures (true = 6)", las = 1)
 axis(1, x, SIZES); grid(); abline(h = al, lty = 3, col = "grey60")
