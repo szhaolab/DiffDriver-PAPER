@@ -1,5 +1,5 @@
 SP <- "/private/tmp/claude-501/-Users-siming-Dartmouth-College-Dropbox-Siming-Zhao-Project-diffDriver-DiffDriver-PAPER/46eb8cab-f9ce-420f-8359-609ff7701606/scratchpad"
-out <- readRDS(file.path(SP,"betaf_sensitivity_metrics.rds"))
+SP <- "."   # dir with betaf_sensitivity_metrics.rds; writes betaf_sensitivity.{pdf,png}
 SIZES <- c(200,400,600,800,1000,1200,1500)
 CAVG<-"#FF3D2E"; CTRU<-"#1f78b4"           # averaged (red) vs ground-truth (blue)
 titles <- c(TSG_binary_0.8="Tumor-suppressor genes (TSG)", OG_binary_0.8="Oncogenes (OG)")
