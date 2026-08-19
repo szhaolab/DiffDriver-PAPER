@@ -1,5 +1,5 @@
 SP <- "/private/tmp/claude-501/-Users-siming-Dartmouth-College-Dropbox-Siming-Zhao-Project-diffDriver-DiffDriver-PAPER/46eb8cab-f9ce-420f-8359-609ff7701606/scratchpad"
-SP <- "."   # dir with betaf_sensitivity_metrics.rds; writes betaf_sensitivity.{pdf,png}
+out <- readRDS(file.path(SP,"betaf_sensitivity_metrics.rds"))
 SIZES <- c(200,400,600,800,1000,1200,1500)
 CAVG<-"#FF3D2E"; CTRU<-"#1f78b4"           # averaged (red) vs ground-truth (blue)
 titles <- c(TSG_binary_0.8="Tumor-suppressor genes (TSG)", OG_binary_0.8="Oncogenes (OG)")
@@ -19,7 +19,8 @@ draw <- function(){
       lines(x,ya,col=CAVG,lwd=1.8); points(x,ya,col=CAVG,pch=19,cex=1.2)
       lines(x,yt,col=CTRU,lwd=1.8,lty=2); points(x,yt,col=CTRU,pch=17,cex=1.2)
       if (metric=="power" && sn=="TSG_binary_0.8")
-        legend("topleft", c("Averaged βf (imported, DiffDriver)","Ground-truth βf (context-specific)"),
+        legend("topleft", c(expression(paste("Averaged ", beta^f, " (imported, DiffDriver)")),
+                            expression(paste("Ground-truth ", beta^f, " (context-specific)"))),
                col=c(CAVG,CTRU), pch=c(19,17), lty=c(1,2), lwd=1.8, bty="n", cex=0.78)
     }
   }
