@@ -36,6 +36,48 @@ The initial analyses for **CESC, PRAD, TGCT, UCEC, and UCS** failed because the 
 
 These failed analyses were subsequently rerun after excluding gender as a covariate. For the **5** phenotypes other than Diagnosis Age, only **age** was included as a **covariate**. For **Diagnosis Age**, **no covariates** were included because age was the phenotype itself and gender had no variation within these tumor types.
 
+# Per-trait (pan-cancer) FDR — main-text Fig. 4a summary
+
+The main-text headline number applies a **pan-cancer Benjamini–Hochberg
+correction across all tumor types within each trait** (each of the 6 traits
+corrected on its own), rather than per-tumor-type. The DiffDriver likelihood-ratio
+p values (`sig` model) for every gene × tumor-type test are pooled per trait in
+`data/clinical_pertrait_pvalues.tsv` (1,968 tests, 185 unique driver genes across
+the 6 traits), and a gene is called significant if it passes BH FDR < 0.1 in at
+least one trait.
+
+```{r pertrait-bh-fig4}
+cl <- read.table("data/clinical_pertrait_pvalues.tsv",
+                 header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+cl <- cl[!is.na(cl$dd.p), ]
+# BH across all tumor types within each trait
+cl$fdr <- ave(cl$dd.p, cl$trait, FUN = function(x) p.adjust(x, "BH"))
+sig <- cl[cl$fdr < 0.1, ]
+n_bg  <- length(unique(cl$gene))
+n_sig <- length(unique(sig$gene))
+cat("Driver genes tested (background):", n_bg, "\n")
+cat("Genes significant in >=1 trait (BH FDR<0.1):", n_sig,
+    sprintf("(%.1f%%)\n", 100 * n_sig / n_bg))
+# per-trait gene counts
+for (tr in sort(unique(sig$trait)))
+  cat("   ", tr, ":", length(unique(sig$gene[sig$trait == tr])), "genes\n")
+```
+
+This reproduces the main-text number: **45 of 185 driver genes (24.3%)** show
+differential selection for at least one of the 6 clinical traits (TMB 29, FGA 23,
+Aneuploidy 19, Diagnosis Age 6; the two survival traits contribute none under the
+pan-cancer correction). The TMB-associated set (29 genes, Fig. 4c) and the
+genomic-instability set (FGA ∪ Aneuploidy, 30 genes, Fig. 4d) are the inputs to
+the GSEA/GO enrichment below.
+
+```{r pertrait-bh-genesets}
+inst_traits <- c("Fraction.Genome.Altered", "Aneuploidy.Score")
+tmb_set  <- sort(unique(sig$gene[sig$trait == "TMB.nonsynonymous"]))
+inst_set <- sort(unique(sig$gene[sig$trait %in% inst_traits]))
+cat("Fig 4c TMB gene set (", length(tmb_set), "):\n", paste(tmb_set, collapse = " "), "\n\n")
+cat("Fig 4d genomic-instability gene set (", length(inst_set), "):\n", paste(inst_set, collapse = " "), "\n")
+```
+
 # Extracting and Summarizing Analysis Results
 This code segment scans through analysis output directories, identifies relevant result files (*_resdd.Rd), extracts corresponding tumor types and phenotypes. Only results from the signature model are included.
 

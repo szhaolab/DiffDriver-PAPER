@@ -15,9 +15,58 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Overview
+# Pan-cancer immune-subtype analysis (`pancancer299`) — main-text Fig. 5a
 
-In total, **80 analyses** were conducted across **20 tumor types**, each classified into **4 distinct immune phenotype groups (C1–C4)**. Among these analyses, **70 completed successfully**, while **10 encountered errors**. The specific tumor type and phenotype combinations for unsuccessful analyses are detailed below.
+To characterize immune-associated differential selection at the pan-cancer level,
+we pooled tumor samples across cancer types (**8,253 tumors across 27 TCGA cancer
+types**) rather than analyzing each tumor type separately. Starting from the 299
+driver genes of Bailey et al., each gene was tested for differential selection
+between each immune subtype and all remaining subtypes (Thorsson **C1–C4,
+one-vs-rest**), adjusting for patient age, sex, and tumor type (sex dropped for
+single-sex cohorts, tumor type for single-tumor cohorts). The Benjamini–Hochberg
+FDR was computed separately across all genes **within each immune subtype**.
+
+Pipeline (see `code/`): `run_cohort_multi.R` / `recover_cohort.R` run the 299
+gene-cohorts on the cluster; `aggregate_pancancer299.R` combines the per-cohort
+C1–C4 results into `data/pancancer299_immune_aggregated.txt` (one row per
+gene × subtype; the BH FDR is `p.adjust(dd.p, "fdr")` within each subtype).
+
+```{r pancancer299-fig5a}
+suppressMessages(library(data.table))
+agg <- fread("data/pancancer299_immune_aggregated.txt")
+n_genes   <- length(unique(agg$gene))
+sig       <- agg[dd.fdr < 0.1]
+sig_genes <- sort(unique(sig$gene))
+cat("Driver genes tested:", n_genes, "\n")
+cat("Genes with FDR < 0.1 in >=1 immune subtype:", length(sig_genes),
+    sprintf("(%.1f%%)\n", 100 * length(sig_genes) / n_genes))
+cat("Significant genes:", paste(sig_genes, collapse = ", "), "\n")
+```
+
+This reproduces the main-text number: **18 of 220 driver genes (8.2%)** show
+differential selection across immune subtypes (Fig. 5a). The significant
+gene × immune-subtype associations:
+
+```{r pancancer299-table}
+library(DT)
+datatable(
+  sig[, .(gene, subtype = phenotype, dd.p = signif(dd.p, 3),
+          dd.fdr = signif(dd.fdr, 3), direction, mut_freq)][order(subtype, dd.fdr)],
+  extensions = 'Buttons',
+  options = list(dom = 'Bfrtip',
+                 buttons = c('copy', 'csv', 'excel'), pageLength = 20)
+)
+```
+
+# Per-tumor-type immune-subtype analysis (earlier version)
+
+The analysis below tests immune subtypes **within each tumor type separately**
+(an earlier version superseded by the pooled pan-cancer analysis above for the
+main text). In total, **80 analyses** were conducted across **20 tumor types**,
+each classified into **4 distinct immune phenotype groups (C1–C4)**. Among these
+analyses, **70 completed successfully**, while **10 encountered errors**. The
+specific tumor type and phenotype combinations for unsuccessful analyses are
+detailed below.
 
 # Summary of Unsuccessful Analyses
 
