@@ -632,15 +632,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree0eb32d72dc9cdb94f7dd9696a1cdda3ba27a836ftargetblank0eb32d7a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree94bf01f189e6f4be6bcb865b95f1c8577445b5a0targetblank94bf01fa">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/0eb32d72dc9cdb94f7dd9696a1cdda3ba27a836f" target="_blank">0eb32d7</a>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/94bf01f189e6f4be6bcb865b95f1c8577445b5a0" target="_blank">94bf01f</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree0eb32d72dc9cdb94f7dd9696a1cdda3ba27a836ftargetblank0eb32d7a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomszhaolabDiffDriverPAPERtree94bf01f189e6f4be6bcb865b95f1c8577445b5a0targetblank94bf01fa"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -650,7 +650,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/0eb32d72dc9cdb94f7dd9696a1cdda3ba27a836f" target="_blank">0eb32d7</a>.
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/tree/94bf01f189e6f4be6bcb865b95f1c8577445b5a0" target="_blank">94bf01f</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -672,6 +672,7 @@ Ignored files:
     Ignored:    data/.DS_Store
 
 Untracked files:
+    Untracked:  analysis/assets/
     Untracked:  data/sgannosig.Rd
     Untracked:  data/sgmatrixsig.Rd
     Untracked:  rites SuppFig3_confounding_robustness.{pdf,png} to the working dir#
@@ -723,6 +724,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/94bf01f189e6f4be6bcb865b95f1c8577445b5a0/analysis/Clinical.Rmd" target="_blank">94bf01f</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-10-29
+</td>
+<td>
+Clean final-version Clinical &amp; Immune_Subtypes pages with figures
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/szhaolab/DiffDriver-PAPER/94bf01f189e6f4be6bcb865b95f1c8577445b5a0/docs/Clinical.html" target="_blank">94bf01f</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-10-29
+</td>
+<td>
+Clean final-version Clinical &amp; Immune_Subtypes pages with figures
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -1187,28 +1222,104 @@ unique driver genes). A gene is called significant if it passes BH FDR
 <pre><code>Genes significant in &gt;=1 trait (BH FDR &lt; 0.1): 45 (24.3%)</code></pre>
 <p><strong>45 of 185 driver genes (24.3%)</strong> show differential
 selection for at least one of the six clinical traits.</p>
-<div id="fig.-4a-driver-genes-per-clinical-trait"
+<p>Per-trait pan-cancer gene counts (BH across tumor types within each
+trait): TMB 29, FGA 23, Aneuploidy 19, Diagnosis Age 6; the two survival
+traits contribute no genes under the pan-cancer correction.</p>
+<div
+id="fig.-4a-significant-driver-genes-by-tumor-type-and-clinical-context"
 class="section level2">
-<h2>Fig. 4a — driver genes per clinical trait</h2>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>lab <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">TMB.nonsynonymous =</span> <span class="st">&quot;TMB&quot;</span>, <span class="at">Fraction.Genome.Altered =</span> <span class="st">&quot;FGA&quot;</span>,</span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>         <span class="at">Aneuploidy.Score =</span> <span class="st">&quot;Aneuploidy&quot;</span>, <span class="at">Diagnosis.Age =</span> <span class="st">&quot;Patient age&quot;</span>,</span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>         <span class="at">Months.of.disease.specific.survival =</span> <span class="st">&quot;Disease-specific survival&quot;</span>,</span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>         <span class="at">Progress.Free.Survival.Months =</span> <span class="st">&quot;Progression-free survival&quot;</span>)</span>
-<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>cnt <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="fu">names</span>(lab), <span class="cf">function</span>(tr) <span class="fu">length</span>(<span class="fu">unique</span>(sig<span class="sc">$</span>gene[sig<span class="sc">$</span>trait <span class="sc">==</span> tr])))</span>
-<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>df  <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">trait =</span> <span class="fu">factor</span>(<span class="fu">unname</span>(lab), <span class="at">levels =</span> <span class="fu">unname</span>(lab[<span class="fu">order</span>(<span class="sc">-</span>cnt)])),</span>
-<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>                  <span class="at">n =</span> <span class="fu">as.integer</span>(cnt))</span>
-<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(trait, n, <span class="at">fill =</span> trait)) <span class="sc">+</span></span>
-<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">width =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> n), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.3</span>, <span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
-<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">&quot;No. driver genes (BH FDR &lt; 0.1)&quot;</span>) <span class="sc">+</span></span>
-<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>, <span class="fu">max</span>(cnt) <span class="sc">*</span> <span class="fl">1.15</span>) <span class="sc">+</span></span>
-<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">12</span>) <span class="sc">+</span></span>
-<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>,</span>
-<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">30</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code></pre></div>
-<p><img src="figure/Clinical.Rmd/fig4a-1.png" alt="" width="624" style="display: block; margin: auto;" /></p>
-<p>Per-trait counts: TMB 29, FGA 23, Aneuploidy 19, Diagnosis Age 6; the
-two survival traits contribute no genes under the pan-cancer
-correction.</p>
+<h2>Fig. 4a — significant driver genes by tumor type and clinical
+context</h2>
+<p>For each clinical context, the number of driver genes under
+significant differential selection (DiffDriver BH FDR &lt; 0.1, computed
+across genes within each tumor-type analysis) is shown per tumor type;
+solid bars are significant genes and the light bars are the total genes
+tested (pseudo-log scale).</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(data.table)); <span class="fu">library</span>(scales)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>dt <span class="ot">&lt;-</span> <span class="fu">as.data.table</span>(cl)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co"># per-analysis BH FDR (across genes within each tumor x trait), as DiffDriver outputs</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>dt[, fdr_analysis <span class="sc">:=</span> <span class="fu">p.adjust</span>(dd.p, <span class="st">&quot;BH&quot;</span>), by <span class="ot">=</span> .(trait, tumor)]</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>cnts <span class="ot">&lt;-</span> dt[, .(<span class="at">sig =</span> <span class="fu">sum</span>(fdr_analysis <span class="sc">&lt;</span> <span class="fl">0.1</span>), <span class="at">total =</span> .N), by <span class="ot">=</span> .(trait, tumor)]</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>contexts <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Aneuploidy.Score&quot;</span>, <span class="st">&quot;Diagnosis.Age&quot;</span>, <span class="st">&quot;Fraction.Genome.Altered&quot;</span>,</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>              <span class="st">&quot;Months.of.disease.specific.survival&quot;</span>, <span class="st">&quot;Progress.Free.Survival.Months&quot;</span>,</span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>              <span class="st">&quot;TMB.nonsynonymous&quot;</span>)</span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>ctx_lab <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Aneuploidy Score&quot;</span>, <span class="st">&quot;Patient Age&quot;</span>, <span class="st">&quot;Fraction of Genome Altered (FGA)&quot;</span>,</span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>             <span class="st">&quot;Disease-Specific Survival&quot;</span>, <span class="st">&quot;Progression-Free Survival&quot;</span>,</span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>             <span class="st">&quot;Tumor Mutational Burden (TMB)&quot;</span>)</span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>tumors <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">unique</span>(dt<span class="sc">$</span>tumor))</span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>cols   <span class="ot">&lt;-</span> <span class="fu">rainbow</span>(<span class="fu">length</span>(tumors))</span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a>pt     <span class="ot">&lt;-</span> scales<span class="sc">::</span><span class="fu">pseudo_log_trans</span>()</span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a>y_ticks <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">30</span>, <span class="dv">60</span>); y_lab <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;0&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="st">&quot;2&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="st">&quot;10&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="st">&quot;60&quot;</span>)</span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a></span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a>op <span class="ot">&lt;-</span> <span class="fu">par</span>(<span class="at">no.readonly =</span> <span class="cn">TRUE</span>); <span class="fu">on.exit</span>(<span class="fu">par</span>(op))</span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a><span class="fu">layout</span>(<span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="at">ncol =</span> <span class="dv">1</span>), <span class="at">heights =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">1</span>, <span class="dv">5</span>), <span class="fl">1.6</span>))</span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(contexts)) {</span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a>  cc  <span class="ot">&lt;-</span> cnts[trait <span class="sc">==</span> contexts[i]][<span class="fu">match</span>(tumors, tumor)]</span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a>  sig_c <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(cc<span class="sc">$</span>sig), <span class="dv">0</span>, cc<span class="sc">$</span>sig)</span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a>  tot_c <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(cc<span class="sc">$</span>total), <span class="dv">0</span>, cc<span class="sc">$</span>total)</span>
+<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a>  last <span class="ot">&lt;-</span> i <span class="sc">==</span> <span class="fu">length</span>(contexts)</span>
+<span id="cb5-25"><a href="#cb5-25" tabindex="-1"></a>  <span class="fu">par</span>(<span class="at">mar =</span> <span class="cf">if</span> (last) <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">5</span>, <span class="dv">2</span>, <span class="dv">1</span>) <span class="cf">else</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">2</span>, <span class="dv">1</span>))</span>
+<span id="cb5-26"><a href="#cb5-26" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="cn">NULL</span>, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fu">length</span>(tumors) <span class="sc">+</span> <span class="fl">0.5</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, pt<span class="sc">$</span><span class="fu">transform</span>(<span class="dv">60</span>) <span class="sc">*</span> <span class="fl">1.2</span>),</span>
+<span id="cb5-27"><a href="#cb5-27" tabindex="-1"></a>       <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>, <span class="at">main =</span> <span class="fu">paste</span>(<span class="st">&quot;Context:&quot;</span>, ctx_lab[i]),</span>
+<span id="cb5-28"><a href="#cb5-28" tabindex="-1"></a>       <span class="at">xaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">yaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>, <span class="at">cex.main =</span> <span class="fl">1.3</span>)</span>
+<span id="cb5-29"><a href="#cb5-29" tabindex="-1"></a>  <span class="fu">title</span>(<span class="at">ylab =</span> <span class="st">&quot;No. Genes&quot;</span>, <span class="at">cex.lab =</span> <span class="fl">1.1</span>)</span>
+<span id="cb5-30"><a href="#cb5-30" tabindex="-1"></a>  <span class="fu">axis</span>(<span class="dv">2</span>, <span class="at">at =</span> pt<span class="sc">$</span><span class="fu">transform</span>(y_ticks), <span class="at">labels =</span> y_lab, <span class="at">las =</span> <span class="dv">1</span>, <span class="at">cex.axis =</span> <span class="fl">0.9</span>)</span>
+<span id="cb5-31"><a href="#cb5-31" tabindex="-1"></a>  <span class="fu">abline</span>(<span class="at">h =</span> pt<span class="sc">$</span><span class="fu">transform</span>(y_ticks[y_ticks <span class="sc">&lt;</span> <span class="dv">60</span>]), <span class="at">col =</span> <span class="st">&quot;grey85&quot;</span>, <span class="at">lty =</span> <span class="dv">3</span>)</span>
+<span id="cb5-32"><a href="#cb5-32" tabindex="-1"></a>  <span class="cf">for</span> (j <span class="cf">in</span> <span class="fu">seq_along</span>(tumors)) {</span>
+<span id="cb5-33"><a href="#cb5-33" tabindex="-1"></a>    <span class="fu">rect</span>(j <span class="sc">-</span> <span class="fl">0.4</span>, pt<span class="sc">$</span><span class="fu">transform</span>(<span class="dv">0</span>), j <span class="sc">+</span> <span class="fl">0.4</span>, pt<span class="sc">$</span><span class="fu">transform</span>(tot_c[j]),</span>
+<span id="cb5-34"><a href="#cb5-34" tabindex="-1"></a>         <span class="at">col =</span> <span class="fu">adjustcolor</span>(cols[j], <span class="at">alpha.f =</span> <span class="fl">0.2</span>), <span class="at">border =</span> <span class="cn">NA</span>)</span>
+<span id="cb5-35"><a href="#cb5-35" tabindex="-1"></a>    <span class="cf">if</span> (sig_c[j] <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb5-36"><a href="#cb5-36" tabindex="-1"></a>      <span class="fu">rect</span>(j <span class="sc">-</span> <span class="fl">0.4</span>, pt<span class="sc">$</span><span class="fu">transform</span>(<span class="dv">0</span>), j <span class="sc">+</span> <span class="fl">0.4</span>, pt<span class="sc">$</span><span class="fu">transform</span>(sig_c[j]),</span>
+<span id="cb5-37"><a href="#cb5-37" tabindex="-1"></a>           <span class="at">col =</span> cols[j], <span class="at">border =</span> <span class="cn">NA</span>)</span>
+<span id="cb5-38"><a href="#cb5-38" tabindex="-1"></a>      <span class="fu">text</span>(j, pt<span class="sc">$</span><span class="fu">transform</span>(sig_c[j]) <span class="sc">+</span> <span class="fl">0.2</span>, sig_c[j], <span class="at">cex =</span> <span class="fl">0.75</span>)</span>
+<span id="cb5-39"><a href="#cb5-39" tabindex="-1"></a>    }</span>
+<span id="cb5-40"><a href="#cb5-40" tabindex="-1"></a>  }</span>
+<span id="cb5-41"><a href="#cb5-41" tabindex="-1"></a>  <span class="cf">if</span> (last) {</span>
+<span id="cb5-42"><a href="#cb5-42" tabindex="-1"></a>    <span class="fu">axis</span>(<span class="dv">1</span>, <span class="at">at =</span> <span class="fu">seq_along</span>(tumors), <span class="at">labels =</span> tumors, <span class="at">las =</span> <span class="dv">2</span>, <span class="at">cex.axis =</span> <span class="fl">0.9</span>)</span>
+<span id="cb5-43"><a href="#cb5-43" tabindex="-1"></a>    <span class="fu">title</span>(<span class="at">xlab =</span> <span class="st">&quot;Tumor Type&quot;</span>, <span class="at">cex.lab =</span> <span class="fl">1.1</span>, <span class="at">line =</span> <span class="fl">5.5</span>)</span>
+<span id="cb5-44"><a href="#cb5-44" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb5-45"><a href="#cb5-45" tabindex="-1"></a>    <span class="fu">axis</span>(<span class="dv">1</span>, <span class="at">at =</span> <span class="fu">seq_along</span>(tumors), <span class="at">labels =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb5-46"><a href="#cb5-46" tabindex="-1"></a>  }</span>
+<span id="cb5-47"><a href="#cb5-47" tabindex="-1"></a>}</span></code></pre></div>
+<p><img src="figure/Clinical.Rmd/fig4a-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-fig4a-1">
+Past versions of fig4a-1.png
+</button>
+</p>
+<div id="fig-fig4a-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/szhaolab/DiffDriver-PAPER/blob/94bf01f189e6f4be6bcb865b95f1c8577445b5a0/docs/figure/Clinical.Rmd/fig4a-1.png" target="_blank">94bf01f</a>
+</td>
+<td>
+Siming
+</td>
+<td>
+2026-10-29
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="functional-enrichment-gene-sets-fig.-4cd"
 class="section level2">
@@ -1251,22 +1362,22 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] ggplot2_3.5.2   workflowr_1.7.1
+[1] scales_1.4.0      data.table_1.17.8 ggplot2_3.5.2     workflowr_1.7.1  
 
 loaded via a namespace (and not attached):
  [1] gtable_0.3.6       jsonlite_2.0.0     dplyr_1.1.4        compiler_4.3.2    
  [5] promises_1.5.0     tidyselect_1.2.1   Rcpp_1.1.0         stringr_1.6.0     
  [9] git2r_0.36.2       callr_3.7.6        later_1.4.8        jquerylib_0.1.4   
-[13] scales_1.4.0       yaml_2.3.12        fastmap_1.2.0      R6_2.6.1          
-[17] labeling_0.4.3     generics_0.1.4     knitr_1.51         tibble_3.3.1      
-[21] rprojroot_2.0.4    RColorBrewer_1.1-3 bslib_0.10.0       pillar_1.11.1     
-[25] rlang_1.1.6        cachem_1.1.0       stringi_1.8.7      httpuv_1.6.15     
-[29] xfun_0.52          getPass_0.2-4      fs_1.6.6           sass_0.4.10       
-[33] otel_0.2.0         cli_3.6.5          withr_3.0.2        magrittr_2.0.3    
-[37] ps_1.8.1           grid_4.3.2         digest_0.6.39      processx_3.8.5    
-[41] rstudioapi_0.17.1  lifecycle_1.0.5    vctrs_0.6.5        evaluate_1.0.5    
-[45] glue_1.8.0         farver_2.1.2       whisker_0.4.1      rmarkdown_2.29    
-[49] httr_1.4.8         tools_4.3.2        pkgconfig_2.0.3    htmltools_0.5.9   </code></pre>
+[13] yaml_2.3.12        fastmap_1.2.0      R6_2.6.1           generics_0.1.4    
+[17] knitr_1.51         tibble_3.3.1       rprojroot_2.0.4    RColorBrewer_1.1-3
+[21] bslib_0.10.0       pillar_1.11.1      rlang_1.1.6        cachem_1.1.0      
+[25] stringi_1.8.7      httpuv_1.6.15      xfun_0.52          getPass_0.2-4     
+[29] fs_1.6.6           sass_0.4.10        otel_0.2.0         cli_3.6.5         
+[33] withr_3.0.2        magrittr_2.0.3     ps_1.8.1           grid_4.3.2        
+[37] digest_0.6.39      processx_3.8.5     rstudioapi_0.17.1  lifecycle_1.0.5   
+[41] vctrs_0.6.5        evaluate_1.0.5     glue_1.8.0         farver_2.1.2      
+[45] whisker_0.4.1      rmarkdown_2.29     httr_1.4.8         tools_4.3.2       
+[49] pkgconfig_2.0.3    htmltools_0.5.9   </code></pre>
 </div>
 </div>
 </div>

@@ -43,28 +43,66 @@ cat("Genes significant in >=1 trait (BH FDR < 0.1):", n_sig,
 **45 of 185 driver genes (24.3%)** show differential selection for at least one
 of the six clinical traits.
 
-## Fig. 4a — driver genes per clinical trait
+Per-trait pan-cancer gene counts (BH across tumor types within each trait): TMB
+29, FGA 23, Aneuploidy 19, Diagnosis Age 6; the two survival traits contribute no
+genes under the pan-cancer correction.
 
-```{r fig4a, fig.width=6.5, fig.height=4}
-lab <- c(TMB.nonsynonymous = "TMB", Fraction.Genome.Altered = "FGA",
-         Aneuploidy.Score = "Aneuploidy", Diagnosis.Age = "Patient age",
-         Months.of.disease.specific.survival = "Disease-specific survival",
-         Progress.Free.Survival.Months = "Progression-free survival")
-cnt <- sapply(names(lab), function(tr) length(unique(sig$gene[sig$trait == tr])))
-df  <- data.frame(trait = factor(unname(lab), levels = unname(lab[order(-cnt)])),
-                  n = as.integer(cnt))
-ggplot(df, aes(trait, n, fill = trait)) +
-  geom_col(width = 0.7) +
-  geom_text(aes(label = n), vjust = -0.3, size = 4) +
-  labs(x = NULL, y = "No. driver genes (BH FDR < 0.1)") +
-  ylim(0, max(cnt) * 1.15) +
-  theme_classic(base_size = 12) +
-  theme(legend.position = "none",
-        axis.text.x = element_text(angle = 30, hjust = 1))
+## Fig. 4a — significant driver genes by tumor type and clinical context
+
+For each clinical context, the number of driver genes under significant
+differential selection (DiffDriver BH FDR < 0.1, computed across genes within each
+tumor-type analysis) is shown per tumor type; solid bars are significant genes and
+the light bars are the total genes tested (pseudo-log scale).
+
+```{r fig4a, fig.width=8, fig.height=14}
+suppressMessages(library(data.table)); library(scales)
+dt <- as.data.table(cl)
+# per-analysis BH FDR (across genes within each tumor x trait), as DiffDriver outputs
+dt[, fdr_analysis := p.adjust(dd.p, "BH"), by = .(trait, tumor)]
+cnts <- dt[, .(sig = sum(fdr_analysis < 0.1), total = .N), by = .(trait, tumor)]
+
+contexts <- c("Aneuploidy.Score", "Diagnosis.Age", "Fraction.Genome.Altered",
+              "Months.of.disease.specific.survival", "Progress.Free.Survival.Months",
+              "TMB.nonsynonymous")
+ctx_lab <- c("Aneuploidy Score", "Patient Age", "Fraction of Genome Altered (FGA)",
+             "Disease-Specific Survival", "Progression-Free Survival",
+             "Tumor Mutational Burden (TMB)")
+tumors <- sort(unique(dt$tumor))
+cols   <- rainbow(length(tumors))
+pt     <- scales::pseudo_log_trans()
+y_ticks <- c(0, 1, 2, 5, 10, 30, 60); y_lab <- c("0", "", "2", "", "10", "", "60")
+
+op <- par(no.readonly = TRUE); on.exit(par(op))
+layout(matrix(1:6, ncol = 1), heights = c(rep(1, 5), 1.6))
+for (i in seq_along(contexts)) {
+  cc  <- cnts[trait == contexts[i]][match(tumors, tumor)]
+  sig_c <- ifelse(is.na(cc$sig), 0, cc$sig)
+  tot_c <- ifelse(is.na(cc$total), 0, cc$total)
+  last <- i == length(contexts)
+  par(mar = if (last) c(7, 5, 2, 1) else c(1, 5, 2, 1))
+  plot(NULL, xlim = c(0.5, length(tumors) + 0.5), ylim = c(0, pt$transform(60) * 1.2),
+       xlab = "", ylab = "", main = paste("Context:", ctx_lab[i]),
+       xaxt = "n", yaxt = "n", bty = "n", cex.main = 1.3)
+  title(ylab = "No. Genes", cex.lab = 1.1)
+  axis(2, at = pt$transform(y_ticks), labels = y_lab, las = 1, cex.axis = 0.9)
+  abline(h = pt$transform(y_ticks[y_ticks < 60]), col = "grey85", lty = 3)
+  for (j in seq_along(tumors)) {
+    rect(j - 0.4, pt$transform(0), j + 0.4, pt$transform(tot_c[j]),
+         col = adjustcolor(cols[j], alpha.f = 0.2), border = NA)
+    if (sig_c[j] > 0) {
+      rect(j - 0.4, pt$transform(0), j + 0.4, pt$transform(sig_c[j]),
+           col = cols[j], border = NA)
+      text(j, pt$transform(sig_c[j]) + 0.2, sig_c[j], cex = 0.75)
+    }
+  }
+  if (last) {
+    axis(1, at = seq_along(tumors), labels = tumors, las = 2, cex.axis = 0.9)
+    title(xlab = "Tumor Type", cex.lab = 1.1, line = 5.5)
+  } else {
+    axis(1, at = seq_along(tumors), labels = FALSE)
+  }
+}
 ```
-
-Per-trait counts: TMB 29, FGA 23, Aneuploidy 19, Diagnosis Age 6; the two
-survival traits contribute no genes under the pan-cancer correction.
 
 ## Functional enrichment gene sets (Fig. 4c–d)
 

@@ -47,26 +47,14 @@ subtypes.
 
 ## Fig. 5a — landscape of differential selection
 
-Each dot is a significant gene × immune-subtype association (BH FDR < 0.1); dot
-size is the significance and color indicates whether selection is stronger inside
-that subtype or in the remaining subtypes.
+Each dot is a driver gene (columns) tested in an immune subtype (rows, C1–C4);
+color is the directional −log10 p value (red: stronger selection in the subtype,
+blue: in the remaining subtypes), size is the effect size |α|, and dots with
+FDR < 0.1 are outlined.
 
-```{r fig5a, fig.width=9, fig.height=3.8}
-d <- copy(sig)
-d[, subtype := factor(phenotype, levels = c("C4", "C3", "C2", "C1"))]
-gord <- d[, .(m = min(dd.fdr)), by = gene][order(m), gene]
-d[, gene := factor(gene, levels = gord)]
-d[, dir := factor(direction, levels = c("up_in_subtype", "up_in_rest"))]
-ggplot(d, aes(gene, subtype)) +
-  geom_point(aes(size = -log10(dd.fdr), color = dir)) +
-  scale_color_manual(values = c(up_in_subtype = "#B2182B", up_in_rest = "#2166AC"),
-                     labels = c("stronger in subtype", "stronger in rest"),
-                     name = "Direction", na.value = "grey60") +
-  scale_size_continuous(range = c(2, 8), name = expression(-log[10]~FDR)) +
-  labs(x = NULL, y = "Immune subtype") +
-  theme_bw(base_size = 12) +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
-        panel.grid.minor = element_blank())
+```{r fig5a, results='asis'}
+cat(sprintf('<img src="%s" style="max-width:100%%; height:auto;" alt="Fig. 5a">',
+            knitr::image_uri("analysis/assets/Figure5a_immune_landscape.png")))
 ```
 
 ## Significant gene × subtype associations
