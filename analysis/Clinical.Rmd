@@ -79,6 +79,16 @@ cat("Fig 4d genomic-instability gene set (", length(inst_set), "):\n", paste(ins
 ```
 
 # Extracting and Summarizing Analysis Results
+
+```{r legacy-data-guard, include=FALSE}
+# The chunks below read raw per-analysis DiffDriver outputs from the cluster
+# (clinical-covariate / cbioportal_download), which were archived off /dartfs on
+# 2026-10-27. They evaluate only where that data is present; otherwise they are
+# skipped so the page still builds. The main-text Fig. 4a result above is
+# reproduced from committed data (data/clinical_pertrait_pvalues.tsv).
+knitr::opts_chunk$set(eval = dir.exists("/dartfs/rc/lab/S/Szhao/qiruiz/diffdriver/temp/output/clinical-covariate/"))
+```
+
 This code segment scans through analysis output directories, identifies relevant result files (*_resdd.Rd), extracts corresponding tumor types and phenotypes. Only results from the signature model are included.
 
 ```{r}
@@ -572,6 +582,13 @@ print(combined)
 ```
 
 # Clinical Traits Enrichment
+
+```{r reenable-eval, include=FALSE}
+# Re-enable evaluation: the enrichment section below reads committed files
+# (output/Clinical.csv, output/all_diffdriver_genes.txt) and committed figures.
+knitr::opts_chunk$set(eval = TRUE)
+```
+
 ```{r }
 a <- read.csv("output/Clinical.csv")
 ```
