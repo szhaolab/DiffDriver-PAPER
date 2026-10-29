@@ -58,6 +58,15 @@ datatable(
 )
 ```
 
+```{r legacy-data-guard, include=FALSE}
+# The per-tumor-type section below reads raw DiffDriver outputs from the lab share
+# (new_plot/immunesubtypes), archived on 2026-10-27. These chunks evaluate only
+# where that data is mounted; otherwise they are skipped so the page still builds
+# (and it also avoids the kableExtra dependency). The main-text Fig. 5a result
+# (pancancer299) above is reproduced from committed data.
+knitr::opts_chunk$set(eval = dir.exists("/Volumes/Szhao/qiruiz/diffdriver/temp/output/new_plot/immunesubtypes") || dir.exists("/dartfs/rc/lab/S/Szhao/qiruiz/diffdriver/temp/output/new_plot/immunesubtypes"))
+```
+
 # Per-tumor-type immune-subtype analysis (earlier version)
 
 The analysis below tests immune subtypes **within each tumor type separately**
@@ -95,15 +104,6 @@ kable(failure_data, format = "html", col.names = c("Phenotype and Tumor Type", "
 ```
 
 # Extracting and Summarizing Analysis Results
-
-```{r legacy-data-guard, include=FALSE}
-# The per-tumor-type chunks below read raw DiffDriver outputs from the lab share
-# (new_plot/immunesubtypes), which was archived on 2026-10-27. They evaluate only
-# where that data is mounted; otherwise they are skipped so the page still builds.
-# The main-text Fig. 5a result (pancancer299) above is reproduced from committed data.
-knitr::opts_chunk$set(eval = dir.exists("/Volumes/Szhao/qiruiz/diffdriver/temp/output/new_plot/immunesubtypes") || dir.exists("/dartfs/rc/lab/S/Szhao/qiruiz/diffdriver/temp/output/new_plot/immunesubtypes"))
-```
-
 This code segment scans through analysis output directories, identifies relevant result files (*_resdd.Rd), extracts corresponding tumor types and immune phenotypes. Only results from the signature model are included.
 ```{r}
 get_files <- function(outputdir, tumors = NULL, phenotypes = NULL) {
